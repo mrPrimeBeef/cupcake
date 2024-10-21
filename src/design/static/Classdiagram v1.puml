@@ -1,0 +1,129 @@
+@startuml
+package app {
+
+  class Main {
+    - static final String USER
+    - static final String PASSWORD
+    - static final String URL
+    - static final String DB
+    - static ConnectionPool connectionPool
+    + static void main(String[] args)
+
+  }
+  package app.Exceptions{
+  class DatabaseException
+  }
+  package app.config {
+    class ThymeleafConfig {
+      + templateEngine()
+    }
+  }
+
+  package app.persistence {
+    class ConnectionPool {
+      + static ConnectionPool getInstance(String user, String password, String url)
+    }
+    class MemberMapper{
+      + static createUser(Context ctx, ConnectionPool connectionPool)
+      + static login(Context ctx, ConnectionPool connectionPool)
+      + static logout()
+      + static getMemberById(Context ctx, ConnectionPool connectionPool)
+      + static updateName(Context ctx, ConnectionPool connectionPool)
+      + static updatePassword(Context ctx, ConnectionPool connectionPool)
+      + static updateEmail(Context ctx, ConnectionPool connectionPool)
+      + static updateBalance(Context ctx, ConnectionPool connectionPool)
+    }
+    class OrderMapper{
+    + static createOrder(Context ctx, ConnectionPool connectionPool)
+    + static updateOrder(Context ctx, ConnectionPool connectionPool)
+    + static deleteOrder(Context ctx, ConnectionPool connectionPool)
+    + static deleteOrderLine(Context ctx, ConnectionPool connectionPool)
+    + static getOrdersByMemberId(int memberId, Context ctx, ConnectionPool connectionPool)
+    + static getOrderLinesByOrderId(int orderNumber, Context ctx, ConnectionPool connectionPool)
+    + static getAllOrders(Context ctx, ConnectionPool connectionPool)
+    }
+  }
+
+  package app.entities{
+      class Cupcake{
+        - int cupcakeId
+        - String bottom
+        - String topping
+        - double price
+        + Cupcake(int cupcakeId, String bottom, String topping, double price)
+        + String getBottom()
+        + String getTopping()
+        + double getPrice()
+        + toString()
+      }
+     class Member{
+        - String name
+        - String password
+        - String email
+        - String role
+        - double balance
+        + Customer(String name, String password, String email, double balance)
+        + String getname()
+        + String getPassword()
+        + String getEmail()
+        + String getRole()
+        + double getBalance()
+        + toString()
+     }
+
+     class Orders {
+             -int ordernumber
+             -int customer_id
+             -double total_price
+             -Date date
+             -String status
+             +getOrderId() int
+             +getCustomerId() int
+             +getTotalPrice() double
+             +getDate() Date
+             +getStatus() String
+             +addOrderline(Orderlines orderline)
+             +removeOrderline(Orderlines orderline)
+             +calculateTotalPrice()
+             + toString()
+         }
+     class Orderlines {
+         - int orderNumber
+         - int cupcakeId
+         - int quantity
+         + OrderLines(int orderNumber, int cupcakeId, int quantity)
+         + int getOrderNumber()
+         + int getCupcakeId()
+         + int getQuantity()
+         + calculateSubtotal(Cupcake cupcake)
+         + toString()
+         }
+  }
+
+  package app.controllers {
+    class MemberConstroller{
+    + static addRoutes(Javalin app, ConnectionPool connectionPool)
+    + static createUser(Context ctx, ConnectionPool connectionPool)
+    + static login(Context ctx, ConnectionPool connectionPool)
+    + static logout(Context ctx)
+      }
+    class OrderController{
+    + static addRoutes(Javalin app, ConnectionPool connectionPool)
+    }
+  }
+    Main --> app.controllers : uses
+    Main --> ConnectionPool : uses
+    Main --> ThymeleafConfig : uses
+
+    MemberConstroller --> MemberMapper : uses
+    OrderController --> OrderMapper : uses
+    app.persistence --> app.Exceptions : uses
+
+    MemberMapper --> app.entities : uses
+    OrderMapper --> app.entities : uses
+
+    Orders --> Orderlines : contains
+    Orders --> Member : associated with
+    Orderlines --> Cupcake : references
+}
+@enduml

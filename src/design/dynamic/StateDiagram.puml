@@ -1,0 +1,33 @@
+@startuml
+skinparam state {
+  BackgroundColor LightBlue
+  BorderColor Blue
+  FontName Arial
+}
+
+[*] --> Uregistreret_Bruger
+
+Uregistreret_Bruger --> Registreret_Kunde : US-2: Opret konto
+Uregistreret_Bruger --> Registreret_Kunde : US-5: Log ind (kunde)
+Uregistreret_Bruger --> Administrator_Logget_Ind : US-5: Log ind (admin)
+
+Registreret_Kunde --> Indkøbskurv : US-4: Tilføj varer
+Registreret_Kunde --> Uregistreret_Bruger : US-5: Log ud
+
+Indkøbskurv --> Indkøbskurv : US-8: Fjern varer
+Indkøbskurv --> Betalt_Ordre : US-1: Bestil og betal
+
+Betalt_Ordre --> Ordre_Fjernet : US-9: Fjern ordre (admin)
+Betalt_Ordre --> Ordre_Fuldført : System: Ordren er klar
+
+Administrator_Logget_Ind --> Kontoopdatering : US-3: Opdatér kundes konto
+Administrator_Logget_Ind --> Administrator_Logget_Ind : US-6: Se alle ordrer
+Administrator_Logget_Ind --> Administrator_Logget_Ind : US-7: Se alle kunder
+Administrator_Logget_Ind --> Ordre_Fjernet : US-9: Fjern en ordre
+Administrator_Logget_Ind --> Uregistreret_Bruger : US-5: Log ud
+
+Kontoopdatering --> Administrator_Logget_Ind
+
+Ordre_Fuldført --> [*]
+Ordre_Fjernet --> [*]
+@enduml
