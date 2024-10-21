@@ -231,25 +231,23 @@ DELETE
 NO ACTION
     NOT VALID;
 
--- Insert Bottom data
 INSERT INTO public.bottom (bottom_name, bottom_price)
-VALUES ('Chocolate', 5.00),
-       ('Vanilla', 5.00),
-       ('Nutmeg', 5.00),
-       ('Pistacio', 6.00),
-       ('Almond', 7.00);
+VALUES ('Chokolade', 5.00),
+       ('Vanilje', 5.00),
+       ('Muskatnød', 5.00),
+       ('Pistacie', 6.00),
+       ('Mandel', 7.00);
 
--- Insert Topping data
 INSERT INTO public.topping (topping_name, topping_price)
-VALUES ('Chocolate', 5.00),
-       ('Blueberry', 5.00),
-       ('Rasberry', 5.00),
-       ('Crispy', 6.00),
-       ('Strawberry', 6.00),
-       ('Rum/Raisin', 7.00),
-       ('Orange', 8.00),
-       ('Lemon', 8.00),
-       ('Blue cheese', 9.00);
+VALUES ('Chokolade', 5.00),
+       ('Blåbær', 5.00),
+       ('Hindbær', 5.00),
+       ('Sprød', 6.00),
+       ('Jordbær', 6.00),
+       ('Rom/Rosin', 7.00),
+       ('Appelsin', 8.00),
+       ('Citron', 8.00),
+       ('Blåskimmelost', 9.00);
 
 -- Add admin user
 INSERT INTO public.member (name, email, mobile, password, role, balance)
