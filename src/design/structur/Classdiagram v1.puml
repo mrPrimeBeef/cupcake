@@ -11,7 +11,8 @@ package app {
 
   }
   package app.Exceptions{
-  class DatabaseException
+  class DatabaseException{
+  + DatabaseException(String userMessage, String systemMessage)
   }
   package app.config {
     class ThymeleafConfig {

@@ -1,0 +1,21 @@
+@startuml
+object login
+object createMember
+object member
+object memberOrder
+object orderline
+object cupcake
+object bottom
+object topping
+object cart
+
+member *-- cart
+createMember *-- login
+cart *-- memberOrder
+login *-- member
+memberOrder *-- orderline
+orderline *-- cupcake
+cupcake *-- bottom
+cupcake *-- topping
+
+@enduml
