@@ -1,10 +1,6 @@
 package app;
 
 import app.config.ThymeleafConfig;
-import app.controllers.ParmController;
-import app.controllers.TimeZonesController;
-import app.controllers.UserController;
-import app.controllers.WarhammerController;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
