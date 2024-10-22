@@ -26,13 +26,13 @@ public class OrdrelineMapper {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                int bottomId = rs.getInt("bottom_id");
-                int toppingId = rs.getInt("topping_id");
+                int bottomPrice = rs.getInt("bottom_price");
+                int toppingPrice = rs.getInt("topping_price");
                 int userIdSQL = rs.getInt("user_id");
                 String bottom = rs.getString("bottom_name");
                 String topping = rs.getString("topping_name");
 
-                cupcakes.add(new Cupcake(bottomId,toppingId, userIdSQL, bottom, topping));
+                cupcakes.add(new Cupcake(bottomPrice,toppingPrice, userIdSQL, bottom, topping));
             }
         } catch (SQLException e) {
             throw new DatabaseException("DB fejl", e.getMessage());
