@@ -7,10 +7,9 @@ import app.persistence.MemberMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
-public class UserController
-{
-    public static void addRoutes(Javalin app, ConnectionPool connectionPool)
-    {
+public class MemberController {
+
+    public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("login", ctx -> ctx.render("login.html"));
 
         app.post("login", ctx -> login(ctx, connectionPool));
@@ -49,32 +48,26 @@ public class UserController
 //
 //    }
 
-    private static void logout(Context ctx)
-    {
+    private static void logout(Context ctx) {
         ctx.req().getSession().invalidate();
         ctx.redirect("/");
     }
 
 
-    public static void login(Context ctx, ConnectionPool connectionPool)
-    {
+    public static void login(Context ctx, ConnectionPool connectionPool) {
         // Hent form parametre
         String email = ctx.formParam("email");
         String password = ctx.formParam("password");
 
         // Check om bruger findes i DB med de angivne email + password
-        try
-        {
-            Member user = MemberMapper.login(email, password, connectionPool);
-            ctx.sessionAttribute("currentUser", user);
-            // Hvis ja, send videre til forsiden med login besked
-            ctx.attribute("message", "Du er nu logget ind");
+        try {
+            Member member = MemberMapper.login(email, password, connectionPool);
+            ctx.sessionAttribute("currentMember", member);
+            // Hvis ja, send videre til forsiden
             ctx.render("index.html");
-        }
-        catch (DatabaseException e)
-        {
+        } catch (DatabaseException e) {
             // Hvis nej, send tilbage til login side med fejl besked
-            ctx.attribute("message", e.getMessage() );
+            ctx.attribute("message", e.getMessage());
             ctx.render("login.html");
         }
 
