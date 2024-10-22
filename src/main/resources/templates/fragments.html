@@ -14,9 +14,14 @@
 <div id="page-container">
 
   <div id="page-content">
-    <header th:fragment="header(title)">
-      <div class="headerimage">
-        <img th:src="@{/images/myevents/frontpage_crop.jpeg}" src="/images/myevents/frontpage_crop.jpeg" width="100%"/>
+    <header th:fragment="header(bar)">
+      <div class="header-bar-left">
+        <a href="#" th:class="header-link">Mine ordrer</a>
+      </div>
+      <div class="header-bar-right">
+        <a href="#" th:class="header-link">logud</a>
+        <span class="email" th:text="${userEmail}">brugernavn@gmail.com</span>
+        <a href="#" th:class="cart-icon">&#128722;</a>
       </div>
     </header>
 
