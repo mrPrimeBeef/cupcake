@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="../public/css/myevent_eventlist.css" th:href="@{/css/myevent_eventlist.css}" rel="stylesheet"/>
+  <link href="../public/ccs/styles.css" th:href="@{/ccs/styles.css}" rel="stylesheet"/>
 </head>
 
 <body>
@@ -14,14 +14,16 @@
 <div id="page-container">
 
   <div id="page-content">
-    <header th:fragment="header(bar)">
+    <header th:fragment="headerFragment" class="header-container">
+      <div class="header-text">
       <div class="header-bar-left">
-        <a href="#" th:class="header-link">Mine ordrer</a>
+        <a href="#" class="header-link">Mine ordrer</a>
       </div>
       <div class="header-bar-right">
-        <a href="#" th:class="header-link">logud</a>
-        <span class="email" th:text="${userEmail}">brugernavn@gmail.com</span>
-        <a href="#" th:class="cart-icon">&#128722;</a>
+        <a href="#" class="header-link">logud</a>
+        <span class="email" th:text="${session.currentUser.email}"></span>
+        <a href="#" class="cart-icon">&#128722;</a>
+      </div>
       </div>
     </header>
 
