@@ -1,6 +1,6 @@
 package app.persistence;
 
-import app.entities.User;
+import app.entities.Member;
 import app.exceptions.DatabaseException;
 
 import java.sql.Connection;
@@ -11,9 +11,9 @@ import java.sql.SQLException;
 public class UserMapper
 {
 
-    public static User login(String userName, String password, ConnectionPool connectionPool) throws DatabaseException
+    public static Member login(String userName, String password, ConnectionPool connectionPool) throws DatabaseException
     {
-        String sql = "select * from public.\"users\" where username=? and password=?";
+        String sql = "SELECT * FROM member WHERE email=? AND password=?";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -26,12 +26,12 @@ public class UserMapper
             ResultSet rs = ps.executeQuery();
             if (rs.next())
             {
-                int id = rs.getInt("user_id");
+                int id = rs.getInt("member_id");
                 String role = rs.getString("role");
-                return new User(id, userName, password, role);
+                return new Member(id, userName, password, role);
             } else
             {
-                throw new DatabaseException("Fejl i login. Prøv igen");
+                throw new DatabaseException("Forkert brugernavn eller password");
             }
         }
         catch (SQLException e)
