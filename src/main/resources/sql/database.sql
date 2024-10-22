@@ -15,12 +15,13 @@ CREATE TABLE IF NOT EXISTS public.member
 (
     member_id serial NOT NULL,
     name character varying COLLATE pg_catalog."default" NOT NULL,
-    email character varying UNIQUE COLLATE pg_catalog."default" NOT NULL,
+    email character varying COLLATE pg_catalog."default" NOT NULL,
     mobile character varying COLLATE pg_catalog."default" NOT NULL,
     password character varying COLLATE pg_catalog."default" NOT NULL,
-    role character varying COLLATE pg_catalog."default" NOT NULL,
+    role character varying COLLATE pg_catalog."default" NOT NULL DEFAULT 'customer'::character varying,
     balance integer NOT NULL,
     CONSTRAINT customer_pkey PRIMARY KEY (member_id),
+    CONSTRAINT email UNIQUE (email)
     );
 
 CREATE TABLE IF NOT EXISTS public.member_order
@@ -36,7 +37,7 @@ CREATE TABLE IF NOT EXISTS public.member_order
 CREATE TABLE IF NOT EXISTS public.orderline
 (
     orderline_id serial NOT NULL,
-    ordernumber integer NOT NULL,
+    order_number integer NOT NULL,
     bottom_id integer NOT NULL,
     topping_id integer NOT NULL,
     quantity integer NOT NULL,
@@ -68,12 +69,10 @@ ALTER TABLE IF EXISTS public.orderline
 
 
 ALTER TABLE IF EXISTS public.orderline
-    ADD CONSTRAINT fk_order FOREIGN KEY (ordernumber)
+    ADD CONSTRAINT fk_order FOREIGN KEY (order_number)
     REFERENCES public.member_order (order_number) MATCH SIMPLE
     ON UPDATE NO ACTION
        ON DELETE NO ACTION;
-CREATE INDEX IF NOT EXISTS orderline_pkey
-    ON public.orderline(ordernumber);
 
 
 ALTER TABLE IF EXISTS public.orderline

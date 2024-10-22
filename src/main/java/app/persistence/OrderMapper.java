@@ -50,4 +50,20 @@ public class OrderMapper {
         }
     }
 
+    public static void updateOrderStatus(int orderNumber, String status, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE member_order SET status = ? WHERE order_number = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, status);
+            ps.setInt(2, orderNumber);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Error updating order status for order number: " + orderNumber);
+        }
+    }
+
+
 }
