@@ -22,9 +22,9 @@ public class ToppingMapper {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                int toppingId = rs.getInt("bottom_id");
-                String toppingName = rs.getString("bottom_name");
-                double toppingPrice = rs.getDouble("bottom_price");
+                int toppingId = rs.getInt("topping_id");
+                String toppingName = rs.getString("topping_name");
+                double toppingPrice = rs.getDouble("topping_price");
 
                 Topping topping = new Topping(toppingId, toppingName, toppingPrice);
 
@@ -32,7 +32,7 @@ public class ToppingMapper {
             }
 
         } catch (SQLException e){
-            throw new DatabaseException("Error in getting bottom names from database");
+            throw new DatabaseException("Error in getting topping names from database");
         }
         return bottomNames;
     }
@@ -58,7 +58,7 @@ public class ToppingMapper {
             }
 
         } catch (SQLException e){
-            throw new DatabaseException("Error in getting bottom name from database");
+            throw new DatabaseException("Error in getting topping name from database");
         }
 
         if (topping == null) {
