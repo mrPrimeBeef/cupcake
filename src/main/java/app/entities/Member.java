@@ -1,7 +1,6 @@
 package app.entities;
 
-public class Member
-{
+public class Member {
     private int memberId;
     private String name;
     private String email;
@@ -10,8 +9,7 @@ public class Member
     private String role;
     private int balance;
 
-    public Member(int memberId, String name, String email, String mobile, String password, String role, int balance)
-    {
+    public Member(int memberId, String name, String email, String mobile, String password, String role, int balance) {
         this.memberId = memberId;
         this.name = name;
         this.email = email;
@@ -21,50 +19,45 @@ public class Member
         this.balance = balance;
     }
 
-    public int getMemberId()
-    {
+    public int getMemberId() {
         return memberId;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public String getEmail()
-    {
+    public String getEmail() {
         return email;
     }
 
-    public String getMobile()
-    {
+    public String getMobile() {
         return mobile;
     }
 
-    public String getPassword()
-    {
+    public String getPassword() {
         return password;
     }
 
-    public String getRole()
-    {
+    public String getRole() {
         return role;
     }
 
-    public int getBalance()
-    {
+    public int getBalance() {
         return balance;
     }
 
-//    TODO: Gør denne metode færdig
+    //    TODO: Gør denne metode færdig
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "Member{" +
                 "memberId=" + memberId +
                 ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", mobile='" + mobile + '\'' +
                 ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
+                ", balance=" + balance +
                 '}';
     }
 }

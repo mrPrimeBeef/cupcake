@@ -10,17 +10,20 @@ import io.javalin.http.Context;
 public class MemberController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-
         app.post("login", ctx -> login(ctx, connectionPool));
-        app.get("logout", ctx -> logout(ctx));
+
         app.get("opretbruger", ctx -> ctx.render("opretbruger.html"));
 //        app.post("opretbruger", ctx -> createMember(ctx, connectionPool));
+
+        app.get("logout", ctx -> logout(ctx));
     }
 
-//    private static void createUser(Context ctx, ConnectionPool connectionPool)
+//    private static void createMember(Context ctx, ConnectionPool connectionPool)
 //    {
 //        // Hent form parametre
-//        String username = ctx.formParam("username");
+//        String name = ctx.formParam("name");
+//        String email = ctx.formParam("email");
+//        String mobile = ctx.formParam("mobile");
 //        String password1 = ctx.formParam("password1");
 //        String password2 = ctx.formParam("password2");
 //
@@ -37,12 +40,12 @@ public class MemberController {
 //            catch (DatabaseException e)
 //            {
 //                ctx.attribute("message", "Dit brugernavn findes allerede. Prøv igen, eller log ind");
-//                ctx.render("createuser.html");
+//                ctx.render("opretbruger.html");
 //            }
 //        } else
 //        {
-//            ctx.attribute("message", "Dine to passwords matcher ikke! Prøv igen");
-//            ctx.render("createuser.html");
+//            ctx.attribute("message", "De to kodeord er ikke ens");
+//            ctx.render("opretbruger.html");
 //        }
 //
 //    }
@@ -61,6 +64,7 @@ public class MemberController {
         // Check om bruger findes i DB med de angivne email + password
         try {
             Member member = MemberMapper.login(email, password, connectionPool);
+            System.out.println(member);
             ctx.sessionAttribute("currentMember", member);
             // Hvis ja, send videre til forsiden
             ctx.render("index.html");
