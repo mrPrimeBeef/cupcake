@@ -2,14 +2,14 @@
 package app.entities;
 
 public class Orderline {
-    private int orderlineId;
+    private int ordernumber;
     private Bottom bottom;
     private Topping topping;
     private int quantity;
     private double orderlinePrice;
 
-    public Orderline(int orderlineId, Bottom bottom, Topping topping, int quantity, double orderlinePrice) {
-        this.orderlineId = orderlineId;
+    public Orderline(int ordernumber, Bottom bottom, Topping topping, int quantity, double orderlinePrice) {
+        this.ordernumber = ordernumber;
         this.bottom = bottom;
         this.topping = topping;
         this.quantity = quantity;
@@ -17,7 +17,7 @@ public class Orderline {
     }
 
     // Getters and Setters
-    public int getOrderlineId() { return orderlineId; }
+    public int getOrdernumber() { return ordernumber; }
     public Bottom getBottom() { return bottom; }
     public Topping getTopping() { return topping; }
     public int getQuantity() { return quantity; }

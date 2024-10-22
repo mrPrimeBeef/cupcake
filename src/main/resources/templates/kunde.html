@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
+<head>
 <title>Frontpage</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+<link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
@@ -18,33 +18,33 @@
     <h1 class="intro-headline">Velkommen ombord</h1>
     <p class="intro-text">Øens bedste cupcakes. Vælge og bestil her:</p>
 
-    <div class="menu-drop">
+    <form action="/kunde" method="post">
+        <div class="menu-drop">
 
-        <select id="bund" name="bund" required>
-            <option value="">Vælg bund</option>
-            <option th:each="bottom : ${bottoms}" th:value="${bottom.bottomId}" th:text="${bottom.bottomName}"></option>
-        </select>
+            <select id="bund" name="bund" required>
+                <option value="">Vælg bund</option>
+                <option th:each="bottom : ${bottoms}" th:value="${bottom.bottomId}" th:text="${bottom.bottomName}"></option>
+            </select>
 
-        <select id="topping" name="topping" required>
-            <option value="">Vælg topping</option>
-            <option th:each="topping : ${toppings}" th:value="${topping.toppingId}" th:text="${topping.toppingName}"></option>
-        </select>
+            <select id="topping" name="topping" required>
+                <option value="">Vælg topping</option>
+                <option th:each="topping : ${toppings}" th:value="${topping.toppingId}" th:text="${topping.toppingName}"></option>
+            </select>
 
+            <select id="antal" name="antal" required>
+                <option value="">Vælg antal</option>
+                <option th:each="i : ${#numbers.sequence(1, 10)}"
+                        th:value="${i}"
+                        th:text="${i}">
+                </option>
+            </select>
+        </div>
 
-        <select id="antal" name="antal" required>
-            <option value="">Vælg antal</option>
-            <option th:each="i : ${#numbers.sequence(1, 10)}"
-                    th:value="${i}"
-                    th:text="${i}">
-            </option>
-        </select>
-    </div>
-
-    <button class="order-button" type="submit">Læg i kurv</button>
-</div>
+        <button class="order-button" type="submit">Læg i kurv</button>
+    </form>
 
 <footer>
 </footer>
-
+</div>
 </body>
 </html>

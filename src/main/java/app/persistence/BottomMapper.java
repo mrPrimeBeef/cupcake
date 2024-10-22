@@ -65,4 +65,34 @@ public class BottomMapper {
         }
         return bottom;
     }
+
+    public static Bottom getBottomByName(String name, ConnectionPool connectionPool) throws DatabaseException {
+        Bottom bottom = null;
+
+        String sql = "SELECT * " +
+                     "FROM bottom WHERE bottom_name = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)){
+
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int buttomId = rs.getInt("bottom_id");
+                String bottomName = rs.getString("bottom_name");
+                double bottomPrice = rs.getDouble("bottom_price");
+
+                bottom = new Bottom(buttomId, bottomName, bottomPrice);
+            }
+
+        } catch (SQLException e){
+            throw new DatabaseException("Error in getting bottom name from database");
+        }
+
+        if (bottom == null) {
+            throw new DatabaseException("No bottom found with id: " + name);
+        }
+        return bottom;
+    }
 }

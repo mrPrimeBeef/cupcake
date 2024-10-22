@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class OrderlineMapper {
 
-    public ArrayList<Orderline> getOrderlinesByOrderNumber(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
+    public static ArrayList<Orderline> getOrderlinesByOrderNumber(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<Orderline> orderlines = new ArrayList<>();
         String sql = "SELECT * FROM orderline WHERE order_number = ?";
 
@@ -31,7 +31,7 @@ public class OrderlineMapper {
         return orderlines;
     }
 
-    private Orderline mapRowToOrderline(ResultSet rs, ConnectionPool connectionPool) throws SQLException, DatabaseException {
+    private static Orderline mapRowToOrderline(ResultSet rs, ConnectionPool connectionPool) throws SQLException, DatabaseException {
         int orderlineId = rs.getInt("orderline_id");
         int bottomId = rs.getInt("bottom_id");
         int toppingId = rs.getInt("topping_id");
@@ -44,13 +44,13 @@ public class OrderlineMapper {
         return new Orderline(orderlineId, bottom, topping, quantity, orderlinePrice);
     }
 
-    public void createOrderline(Orderline orderline, int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "INSERT INTO orderline (order_number, bottom_id, topping_id, quantity, orderline_price) VALUES (?, ?, ?, ?, ?)";
+    public void createOrderline(Orderline orderline, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "INSERT INTO orderline (orderline_id, bottom_id, topping_id, quantity, orderline_price) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            ps.setInt(1, orderNumber);
+            ps.setInt(1, orderline.getOrdernumber());
             ps.setInt(2, orderline.getBottom().getBottomId());
             ps.setInt(3, orderline.getTopping().getToppingId());
             ps.setInt(4, orderline.getQuantity());
@@ -58,7 +58,7 @@ public class OrderlineMapper {
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            throw new DatabaseException("Error creating order line for order number: " + orderNumber);
+            throw new DatabaseException("Error creating orderline: " + orderline.getOrdernumber());
         }
     }
 }
