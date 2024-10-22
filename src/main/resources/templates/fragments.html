@@ -15,15 +15,18 @@
 
   <div id="page-content">
     <header th:fragment="headerFragment" class="header-container">
-      <div class="header-text">
-      <div class="header-bar-left">
-        <a href="#" class="header-link">Mine ordrer</a>
+      <div class="headerimage">
+        <img th:src="@{/resources/public/images/logo.png}" src="/public/images/logo.png" width="100" height="100"/>
+        <img th:src="@{/resources/public/images/cupcakelogo.png}" src="/public/images/cupcakelogo.png" width="25%" height="25%"/>
       </div>
-      <div class="header-bar-right">
+      <div class="header-text">
+        <a href="#" class="header-link">Mine ordrer</a>
+        <div class="left">
         <a href="#" class="header-link">logud</a>
         <span class="email" th:text="${session.currentUser.email}"></span>
         <a href="#" class="cart-icon">&#128722;</a>
-      </div>
+        </div>
+
       </div>
     </header>
 

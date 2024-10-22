@@ -21,28 +21,27 @@ html, body {
 header {
     width: 100%;  /* Ensure header fills full width */
 }
-div{
-    width: 100%;
-}
 
-header .header-text, .header-container {
-    display: flex;  /* Use flex for proper layout */
+header .header-text {
+    display: flex;
+    flex-direction: row;
+    column-count: 2;
+    column-gap: 85%;
+    align-items: center;
     padding: 10px;  /* Optional: Add some padding for aesthetics */
-    background-color: #f8f8f8;  /* Optional: Set background color */
+    background-color: salmon;  /* Optional: Set background color */
     width: 100%;
 }
-
-.header-bar-left, .header-bar-right {
-    display: flex;  /* Use flex for consistent behavior */
-    width: 100%;  /* Ensure they fill the available width */
+.headerimage{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: darkolivegreen;
 }
 
-.header-bar-left {
-    justify-content: flex-start;  /* Align items to the start */
-}
-
-.header-bar-right {
-    justify-content: flex-end;  /* Align items to the end */
+.left{
+    display: flex;
+    justify-content: flex-end;
 }
 
 .header-link, .cart-icon {
