@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<title>Frontpage</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="public/ccs/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+
+<div class="page">
+
+    <header>
+    </header>
+
+    <h1 class="intro-headline">Velkommen ombord</h1>
+    <p class="intro-text">Øens bedste cupcakes. Vælge og bestil her:</p>
+
+    <div class="menu-drop">
+
+        <select id="bund" name="bund" required>
+            <option value="">Vælg bund...</option>
+            <option value="chocolate">Chokolade</option>
+            <option value="vanilla">Vanilje</option>
+            <option value="red-velvet">Red Velvet</option>
+            <option value="lemon">Citrus</option>
+        </select>
+
+
+        <select id="topping" name="topping" required>
+            <option value="">Vælg topping...</option>
+            <option value="buttercream">Smørcreme</option>
+            <option value="whipped-cream">Pisket fløde</option>
+            <option value="cream-cheese">Flødeost</option>
+            <option value="chocolate-ganache">Chokoladeganache</option>
+        </select>
+
+
+        <select id="antal" name="antal" required>
+            <option value="">Vælg antal...</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+        </select>
+    </div>
+    <button class="order-button" type="submit">Læg i kurv</button>
+</div>
+
+<footer>
+</footer>
+
+</body>
+</html>
+

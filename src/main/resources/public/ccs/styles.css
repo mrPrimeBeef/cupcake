@@ -1,126 +1,104 @@
-/* Stylesheet for the application - dont' touch */
-/* Stylesheet for the application */
+body{
+    margin:0px;
+    background-color: #F3F3ED;
+}
 
-html * {
-    box-sizing: border-box;
+p{
+    font-size: 30px;
+    color: darkred;
+}
+#ContainerHeader {
+    display: flex;
+    justify-content: center; /* Centrerer horisontalt */
+    align-items: center;     /* Centrerer vertikalt */
+    height: 300px;           /* Juster højden som nødvendigt */
+    border: 1px solid black; /* Kun for at vise containerens kant */
+    background-color: peachpuff;
+}
+
+#header {
+    max-width: 60%;
+    height: auto; /* Sørg for, at billedet skalerer korrekt */
+}
+
+.menu {
+    background-color: #f8f8f8;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+.menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+.menu li {
+    margin: 0 15px;
+}
+.menu a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+.email {
+    margin-left: auto;
+    margin-right: 45px;
+}
+.cart-icon {
+    color: #333;
+    font-size: 20px;
+    margin-right: 45px;
+}
+
+.intro-headline{
+    font-size: 56px;
+    margin-top: 5%;
+    margin-left: 15%;
+}
+
+.intro-text{
+    margin-left: 15%;
 }
 
 body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+.menu-drop{
+    margin-left: 15%;
+}
+#bund{
+    margin-right: 15%;
+}
+#topping{
+    margin-right: 15%;
+}
+#antal{
+    margin-right: 15%;
 }
 
-.page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 800px;
-    padding: 8px;
-    border: 1px solid silver;
-    min-height: 600px;
+.menu label {
+    font-weight: bold;
+    display: block;
 }
-
-header {
-    margin-bottom: 40px;
+.menu select {
+    padding: 5px;
+    width: 15%;
 }
-
-header a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-header a img {
-    width: 70%;
-}
-
-h1 {
-    font-size: 2.125rem;
-}
-
-h2 {
-    font-size: 1.875rem;
-}
-
-h3 {
-    font-size: 1.5rem;
-}
-
-.error {
-    border: 1px solid red;
-    padding: 10px;
-    color: red;
-    max-width: 400px;
-}
-
-.generic-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.generic-form input[type=text],
-.generic-form input[type=password],
-.generic-form button {
-    padding: 7px;
-    border-radius: 5px;
-    border: 1px solid silver;
-}
-
-.generic-form button:hover {
-    background-color: darkgray;
-}
-
-.projects {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.cards {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-}
-
-.card {
-    display: flex;
-    flex-direction: column;
-    min-width: 100px;
-    max-width: 200px;
-    align-items: center;
-    gap: 10px;
-    border: 1px solid silver;
-    border-radius: 8px;
-}
-
-.card-image {
-    width: 100%;
-    height: auto;
-    border-radius: 8px 8px 0px 0px;
-}
-
-.card-link {
-    font-family: "Helvetica Neue";
-    padding: 10px;
-    font-size: 0.85rem;
+.order-button {
+    padding:10px 20px;
+    font-weight: bold;
+    background-color: cornflowerblue;
     color: white;
-    border: solid 1px silver;
-    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 85%;
+    margin-top: 10px;
+}
+.order-button:hover {
     background-color: darkblue;
-    margin-bottom: 10px;
-    border-radius: 10px;
-}
-
-.card-link:hover {
-    background-color: #2566ac;
-}
-
-.card-copy {
-    font-family: "Helvetica Neue";
-    padding: 10px;
-    font-size: 0.85rem;
 }
