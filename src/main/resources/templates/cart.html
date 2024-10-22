@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Cart</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body>
+<div class="page">
+
+
+    <form class="cart" method="post">
+
+            <table class="cart-table">
+                <thead>
+                <tr>
+                    <th>Bund</th>
+                    <th>Topping</th>
+                    <th>Antal</th>
+                    <th>Pris</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="Bund: ${bottomList}">
+                    <td th:text="${bottom_name}"></td>
+                    th:each="Topping: ${toppingList}">
+                    <td th:text="${topping_name}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+
+
+        <div>
+            <button id="sub_button" type="submit">Køb</button>
+        </div>
+    </form>
+
+</div>
+</body>
+</html>
