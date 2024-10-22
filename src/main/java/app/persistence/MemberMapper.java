@@ -36,15 +36,17 @@ public class MemberMapper {
         }
     }
 
-    public static void createuser(String userName, String password, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "insert into users (username, password) values (?,?)";
+    public static void createMember(String name, String email, String mobile, String password, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "INSERT INTO member (name, email, mobile, password, balance) VALUES (?,?,?,?,100)";
 
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
         ) {
-            ps.setString(1, userName);
-            ps.setString(2, password);
+            ps.setString(1, name);
+            ps.setString(2, email);
+            ps.setString(3, mobile);
+            ps.setString(4, password);
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected != 1) {

@@ -36,11 +36,13 @@
     <label for="password2">Gentag kodeord</label><br>
     <input type="password" id="password2" name="password2" placeholder="Kodeord" required/><br>
 
-    <div><p th:text="${message}"></p></div>
+    <p class="error" th:text="${message}"></p>
 
     <button type="submit" formaction="/opretbruger">Opret bruger</button>
 
 </form>
+
+
 
 </body>
 </html>
