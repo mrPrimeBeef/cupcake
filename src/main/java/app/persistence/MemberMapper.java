@@ -37,7 +37,7 @@ public class MemberMapper {
     }
 
     public static void createMember(String name, String email, String mobile, String password, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "INSERT INTO member (name, email, mobile, password, balance) VALUES (?,?,?,?,100)";
+        String sql = "INSERT INTO member (name, email, mobile, password, balance) VALUES (?,?,?,?,0)";
 
         try (
                 Connection connection = connectionPool.getConnection();
