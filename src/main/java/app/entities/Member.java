@@ -2,27 +2,43 @@ package app.entities;
 
 public class Member
 {
-    private int userId;
-    private String userName;
+    private int memberId;
+    private String name;
+    private String email;
+    private String mobile;
     private String password;
     private String role;
+    private int balance;
 
-    public Member(int userId, String userName, String password, String role)
+    public Member(int memberId, String name, String email, String mobile, String password, String role, int balance)
     {
-        this.userId = userId;
-        this.userName = userName;
+        this.memberId = memberId;
+        this.name = name;
+        this.email = email;
+        this.mobile = mobile;
         this.password = password;
         this.role = role;
+        this.balance = balance;
     }
 
-    public int getUserId()
+    public int getMemberId()
     {
-        return userId;
+        return memberId;
     }
 
-    public String getUserName()
+    public String getName()
     {
-        return userName;
+        return name;
+    }
+
+    public String getEmail()
+    {
+        return email;
+    }
+
+    public String getMobile()
+    {
+        return mobile;
     }
 
     public String getPassword()
@@ -35,12 +51,18 @@ public class Member
         return role;
     }
 
+    public int getBalance()
+    {
+        return balance;
+    }
+
+//    TODO: Gør denne metode færdig
     @Override
     public String toString()
     {
-        return "User{" +
-                "userId=" + userId +
-                ", userName='" + userName + '\'' +
+        return "Member{" +
+                "memberId=" + memberId +
+                ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
                 '}';
