@@ -1,6 +1,8 @@
 package app;
 
 import app.config.ThymeleafConfig;
+import app.controllers.MemberController;
+import app.controllers.OrderController;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;

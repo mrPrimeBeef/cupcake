@@ -34,4 +34,20 @@ public class OrderMapper {
         return orderNumber;
     }
 
+    public static void updateOrderPrice(int orderNumber, double totalPrice, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE member_order SET order_price = ? WHERE order_number = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setDouble(1, totalPrice);
+            ps.setInt(2, orderNumber);
+
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Error updating order price for order number: " + orderNumber);
+        }
+    }
+
 }

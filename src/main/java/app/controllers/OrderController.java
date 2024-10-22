@@ -1,6 +1,7 @@
 package app.controllers;
 
 import app.entities.Bottom;
+import app.entities.Member;
 import app.entities.Orderline;
 import app.entities.Topping;
 import app.exceptions.DatabaseException;
@@ -8,6 +9,8 @@ import app.persistence.*;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 
@@ -45,22 +48,42 @@ public class OrderController {
 
     private static void addToOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
 
-        String selectedBottom = ctx.formParam("bund");
-        Bottom bottom = BottomMapper.getBottomByName(selectedBottom, connectionPool);
+        int selectedBottom = Integer.parseInt(ctx.formParam("bund"));
+        Bottom bottom = BottomMapper.getBottomNameById(selectedBottom, connectionPool);
 
-        String selectedTopping = ctx.formParam("topping");
-        Topping topping = ToppingMapper.getToppingByName(selectedTopping, connectionPool);
+        int selectedTopping = Integer.parseInt(ctx.formParam("topping"));
+        Topping topping = ToppingMapper.getToppingNameById(selectedTopping, connectionPool);
 
-        String quantity = ctx.formParam("antal");
         double toppingPrice = topping.getToppingPrice();
         double bottomPrice = bottom.getBottomPrice();
 
-        double orderlinePrice = toppingPrice + bottomPrice;
+        String number = ctx.formParam("antal");
+        int quantity = Integer.parseInt(number);
 
+        double orderlinePrice = (toppingPrice + bottomPrice) * quantity;
 
+        Member member = ctx.sessionAttribute("currentMember");
 
-        Orderline orderline = new Orderline(ordernumber, bottom,topping, quantity, orderlinePrice);
+        Date date = new Date(System.currentTimeMillis());
+
+        int orderNumber = OrderMapper.createOrder(member.getMemberId(), date, "In progress", 0,connectionPool);
+
+        Orderline orderline = new Orderline(orderNumber, bottom,topping, quantity, orderlinePrice);
 
         OrderlineMapper.createOrderline(orderline, connectionPool);
+
+        updateOrderPrice(orderNumber, connectionPool);
     }
+    private static void updateOrderPrice(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
+        ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(orderNumber, connectionPool);
+
+
+        double totalPrice = 0;
+        for (Orderline orderline : orderlines) {
+            totalPrice += orderline.getOrderlinePrice() * orderline.getQuantity();
+        }
+
+        OrderMapper.updateOrderPrice(orderNumber, totalPrice, connectionPool);
+    }
+
 }

@@ -17,7 +17,7 @@ public class Orderline {
     }
 
     // Getters and Setters
-    public int getOrdernumber() { return ordernumber; }
+    public int getOrderNumber() { return ordernumber; }
     public Bottom getBottom() { return bottom; }
     public Topping getTopping() { return topping; }
     public int getQuantity() { return quantity; }
