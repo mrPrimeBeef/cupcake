@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>-->
+</head>
+
+<body>
+
+<h1>Velkommen til Olsker Cupcakes</h1>
+<h2>Log på med din email og kodeord</h2>
+
+<form method="post">
+
+    <label for="username">Brugernavn</label><br>
+    <input type="text" id="username" name="username" placeholder="Email"/><br>
+
+    <label for="password">Kodeord</label><br>
+    <input type="password" id="password" name="password" placeholder="Kodeord"/><br>
+
+    <button type="submit" formaction="/login">Login</button>
+    <!--    <div><p class="error" th:unless="${#strings.isEmpty(message)}" th:text="${message}"></p></div>-->
+
+    <p>Ikke bruger endnu? <a href="/konto">Opret konto</a></p>
+</form>
+
+
+</body>
+</html>
