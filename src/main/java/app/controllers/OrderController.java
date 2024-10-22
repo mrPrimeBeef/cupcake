@@ -90,6 +90,18 @@ public class OrderController {
         OrderMapper.updateOrderPrice(orderNumber, totalPrice, connectionPool);
     }
 
+    private static void cancelOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        Order currentOrder = ctx.sessionAttribute("currentOrder");
+
+        if (currentOrder == null) {
+            throw new DatabaseException("No active order to cancel.");
+        }
+
+        OrderMapper.updateOrderStatus(currentOrder.getOrderNumber(), "Canceled", connectionPool);
+
+        ctx.sessionAttribute("currentOrder", null);
+    }
+
     private static void checkoutOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         Order currentOrder = ctx.sessionAttribute("currentOrder");
 
