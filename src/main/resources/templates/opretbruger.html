@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Opret bruger</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>-->
+
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<h2>Opret bruger</h2>
+
+<form method="post">
+
+    <label for="name">Fulde navn</label><br>
+    <input type="text" id="name" name="name" placeholder="Fulde navn" required/><br>
+
+    <label for="email">Brugernavn (din email)</label><br>
+    <input type="email" id="email" name="email" placeholder="Email" required/><br>
+
+    <label for="mobile">Mobil</label><br>
+    <input type="text" id="mobile" name="mobile" placeholder="Mobil" required/><br>
+
+    <label for="password1">Kodeord</label><br>
+    <input type="password" id="password1" name="password1" placeholder="Kodeord" required/><br>
+
+    <label for="password2">Gentag kodeord</label><br>
+    <input type="password" id="password2" name="password2" placeholder="Kodeord" required/><br>
+
+    <div><p th:text="${message}"></p></div>
+
+    <button type="submit" formaction="/opretbruger">Opret bruger</button>
+
+</form>
+
+</body>
+</html>
