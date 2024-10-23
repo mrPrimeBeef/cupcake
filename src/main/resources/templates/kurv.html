@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Kurv</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{css/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<div class="page">
+    <form class="cart" method="post">
+        <table class="cart-table">
+            <thead>
+            <tr>
+                <th>Bund</th>
+                <th>Topping</th>
+                <th>Antal</th>
+                <th>Pris</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="orderline : ${orderlines}">
+                <td th:text="${orderline.bottom.bottomName}"></td>
+                <td th:text="${orderline.topping.toppingName}"></td>
+                <td th:text="${orderline.quantity}"></td>
+                <td th:text="${orderline.orderlinePrice}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+
+    <div class="total">
+        <p>Samlet pris: <span th:text="${totalPrice}"></span> DKK</p>
+    </div>
+
+    <form action="/tak" method="post">
+        <div>
+            <button class="køb-knap" type="submit">Køb</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

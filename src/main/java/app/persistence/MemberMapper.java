@@ -1,7 +1,9 @@
 package app.persistence;
 
 import app.entities.Member;
+import app.entities.Order;
 import app.exceptions.DatabaseException;
+import io.javalin.http.Context;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -61,10 +63,52 @@ public class MemberMapper {
         }
     }
 
-    public static Member getMemberById(int memberId, ConnectionPool connectionPool) throws DatabaseException {
 
+    public static Member getBalance(int memberId, int balance, Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         Member member = null;
+        String sql = "SELECT * FROM member WHERE member_id=?";
 
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ps.setInt(1, memberId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int currentBalance = rs.getInt("balance");
+
+                member = new Member(memberId, currentBalance);
+                return member;
+            } else {
+                throw new DatabaseException("Medlem ikke fundet.");
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Databasefejl: " + e.getMessage());
+        }
+    }
+
+    public static void updateMemberBalance(int memberId, double newBalance, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE member SET balance = ? WHERE member_id = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setDouble(1, newBalance);
+            ps.setInt(2, memberId);
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new DatabaseException("Medlemmet blev ikke fundet.");
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Fejl ved opdatering af medlemsbalance.", e.getMessage());
+        }
+    }
+
+   public static Member getMemberById(int memberId, ConnectionPool connectionPool) throws DatabaseException {
+        Member member = null;
+  
         String sql = "SELECT * FROM member WHERE member_id=?";
 
         try (
@@ -87,8 +131,5 @@ public class MemberMapper {
             throw new DatabaseException("DB fejl ved hentning af member med id = " + memberId, e.getMessage());
         }
         return member;
-
     }
-
-
 }

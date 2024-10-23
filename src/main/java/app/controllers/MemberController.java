@@ -74,6 +74,5 @@ public class MemberController {
             ctx.attribute("message", e.getMessage());
             ctx.render("login.html");
         }
-
     }
 }
