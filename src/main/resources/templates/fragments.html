@@ -19,9 +19,9 @@
       <div class="header-text">
         <a href="#" class="header-link">Mine ordrer</a>
         <div class="left">
-        <a href="#" class="header-link">logud</a>
+          <a href="#" class="header-link" th:if="${#ctx.session.currentMember} != null" th:href="@{/logout}">Logud</a>
         <span class="email" th:text="${session.currentMember.email}"></span>
-        <a href="#" class="cart-icon">&#128722;</a>
+          <a href="#" class="cart-icon" th:href="@{/kurv}">&#128722; </a>
         </div>
 
       </div>
