@@ -16,6 +16,32 @@ public class OrderController {
         app.get("kunde", ctx -> addToCart(ctx, connectionPool));
         app.post("kunde", ctx -> addToOrder(ctx, connectionPool));
         app.get("tak", ctx -> thanks(ctx, connectionPool));
+        app.post("kurv", ctx-> watchCart(ctx, connectionPool));
+        app.get("kurv", ctx -> watchCart(ctx, connectionPool));
+    }
+
+    private static void watchCart(Context ctx, ConnectionPool connectionPool) {
+        Member currentMember = ctx.sessionAttribute("currentMember");
+        Order currentOrder = ctx.sessionAttribute("currentOrder");
+
+        if (currentMember == null) {
+            ctx.attribute("errorMessage", "log ind for at bestille.");
+            ctx.render("error.html");
+            return;
+        }
+
+        try {
+            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(currentOrder.getOrderNumber(),connectionPool);
+
+            ctx.attribute("orderlines", orderlines);
+
+
+        }catch (DatabaseException e) {
+                ctx.attribute("errorMessage", "There was a problem retrieving your data. Please try again later.");
+                ctx.render("error.html");
+                throw new RuntimeException(e);
+        }
+        ctx.render("kurv.html");
     }
 
     private static void thanks(Context ctx, ConnectionPool connectionPool) {

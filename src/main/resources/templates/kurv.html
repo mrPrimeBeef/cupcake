@@ -23,11 +23,11 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="Bund: ${bottomList}">
-                    <td th:text="${bottom_name}"></td>
-                </tr>
-                <tr th:each="Topping: ${toppinList}">
-                    <td th:text="${topping_name}"></td>
+                <tr th:each="orderline : ${orderlines}">
+                    <td th:text="${orderline.bottom.bottomName}"></td>
+                    <td th:text="${orderline.topping.toppingName}"></td>
+                    <td th:text="${orderline.quantity}"></td>
+                    <td th:text="${orderline.orderlinePrice}"></td>
                 </tr>
                 </tbody>
             </table>
