@@ -102,7 +102,8 @@ VALUES ('Chokolade', 5.00),
 
 -- Add admin user
 INSERT INTO public.member (name, email, mobile, password, role, balance)
-VALUES ('admin', 'admin@example.com', '09090909', '1234', 'admin', 0);
-VALUES ('test', 'test@example.com', '08080808', '1234', 'member', 1000);
+VALUES
+    ('admin', 'admin@example.com', '09090909', '1234', 'admin', 0),
+    ('test', 'test@example.com', '08080808', '1234', 'member', 1000);
 
 END;

@@ -1,9 +1,6 @@
 package app.persistence;
 
-import app.entities.Bottom;
-import app.entities.Order;
-import app.entities.Topping;
-import app.entities.Orderline;
+import app.entities.*;
 import app.exceptions.DatabaseException;
 import io.javalin.http.Context;
 
@@ -66,9 +63,36 @@ public class OrderMapper {
         }
     }
 
-    public static ArrayList<Order> getActiveOrder(ConnectionPool connectionPool) throws DatabaseException {
+    public static Order getActiveOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        Member member = ctx.sessionAttribute("currentMember");
+        Order order = null;
 
+        String sql = "SELECT * FROM member_order WHERE member_id = ? AND status = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, member.getMemberId());
+            ps.setString(2, "In progress");
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int orderNumber = rs.getInt("order_number");
+                int memberId = rs.getInt("member_id");
+                Date date = rs.getDate("date");
+                String status = rs.getString("status");
+                double orderPrice = rs.getDouble("order_price");
+
+                order = new Order(orderNumber, memberId, date, status, orderPrice);
+
+            } else{
+                return order;
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Error getting active orderlines");
+        }
+        return order;
     }
-
 
 }
