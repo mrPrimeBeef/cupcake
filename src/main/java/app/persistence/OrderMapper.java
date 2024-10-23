@@ -1,9 +1,6 @@
 package app.persistence;
 
-import app.entities.Bottom;
-import app.entities.Order;
-import app.entities.Topping;
-import app.entities.Orderline;
+import app.entities.*;
 import app.exceptions.DatabaseException;
 import io.javalin.http.Context;
 
@@ -67,6 +64,36 @@ public class OrderMapper {
     }
 
     public static ArrayList<Order> getActiveOrder(ConnectionPool connectionPool) throws DatabaseException {
+        // TODO: Slet return null
+        return null;
+    }
+
+
+    public static ArrayList<Order> getAllOrders(ConnectionPool connectionPool) throws DatabaseException {
+
+        ArrayList<Order> allOrders = new ArrayList<Order>();
+
+        String sql = "SELECT * FROM member_order";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int orderNumber = rs.getInt("order_number");
+                int memberId = rs.getInt("member_id");
+                Date date = rs.getDate("date");
+                String status = rs.getString("status");
+                double price = rs.getDouble("order_price");
+                allOrders.add(new Order(orderNumber, memberId, date, status, price));
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("DB fejl", e.getMessage());
+        }
+
+        return allOrders;
 
     }
 

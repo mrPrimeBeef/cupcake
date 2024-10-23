@@ -16,6 +16,26 @@ public class OrderController {
         app.get("kunde", ctx -> addToCart(ctx, connectionPool));
         app.post("kunde", ctx -> addToOrder(ctx, connectionPool));
         app.get("tak", ctx -> thanks(ctx, connectionPool));
+
+        app.get("pbdummy", ctx -> pbDummy(ctx, connectionPool));
+    }
+
+    private static void pbDummy(Context ctx, ConnectionPool connectionPool) {
+
+        // TODO: Guard condition for at det kun er admin som for lov
+
+        try {
+            ArrayList<Order> allOrders = OrderMapper.getAllOrders(connectionPool);
+            System.out.println("All Orders:");
+            for (Order o : allOrders) {
+                System.out.println(o);
+            }
+            ctx.attribute("allOrders", allOrders);
+            ctx.render("adminordrer.html");
+        } catch (DatabaseException e) {
+            //ctx.attribute("message", "Brugernavnet findes allerede");
+            //ctx.render("opretbruger.html");
+        }
     }
 
     private static void thanks(Context ctx, ConnectionPool connectionPool) {
@@ -78,6 +98,7 @@ public class OrderController {
 
         addToCart(ctx, connectionPool);
     }
+
     private static void updateOrderPrice(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(orderNumber, connectionPool);
 

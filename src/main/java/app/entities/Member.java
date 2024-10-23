@@ -47,7 +47,6 @@ public class Member {
         return balance;
     }
 
-    //    TODO: Gør denne metode færdig
     @Override
     public String toString() {
         return "Member{" +
