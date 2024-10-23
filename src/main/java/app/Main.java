@@ -1,6 +1,8 @@
 package app;
 
 import app.config.ThymeleafConfig;
+import app.controllers.MemberController;
+import app.controllers.OrderController;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
@@ -26,6 +28,8 @@ public class Main
         }).start(7070);
 
         // Routing
-        app.get("/", ctx -> ctx.render("index.html"));
+        app.get("/", ctx -> ctx.render("login.html"));
+        OrderController.addRoutes(app, connectionPool);
+        MemberController.addRoutes(app, connectionPool);
     }
 }
