@@ -13,42 +13,35 @@ public class MemberController {
         app.post("login", ctx -> login(ctx, connectionPool));
 
         app.get("opretbruger", ctx -> ctx.render("opretbruger.html"));
-//        app.post("opretbruger", ctx -> createMember(ctx, connectionPool));
+        app.post("opretbruger", ctx -> createMember(ctx, connectionPool));
 
         app.get("logout", ctx -> logout(ctx));
     }
 
-//    private static void createMember(Context ctx, ConnectionPool connectionPool)
-//    {
-//        // Hent form parametre
-//        String name = ctx.formParam("name");
-//        String email = ctx.formParam("email");
-//        String mobile = ctx.formParam("mobile");
-//        String password1 = ctx.formParam("password1");
-//        String password2 = ctx.formParam("password2");
-//
-//        if (password1.equals(password2))
-//        {
-//            try
-//            {
-//                MemberMapper.createuser(username, password1, connectionPool);
-//                ctx.attribute("message", "Du er hermed oprettet med brugernavn: " + username +
-//                        ". Nu skal du logge på.");
-//                ctx.render("index.html");
-//            }
-//
-//            catch (DatabaseException e)
-//            {
-//                ctx.attribute("message", "Dit brugernavn findes allerede. Prøv igen, eller log ind");
-//                ctx.render("opretbruger.html");
-//            }
-//        } else
-//        {
-//            ctx.attribute("message", "De to kodeord er ikke ens");
-//            ctx.render("opretbruger.html");
-//        }
-//
-//    }
+    private static void createMember(Context ctx, ConnectionPool connectionPool) {
+        // Hent form parametre
+        String name = ctx.formParam("name");
+        String email = ctx.formParam("email");
+        String mobile = ctx.formParam("mobile");
+        String password1 = ctx.formParam("password1");
+        String password2 = ctx.formParam("password2");
+
+        if (password1.equals(password2)) {
+            try {
+                MemberMapper.createMember(name, email, mobile, password1, connectionPool);
+                ctx.attribute("message", "Du er hermed oprettet med brugernavn: " + email +
+                        ". Nu kan du logge ind.");
+                ctx.render("login.html");
+            } catch (DatabaseException e) {
+                ctx.attribute("message", "Brugernavnet findes allerede");
+                ctx.render("opretbruger.html");
+            }
+        } else {
+            ctx.attribute("message", "Kodeord matcher ikke");
+            ctx.render("opretbruger.html");
+        }
+
+    }
 
     private static void logout(Context ctx) {
         ctx.req().getSession().invalidate();
