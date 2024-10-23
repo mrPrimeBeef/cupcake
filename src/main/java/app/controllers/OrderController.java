@@ -33,7 +33,14 @@ public class OrderController {
         try {
             ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(currentOrder.getOrderNumber(),connectionPool);
 
+            double totalPrice = 0;
+            for (Orderline orderline : orderlines) {
+                totalPrice += orderline.getOrderlinePrice();  // Summér prisen for hver orderline
+            }
+
+            // Send orderlines og totalPrice til Thymeleaf
             ctx.attribute("orderlines", orderlines);
+            ctx.attribute("totalPrice", totalPrice);
 
 
         }catch (DatabaseException e) {
