@@ -171,7 +171,7 @@ class MemberMapperTest {
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
         ) {
-            ps.setString(1, "test@example.com");
+            ps.setString(1, "admin@example.com");
             ps.setString(2, "1234");
 
             ResultSet rs = ps.executeQuery();
@@ -189,12 +189,28 @@ class MemberMapperTest {
 
         }
 
-        assertEquals("test",member.getName());
-        assertEquals("customer", member.getRole());
-        assertEquals(1000, member.getBalance());
+        assertEquals("admin",member.getName());
+        assertEquals("admin", member.getRole());
+        assertEquals(0, member.getBalance());
     }
 
     @Test
-    void createMember() {
+    void createMember() throws DatabaseException {
+        int rowsAffected = 0;
+
+        String sql = "INSERT INTO member (name, email, mobile, password, balance) " +
+                     "VALUES ('rolf', 'email@gmail.com', 10101010, '1234',0)";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)){
+
+            rowsAffected = ps.executeUpdate();
+
+        } catch (SQLException e) {
+
+        }
+        assertEquals(1, rowsAffected);
+
+
     }
 }
