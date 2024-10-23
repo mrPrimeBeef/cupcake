@@ -80,3 +80,7 @@ footer {
     margin-right: 25%;
     margin-top: 0;
 }
+
+ .error {
+     color: red;
+ }

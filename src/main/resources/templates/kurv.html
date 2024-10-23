@@ -9,6 +9,7 @@
 </head>
 <body>
 <div class="page">
+    <header th:replace="fragments :: headerFragment"></header>
     <form class="cart" method="post">
         <table class="cart-table">
             <thead>
@@ -39,6 +40,7 @@
             <button class="køb-knap" type="submit">Køb</button>
         </div>
     </form>
+    <footer th:replace="fragments :: footer"></footer>
 </div>
 </body>
 </html>

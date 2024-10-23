@@ -55,11 +55,9 @@ public class MemberController {
 
 
     public static void login(Context ctx, ConnectionPool connectionPool) {
-        // Hent form parametre
         String email = ctx.formParam("email");
         String password = ctx.formParam("password");
 
-        // Check om bruger findes i DB med de angivne email + password
         try {
             Member member = MemberMapper.login(email, password, connectionPool);
             ctx.sessionAttribute("currentMember", member);
@@ -67,10 +65,8 @@ public class MemberController {
             Order currentOrder = OrderMapper.getActiveOrder(ctx, connectionPool);
             ctx.sessionAttribute("currentOrder", currentOrder);
 
-            // Hvis ja, send videre til forsiden
-            ctx.render("index.html");
+            ctx.render("kunde.html");
         } catch (DatabaseException e) {
-            // Hvis nej, send tilbage til login side med fejl besked
             ctx.attribute("message", e.getMessage());
             ctx.render("login.html");
         }

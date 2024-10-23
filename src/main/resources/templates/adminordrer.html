@@ -8,7 +8,7 @@
 </head>
 
 <body>
-
+<header th:replace="fragments :: headerFragment"></header>
 <h2>Admin: Se alle ordrer</h2>
 
 <table>
@@ -29,6 +29,6 @@
         <td th:text="${orderMemberDto.orderStatus}"></td>
     </tr>
 </table>
-
+<footer th:replace="fragments :: footer"></footer>
 </body>
 </html>
