@@ -66,9 +66,6 @@ public class OrderMapper {
         }
     }
 
-    public static ArrayList<Order> getActiveOrder(ConnectionPool connectionPool) throws DatabaseException {
-
-    }
 
 
 }

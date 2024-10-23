@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="../public/ccs/styles.css" th:href="@{/ccs/styles.css}" rel="stylesheet"/>
+  <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
 </head>
 
 <body>
@@ -20,7 +20,7 @@
         <a href="#" class="header-link">Mine ordrer</a>
         <div class="left">
         <a href="#" class="header-link">logud</a>
-<!--        <span class="email" th:text="${session.currentUser.email}"></span>-->
+        <span class="email" th:text="${session.currentMember.email}"></span>
         <a href="#" class="cart-icon">&#128722;</a>
         </div>
 
