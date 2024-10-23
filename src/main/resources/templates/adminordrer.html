@@ -5,14 +5,6 @@
     <title>Admin ordrer</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>-->
-
-    <style>
-        .error {
-            color: red;
-        }
-    </style>
-
 </head>
 
 <body>
@@ -28,13 +20,13 @@
         <th>Pris</th>
         <th>Status</th>
     </tr>
-    <tr th:each="order: ${allOrders}">
-        <td th:text="${order.orderNumber}"></td>
-        <td></td>
-        <td></td>
-        <td th:text="${order.date}"></td>
-        <td th:text="${order.price}"></td>
-        <td th:text="${order.status}"></td>
+    <tr th:each="orderMemberDto: ${allOrderMemberDtos}">
+        <td th:text="${orderMemberDto.orderNumber}"></td>
+        <td th:text="${orderMemberDto.memberName}"></td>
+        <td th:text="${orderMemberDto.memberEmail}"></td>
+        <td th:text="${orderMemberDto.orderDate}"></td>
+        <td th:text="${orderMemberDto.orderPrice}"></td>
+        <td th:text="${orderMemberDto.orderStatus}"></td>
     </tr>
 </table>
 

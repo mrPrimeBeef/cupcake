@@ -1,5 +1,6 @@
 package app.persistence;
 
+import app.dto.OrderMemberDto;
 import app.entities.*;
 import app.exceptions.DatabaseException;
 import io.javalin.http.Context;
@@ -69,11 +70,11 @@ public class OrderMapper {
     }
 
 
-    public static ArrayList<Order> getAllOrders(ConnectionPool connectionPool) throws DatabaseException {
+    public static ArrayList<OrderMemberDto> getAllOrderMemberDtos(ConnectionPool connectionPool) throws DatabaseException {
 
-        ArrayList<Order> allOrders = new ArrayList<Order>();
+        ArrayList<OrderMemberDto> allOrderMemberDtos = new ArrayList<OrderMemberDto>();
 
-        String sql = "SELECT * FROM member_order";
+        String sql = "SELECT order_number, name, email, date, status, order_price FROM member_order JOIN member USING(member_id)";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -83,17 +84,18 @@ public class OrderMapper {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 int orderNumber = rs.getInt("order_number");
-                int memberId = rs.getInt("member_id");
-                Date date = rs.getDate("date");
-                String status = rs.getString("status");
-                double price = rs.getDouble("order_price");
-                allOrders.add(new Order(orderNumber, memberId, date, status, price));
+                String memberName = rs.getString("name");
+                String memberEmail = rs.getString("email");
+                Date orderDate = rs.getDate("date");
+                String orderStatus = rs.getString("status");
+                double orderPrice = rs.getDouble("order_price");
+                allOrderMemberDtos.add(new OrderMemberDto(orderNumber, memberName, memberEmail, orderDate, orderStatus, orderPrice));
             }
         } catch (SQLException e) {
-            throw new DatabaseException("DB fejl i getAllOrders", e.getMessage());
+            throw new DatabaseException("DB fejl i getAllOrderMemberDtos", e.getMessage());
         }
 
-        return allOrders;
+        return allOrderMemberDtos;
 
     }
 

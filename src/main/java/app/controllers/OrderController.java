@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.dto.OrderMemberDto;
 import app.entities.*;
 import app.exceptions.DatabaseException;
 import app.persistence.*;
@@ -31,12 +32,12 @@ public class OrderController {
         try {
             System.out.println(MemberMapper.getMemberById(1, connectionPool));
 
-            ArrayList<Order> allOrders = OrderMapper.getAllOrders(connectionPool);
+            ArrayList<OrderMemberDto> allOrderMemberDtos = OrderMapper.getAllOrderMemberDtos(connectionPool);
             System.out.println("All Orders:");
-            for (Order o : allOrders) {
+            for (OrderMemberDto o : allOrderMemberDtos) {
                 System.out.println(o);
             }
-            ctx.attribute("allOrders", allOrders);
+            ctx.attribute("allOrderMemberDtos", allOrderMemberDtos);
             ctx.render("adminordrer.html");
         } catch (DatabaseException e) {
             //ctx.attribute("message", "Brugernavnet findes allerede");
