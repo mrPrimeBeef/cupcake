@@ -24,7 +24,6 @@ public class MemberController {
     }
 
     private static void createMember(Context ctx, ConnectionPool connectionPool) {
-        // Hent form parametre
         String name = ctx.formParam("name");
         String email = ctx.formParam("email");
         String mobile = ctx.formParam("mobile");
@@ -62,10 +61,16 @@ public class MemberController {
             Member member = MemberMapper.login(email, password, connectionPool);
             ctx.sessionAttribute("currentMember", member);
 
+            if (member.getRole().equals("admin")) {
+                ctx.render("adminordrer.html");
+                return;
+            }
+
             Order currentOrder = OrderMapper.getActiveOrder(ctx, connectionPool);
             ctx.sessionAttribute("currentOrder", currentOrder);
-
             ctx.render("kunde.html");
+
+
         } catch (DatabaseException e) {
             ctx.attribute("message", e.getMessage());
             ctx.render("login.html");
