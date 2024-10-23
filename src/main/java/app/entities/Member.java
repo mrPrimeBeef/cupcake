@@ -9,11 +9,11 @@ public class Member {
     private String role;
     private int balance;
 
-
     public Member(int memberId, int balance){
         this.memberId=memberId;
         this.balance=balance;
     }
+
     public Member(int memberId, String name, String email, String mobile, String password, String role, int balance) {
         this.memberId = memberId;
         this.name = name;

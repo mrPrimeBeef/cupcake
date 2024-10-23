@@ -71,16 +71,14 @@ public class MemberMapper {
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
         ) {
-            // Sæt parameteren for medlemmet
             ps.setInt(1, memberId);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                // Hent balancen og medlemmet fra resultatsættet
                 int currentBalance = rs.getInt("balance");
 
-                    member = new Member(memberId, currentBalance);
-                    return member;
+                member = new Member(memberId, currentBalance);
+                return member;
             } else {
                 throw new DatabaseException("Medlem ikke fundet.");
             }
