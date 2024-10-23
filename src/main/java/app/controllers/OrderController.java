@@ -12,36 +12,29 @@ import java.util.ArrayList;
 
 
 public class OrderController {
+
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("kunde", ctx -> addToCart(ctx, connectionPool));
         app.post("kunde", ctx -> addToOrder(ctx, connectionPool));
         app.get("tak", ctx -> thanks(ctx, connectionPool));
-
         app.get("adminordrer", ctx -> showAllOrders(ctx, connectionPool));
     }
 
     private static void showAllOrders(Context ctx, ConnectionPool connectionPool) {
-
-        System.out.println("ShowAllOrders");
         Member currentMember = ctx.sessionAttribute("currentMember");
         if (currentMember == null || !currentMember.getRole().equals("admin")) {
-            ctx.render("kunforadmin.html");
+            ctx.attribute("errorMessage", "Kun for admin.");
+            ctx.render("error.html");
             return;
         }
 
         try {
-            System.out.println(MemberMapper.getMemberById(1, connectionPool));
-
             ArrayList<OrderMemberDto> allOrderMemberDtos = OrderMapper.getAllOrderMemberDtos(connectionPool);
-            System.out.println("All Orders:");
-            for (OrderMemberDto o : allOrderMemberDtos) {
-                System.out.println(o);
-            }
             ctx.attribute("allOrderMemberDtos", allOrderMemberDtos);
             ctx.render("adminordrer.html");
         } catch (DatabaseException e) {
-            //ctx.attribute("message", "Brugernavnet findes allerede");
-            //ctx.render("opretbruger.html");
+            ctx.attribute("errorMessage", "Der er sket en fejl: "+e.getMessage());
+            ctx.render("error.html");
         }
     }
 
