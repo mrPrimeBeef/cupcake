@@ -16,6 +16,7 @@ public class OrderController {
         app.get("kunde", ctx -> addToCart(ctx, connectionPool));
         app.post("kunde", ctx -> addToOrder(ctx, connectionPool));
         app.get("tak", ctx -> thanks(ctx, connectionPool));
+        app.post("tak", ctx -> thanks(ctx, connectionPool));
         app.post("kurv", ctx-> watchCart(ctx, connectionPool));
         app.get("kurv", ctx -> watchCart(ctx, connectionPool));
     }
@@ -50,14 +51,14 @@ public class OrderController {
         }
         ctx.render("kurv.html");
     }
-private static void validateBalance(Context ctx, ConnectionPool connectionPool)throws DatabaseException{
+private static boolean validateBalance(Context ctx, ConnectionPool connectionPool)throws DatabaseException{
     Member currentMember = ctx.sessionAttribute("currentMember");
     Order currentOrder = ctx.sessionAttribute("currentOrder");
 
     if (currentMember == null) {
         ctx.attribute("errorMessage", "log ind for at bestille.");
         ctx.render("error.html");
-        return;
+        return false;
     }
 
     try {
@@ -74,7 +75,7 @@ private static void validateBalance(Context ctx, ConnectionPool connectionPool)t
     try {
         ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(currentOrder.getOrderNumber(), connectionPool);
         for (Orderline orderline : orderlines) {
-            totalOrderPrice += orderline.getOrderlinePrice() * orderline.getQuantity();
+            totalOrderPrice += orderline.getOrderlinePrice();
         }
     } catch (DatabaseException e) {
         ctx.attribute("errorMessage", "Der opstod en fejl under hentning af orderlines.");
@@ -86,10 +87,18 @@ private static void validateBalance(Context ctx, ConnectionPool connectionPool)t
     if (totalOrderPrice > currentMember.getBalance()) {
         ctx.attribute("errorMessage", "Ikke nok penge på kontoen til at gennemføre ordren.");
         ctx.render("error.html");
-        return; // Stop videre behandling
+        return false;
+    }
+    double newBalance = currentMember.getBalance() - totalOrderPrice;
+    try {
+        MemberMapper.updateMemberBalance(currentMember.getMemberId(), newBalance, connectionPool);
+    } catch (DatabaseException e) {
+        ctx.attribute("errorMessage", "Fejl ved opdatering af medlemsbalance. Prøv igen senere.");
+        ctx.render("error.html");
+        throw new RuntimeException(e);
     }
 
-    ctx.render("kurv.html");
+    return true;
 
 }
 
@@ -103,7 +112,7 @@ private static void validateBalance(Context ctx, ConnectionPool connectionPool)t
             checkoutOrder(ctx, connectionPool);
 
             // Eventuelt kan du vise en takkeside efter checkoutOrder er kaldt
-            ctx.render("thank_you.html"); // Render en takkeside, hvis checkout er vellykket
+            ctx.render("tak.html"); // Render en takkeside, hvis checkout er vellykket
 
         } catch (DatabaseException e) {
             // Håndter undtagelser, hvis noget går galt

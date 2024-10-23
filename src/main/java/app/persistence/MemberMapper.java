@@ -88,4 +88,22 @@ public class MemberMapper {
             throw new DatabaseException("Databasefejl: " + e.getMessage());
         }
     }
+
+    public static void updateMemberBalance(int memberId, double newBalance, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE member SET balance = ? WHERE member_id = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setDouble(1, newBalance);
+            ps.setInt(2, memberId);
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new DatabaseException("Medlemmet blev ikke fundet.");
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Fejl ved opdatering af medlemsbalance.", e.getMessage());
+        }
+    }
 }
