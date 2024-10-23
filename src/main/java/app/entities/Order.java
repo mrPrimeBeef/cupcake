@@ -6,8 +6,8 @@ public class Order {
     private int orderNumber;
     private int memberId;
     private Date date;
-    String status;
-    double price;
+    private String status;
+    private double price;
 
     public Order(int orderNumber, int memberId, Date date, String status, double price) {
         this.orderNumber = orderNumber;
@@ -35,5 +35,16 @@ public class Order {
 
     public double getPrice() {
         return price;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderNumber=" + orderNumber +
+                ", memberId=" + memberId +
+                ", date=" + date +
+                ", status='" + status + '\'' +
+                ", price=" + price +
+                '}';
     }
 }

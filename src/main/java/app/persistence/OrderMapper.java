@@ -1,5 +1,6 @@
 package app.persistence;
 
+import app.dto.OrderMemberDto;
 import app.entities.*;
 import app.exceptions.DatabaseException;
 import io.javalin.http.Context;
@@ -61,6 +62,34 @@ public class OrderMapper {
         } catch (SQLException e) {
             throw new DatabaseException("Error updating order status for order number: " + orderNumber);
         }
+    }
+
+    public static ArrayList<OrderMemberDto> getAllOrderMemberDtos(ConnectionPool connectionPool) throws DatabaseException {
+
+        ArrayList<OrderMemberDto> allOrderMemberDtos = new ArrayList<OrderMemberDto>();
+
+        String sql = "SELECT order_number, name, email, date, status, order_price FROM member_order JOIN member USING(member_id)";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int orderNumber = rs.getInt("order_number");
+                String memberName = rs.getString("name");
+                String memberEmail = rs.getString("email");
+                Date orderDate = rs.getDate("date");
+                String orderStatus = rs.getString("status");
+                double orderPrice = rs.getDouble("order_price");
+                allOrderMemberDtos.add(new OrderMemberDto(orderNumber, memberName, memberEmail, orderDate, orderStatus, orderPrice));
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("DB fejl i getAllOrderMemberDtos", e.getMessage());
+        }
+
+        return allOrderMemberDtos;
     }
 
     public static Order getActiveOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {

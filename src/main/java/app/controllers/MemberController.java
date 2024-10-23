@@ -62,7 +62,6 @@ public class MemberController {
         // Check om bruger findes i DB med de angivne email + password
         try {
             Member member = MemberMapper.login(email, password, connectionPool);
-            System.out.println(member);
             ctx.sessionAttribute("currentMember", member);
 
             Order currentOrder = OrderMapper.getActiveOrder(ctx, connectionPool);

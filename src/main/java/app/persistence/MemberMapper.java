@@ -60,4 +60,35 @@ public class MemberMapper {
             throw new DatabaseException(msg, e.getMessage());
         }
     }
+
+    public static Member getMemberById(int memberId, ConnectionPool connectionPool) throws DatabaseException {
+
+        Member member = null;
+
+        String sql = "SELECT * FROM member WHERE member_id=?";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ps.setInt(1, memberId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                String name = rs.getString("name");
+                String email = rs.getString("email");
+                String mobile = rs.getString("mobile");
+                String password = rs.getString("password");
+                String role = rs.getString("role");
+                int balance = rs.getInt("balance");
+                member = new Member(memberId, name, email, mobile, password, role, balance);
+            }
+            // TODO: Evt. tilføj else som thrower en exception hvis der ikke findes nogen member med den id
+        } catch (SQLException e) {
+            throw new DatabaseException("DB fejl ved hentning af member med id = " + memberId, e.getMessage());
+        }
+        return member;
+
+    }
+
+
 }
