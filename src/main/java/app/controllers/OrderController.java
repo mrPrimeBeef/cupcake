@@ -7,7 +7,6 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 
@@ -17,14 +16,21 @@ public class OrderController {
         app.post("kunde", ctx -> addToOrder(ctx, connectionPool));
         app.get("tak", ctx -> thanks(ctx, connectionPool));
 
-        app.get("pbdummy", ctx -> pbDummy(ctx, connectionPool));
+        app.get("adminordrer", ctx -> showAllOrders(ctx, connectionPool));
     }
 
-    private static void pbDummy(Context ctx, ConnectionPool connectionPool) {
+    private static void showAllOrders(Context ctx, ConnectionPool connectionPool) {
 
-        // TODO: Guard condition for at det kun er admin som for lov
+        System.out.println("ShowAllOrders");
+        Member currentMember = ctx.sessionAttribute("currentMember");
+        if (currentMember == null || !currentMember.getRole().equals("admin")) {
+            ctx.render("kunforadmin.html");
+            return;
+        }
 
         try {
+            System.out.println(MemberMapper.getMemberById(1, connectionPool));
+
             ArrayList<Order> allOrders = OrderMapper.getAllOrders(connectionPool);
             System.out.println("All Orders:");
             for (Order o : allOrders) {
