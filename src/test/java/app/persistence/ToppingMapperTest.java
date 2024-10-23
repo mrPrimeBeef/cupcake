@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ToppingMapperTest {
     private static final String USER = "postgres";
     private static final String PASSWORD = "postgres";
-    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
+    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=test";
     private static final String DB = "cupcake";
 
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
@@ -188,28 +188,11 @@ class ToppingMapperTest {
     }
 
     @Test
-    void getToppingNameById() {
+    void getToppingNameById() throws DatabaseException {
         Topping topping = null;
 
-        String sql = "SELECT * " +
-                     "FROM topping WHERE topping_id = ?";
+        topping = ToppingMapper.getToppingNameById(1,connectionPool);
 
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)){
-
-            ps.setInt(1, 1);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                int toppingId = rs.getInt("topping_id");
-                String toppingName = rs.getString("topping_name");
-                double toppingPrice = rs.getDouble("topping_price");
-
-                topping = new Topping(toppingId, toppingName, toppingPrice);
-            }
-
-        } catch (SQLException e){
-        }
         assertEquals("Chokolade",topping.getToppingName());
 
         // will fail

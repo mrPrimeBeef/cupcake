@@ -14,7 +14,7 @@ public class BottomMapperTest {
 
     private static final String USER = "postgres";
     private static final String PASSWORD = "postgres";
-    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
+    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=test";
     private static final String DB = "cupcake";
 
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
@@ -193,26 +193,7 @@ public class BottomMapperTest {
         void getBottomNameById () throws DatabaseException {
             Bottom bottom = null;
 
-            String sql = "SELECT * " +
-                         "FROM bottom WHERE bottom_id = ?";
-
-            try (Connection connection = connectionPool.getConnection();
-                 PreparedStatement ps = connection.prepareStatement(sql)){
-
-                ps.setInt(1, 1);
-                ResultSet rs = ps.executeQuery();
-
-                if (rs.next()) {
-                    int bottomId = rs.getInt("bottom_id");
-                    String bottomName = rs.getString("bottom_name");
-                    double bottomPrice = rs.getDouble("bottom_price");
-
-                    bottom = new Bottom(bottomId, bottomName, bottomPrice);
-                }
-
-            } catch (SQLException e){
-                throw new DatabaseException("Error in getting bottom name from database");
-            }
+           bottom = BottomMapper.getBottomNameById(1,connectionPool);
             assertEquals("Chokolade",bottom.getBottomName());
 
             // will fail

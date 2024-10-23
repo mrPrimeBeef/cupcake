@@ -1,6 +1,5 @@
 @startuml
 object login
-object createMember
 object member
 object memberOrder
 object orderline
@@ -10,7 +9,6 @@ object topping
 object cart
 
 member *-- cart
-createMember *-- login
 cart *-- memberOrder
 login *-- member
 memberOrder *-- orderline

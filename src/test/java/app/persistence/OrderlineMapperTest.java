@@ -1,15 +1,18 @@
 package app.persistence;
 
-import app.entities.Member;
+import app.entities.Bottom;
+import app.entities.Orderline;
+import app.entities.Topping;
 import app.exceptions.DatabaseException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MemberMapperTest {
+class OrderlineMapperTest {
     private static final String USER = "postgres";
     private static final String PASSWORD = "postgres";
     private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=test";
@@ -155,6 +158,18 @@ class MemberMapperTest {
                             ('admin', 'admin@example.com', '09090909', '1234', 'admin', 0),
                             ('test', 'test@example.com', '08080808', '1234', 'customer', 1000);
                     """);
+            stmt.execute("""
+                        INSERT INTO test.member_order (order_number, member_id, date, status, order_price)
+                        VALUES
+                            (1, 2, '2024-10-23', 'in progress', 20);
+                    """);
+
+            stmt.execute("""
+                        INSERT INTO test.orderline (order_number, bottom_id, topping_id, quantity, orderline_price)
+                        VALUES
+                            (1, 1, 2, 2, 20);
+                    """);
+
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -163,31 +178,28 @@ class MemberMapperTest {
     }
 
     @Test
-    void login() throws DatabaseException {
-        Member member = null;
+    void getOrderlinesByOrderNumber() throws DatabaseException {
+        ArrayList<Orderline> orderlines = new ArrayList<>();
 
-        member = MemberMapper.login("test@example.com","1234",connectionPool);
+        orderlines = OrderlineMapper.getOrderlinesByOrderNumber(1,connectionPool);
 
-        assertEquals("test",member.getName());
-        assertEquals("customer", member.getRole());
-        assertEquals(1000, member.getBalance());
+        assertEquals(1, orderlines.size());
+        assertEquals(1, orderlines.get(0).getOrderNumber());
+        assertEquals(2, orderlines.get(0).getQuantity());
+        assertEquals(20,orderlines.get(0).getOrderlinePrice());
     }
 
     @Test
-    void createMember() throws DatabaseException {
-        int rowsAffected = 0;
+    void createOrderline() throws DatabaseException {
+        Bottom bottom = new Bottom(1, "Chokolade", 5.00);
+        Topping topping = new Topping(2, "Vanilje", 5.00);
 
-        String sql = "INSERT INTO member (name, email, mobile, password, balance) " +
-                     "VALUES ('rolf', 'email@gmail.com', 10101010, '1234',0)";
+        Orderline orderlines = new Orderline(1, bottom,topping,4,40);
 
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)){
+        OrderlineMapper.createOrderline(orderlines, connectionPool);
 
-            rowsAffected = ps.executeUpdate();
+        Orderline actual = OrderlineMapper.getOrderlinesByOrderNumber(1,connectionPool).get(1);
 
-        } catch (SQLException e) {
-
-        }
-        assertEquals(1, rowsAffected);
+        assertEquals(orderlines.getQuantity(),actual.getQuantity());
     }
 }
