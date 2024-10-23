@@ -1,17 +1,15 @@
 package app.persistence;
 
-import app.entities.Bottom;
+import app.entities.Member;
 import app.exceptions.DatabaseException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BottomMapperTest {
-
+class MemberMapperTest {
     private static final String USER = "postgres";
     private static final String PASSWORD = "postgres";
     private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
@@ -164,61 +162,39 @@ public class BottomMapperTest {
         }
     }
 
+    @Test
+    void login() throws DatabaseException {
+        Member member = null;
+        String sql = "SELECT * FROM member WHERE email=? AND password=?";
 
-        @Test
-        void getAllBottoms () throws DatabaseException {
-            ArrayList<Bottom> bottoms = new ArrayList<>();
-            String sql = "select * from test.bottom";
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ps.setString(1, "test@example.com");
+            ps.setString(2, "1234");
 
-            try (Connection connection = connectionPool.getConnection();
-                 PreparedStatement ps = connection.prepareStatement(sql)) {
-
-                bottoms = BottomMapper.getAllBottoms(connectionPool);
-
-            } catch (SQLException e) {
-                e.printStackTrace();
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int memberId = rs.getInt("member_id");
+                String name = rs.getString("name");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String mobile = rs.getString("mobile");
+                String role = rs.getString("role");
+                int balance = rs.getInt("balance");
+                member = new Member(memberId, name, email, mobile, password, role, balance);
             }
+        } catch (SQLException e) {
 
-            assertEquals(bottoms.size(),5);
-            assertEquals(bottoms.get(0).getBottomName(),"Chokolade");
-            assertEquals(bottoms.get(1).getBottomName(),"Vanilje");
-            assertEquals(bottoms.get(2).getBottomName(),"Muskatnød");
-
-            // will fail
-//             assertEquals(bottoms.size(), 4);
-//             assertEquals(bottoms.get(1).getBottomName(),"Vanilje1");
         }
 
-        @Test
-        void getBottomNameById () throws DatabaseException {
-            Bottom bottom = null;
-
-            String sql = "SELECT * " +
-                         "FROM bottom WHERE bottom_id = ?";
-
-            try (Connection connection = connectionPool.getConnection();
-                 PreparedStatement ps = connection.prepareStatement(sql)){
-
-                ps.setInt(1, 1);
-                ResultSet rs = ps.executeQuery();
-
-                if (rs.next()) {
-                    int bottomId = rs.getInt("bottom_id");
-                    String bottomName = rs.getString("bottom_name");
-                    double bottomPrice = rs.getDouble("bottom_price");
-
-                    bottom = new Bottom(bottomId, bottomName, bottomPrice);
-                }
-
-            } catch (SQLException e){
-                throw new DatabaseException("Error in getting bottom name from database");
-            }
-            assertEquals("Chokolade",bottom.getBottomName());
-
-            // will fail
-            //assertEquals("Vanilje",bottom.getBottomName());
-        }
-
-
+        assertEquals("test",member.getName());
+        assertEquals("customer", member.getRole());
+        assertEquals(1000, member.getBalance());
     }
 
+    @Test
+    void createMember() {
+    }
+}
