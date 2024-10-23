@@ -60,4 +60,12 @@ public class MemberMapper {
             throw new DatabaseException(msg, e.getMessage());
         }
     }
+
+    public static Member getMember(int memberId, ConnectionPool connectionPool) throws DatabaseException {
+
+        return null;
+
+    }
+
+
 }

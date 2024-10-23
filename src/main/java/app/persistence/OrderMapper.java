@@ -90,7 +90,7 @@ public class OrderMapper {
                 allOrders.add(new Order(orderNumber, memberId, date, status, price));
             }
         } catch (SQLException e) {
-            throw new DatabaseException("DB fejl", e.getMessage());
+            throw new DatabaseException("DB fejl i getAllOrders", e.getMessage());
         }
 
         return allOrders;
