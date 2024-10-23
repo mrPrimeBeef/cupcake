@@ -1,11 +1,16 @@
 package app.controllers;
 
 import app.entities.Member;
+import app.entities.Order;
+import app.entities.Orderline;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.MemberMapper;
+import app.persistence.OrderMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+
+import java.util.ArrayList;
 
 public class MemberController {
 
@@ -58,6 +63,10 @@ public class MemberController {
         try {
             Member member = MemberMapper.login(email, password, connectionPool);
             ctx.sessionAttribute("currentMember", member);
+
+            Order currentOrder = OrderMapper.getActiveOrder(ctx, connectionPool);
+            ctx.sessionAttribute("currentOrder", currentOrder);
+
             // Hvis ja, send videre til forsiden
             ctx.render("index.html");
         } catch (DatabaseException e) {
