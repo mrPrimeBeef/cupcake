@@ -3,25 +3,21 @@
 }
 
 html, body {
-    height: 100%;  /* Sikrer at html og body fylder hele siden */
-    width: 100%;   /* Fyld hele skærmens bredde */
+    height: 100%;
+    width: 100%;
     margin: 0;
     background-color: #F3F3ED;
     display: flex;
     flex-direction: column;
 }
 
-header {
-    position: fixed;
-    width: 100%;  /* Sikrer at headeren fylder hele bredden */
-    background-color: #B5B0D4;  /* Optional: Baggrundsfarve */
-}
-
 header .header-text {
     display: flex;
-    justify-content: space-between;  /* Fordel elementer i to kolonner med afstand imellem */
+    justify-content: space-between;
     align-items: center;
     width: 100%;
+    position: fixed;
+    background-color: #B5B0D4;
 }
 
 .headerimage {
@@ -47,8 +43,7 @@ header .header-text {
 }
 
 .email {
-    margin-left: 20px;  /* Space before the email */
-    font-weight: bold;
+    margin-left: 20px;
 }
 
 .cart-icon {
@@ -67,7 +62,7 @@ footer {
     position: fixed;
     left: 0;
     bottom: 0;
-    width: 100%;  /* Sikrer at footer fylder hele bredden */
+    width: 100%;
     background-color: #B76E79;
     display: flex;
 }

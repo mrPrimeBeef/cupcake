@@ -65,7 +65,4 @@ public class OrderMapper {
             throw new DatabaseException("Error updating order status for order number: " + orderNumber);
         }
     }
-
-
-
 }
