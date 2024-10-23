@@ -63,7 +63,7 @@ public class OrderMapper {
             throw new DatabaseException("Error updating order status for order number: " + orderNumber);
         }
     }
-
+  
     public static ArrayList<OrderMemberDto> getAllOrderMemberDtos(ConnectionPool connectionPool) throws DatabaseException {
 
         ArrayList<OrderMemberDto> allOrderMemberDtos = new ArrayList<OrderMemberDto>();
@@ -113,7 +113,6 @@ public class OrderMapper {
                 double orderPrice = rs.getDouble("order_price");
 
                 order = new Order(orderNumber, memberId, date, status, orderPrice);
-
             } else{
                 return order;
             }
