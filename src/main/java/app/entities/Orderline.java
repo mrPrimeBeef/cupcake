@@ -1,4 +1,3 @@
-// File: src/main/java/app/entities/Orderline.java
 package app.entities;
 
 public class Orderline {

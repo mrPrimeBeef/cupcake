@@ -1,6 +1,7 @@
 package app.persistence;
 
 import app.entities.Bottom;
+import app.entities.Order;
 import app.entities.Topping;
 import app.entities.Orderline;
 import app.exceptions.DatabaseException;
@@ -63,6 +64,10 @@ public class OrderMapper {
         } catch (SQLException e) {
             throw new DatabaseException("Error updating order status for order number: " + orderNumber);
         }
+    }
+
+    public static ArrayList<Order> getActiveOrder(ConnectionPool connectionPool) throws DatabaseException {
+
     }
 
 
