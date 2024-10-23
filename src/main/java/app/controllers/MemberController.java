@@ -33,8 +33,7 @@ public class MemberController {
         if (password1.equals(password2)) {
             try {
                 MemberMapper.createMember(name, email, mobile, password1, connectionPool);
-                ctx.attribute("message", "Du er hermed oprettet med brugernavn: " + email +
-                        ". Nu kan du logge ind.");
+                ctx.attribute("message", "Du er hermed oprettet med brugernavn: " + email + ". Nu kan du logge ind.");
                 ctx.render("login.html");
             } catch (DatabaseException e) {
                 ctx.attribute("message", "Brugernavnet findes allerede");
@@ -68,7 +67,7 @@ public class MemberController {
 
             Order currentOrder = OrderMapper.getActiveOrder(ctx, connectionPool);
             ctx.sessionAttribute("currentOrder", currentOrder);
-            ctx.render("kunde.html");
+            ctx.redirect("kunde");
 
 
         } catch (DatabaseException e) {
