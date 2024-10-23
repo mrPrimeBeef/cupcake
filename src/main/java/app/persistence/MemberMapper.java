@@ -1,7 +1,9 @@
 package app.persistence;
 
 import app.entities.Member;
+import app.entities.Order;
 import app.exceptions.DatabaseException;
+import io.javalin.http.Context;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -58,6 +60,32 @@ public class MemberMapper {
                 msg = "Brugernavnet findes allerede. Vælg et andet";
             }
             throw new DatabaseException(msg, e.getMessage());
+        }
+    }
+
+    public static Member getBalance(int memberId, int balance, Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        Member member = null;
+        String sql = "SELECT * FROM member WHERE member_id=?";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            // Sæt parameteren for medlemmet
+            ps.setInt(1, memberId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                // Hent balancen og medlemmet fra resultatsættet
+                int currentBalance = rs.getInt("balance");
+
+                    member = new Member(memberId, currentBalance);
+                    return member;
+            } else {
+                throw new DatabaseException("Medlem ikke fundet.");
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Databasefejl: " + e.getMessage());
         }
     }
 }
