@@ -1,32 +1,98 @@
 package app.persistence;
 
+import app.entities.Bottom;
+import app.entities.Topping;
 import app.exceptions.DatabaseException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ToppingMapper {
+    public static ArrayList<Topping> getAllBToppings(ConnectionPool connectionPool) throws DatabaseException {
+        ArrayList<Topping> bottomNames = new ArrayList<>();
 
-    public static Boolean addTopping(int userId, String topping, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "INSERT INTO cupcake (topping_name) VALUES (?)";
-        boolean result = false;
+        String sql = "SELECT * FROM topping";
 
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
+             PreparedStatement ps = connection.prepareStatement(sql)){
 
-            ps.setInt(1, Integer.parseInt(topping));
+            ResultSet rs = ps.executeQuery();
 
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected != 1) {
-                throw new DatabaseException("Error, occured when adding a topping");
-            } else {
-                result = true;
+            while (rs.next()) {
+                int toppingId = rs.getInt("topping_id");
+                String toppingName = rs.getString("topping_name");
+                double toppingPrice = rs.getDouble("topping_price");
+
+                Topping topping = new Topping(toppingId, toppingName, toppingPrice);
+
+                bottomNames.add(topping);
             }
 
-        } catch (SQLException e) {
-            throw new DatabaseException("Database error", e.getMessage());
+        } catch (SQLException e){
+            throw new DatabaseException("Error in getting topping names from database");
         }
-        return result;
+        return bottomNames;
     }
+
+    public static Topping getToppingNameById(int id, ConnectionPool connectionPool) throws DatabaseException {
+        Topping topping = null;
+
+        String sql = "SELECT * " +
+                     "FROM topping WHERE topping_id = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)){
+
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int toppingId = rs.getInt("topping_id");
+                String toppingName = rs.getString("topping_name");
+                double toppingPrice = rs.getDouble("topping_price");
+
+               topping = new Topping(toppingId, toppingName, toppingPrice);
+            }
+
+        } catch (SQLException e){
+            throw new DatabaseException("Error in getting topping name from database");
+        }
+
+        if (topping == null) {
+            throw new DatabaseException("No topping found with id: " + id);
+        }
+        return topping;
+    }
+//    public static Topping getToppingByName(String name, ConnectionPool connectionPool) throws DatabaseException {
+//        Topping topping = null;
+//
+//        String sql = "SELECT * " +
+//                     "FROM topping WHERE topping_name = ?";
+//
+//        try (Connection connection = connectionPool.getConnection();
+//             PreparedStatement ps = connection.prepareStatement(sql)){
+//
+//            ps.setString(1, name);
+//            ResultSet rs = ps.executeQuery();
+//
+//            if (rs.next()) {
+//                int toppingId = rs.getInt("topping_id");
+//                String toppingName = rs.getString("topping_name");
+//                double toppingPrice = rs.getDouble("topping_price");
+//
+//                topping = new Topping(toppingId, toppingName, toppingPrice);
+//            }
+//
+//        } catch (SQLException e){
+//            throw new DatabaseException("Error in getting bottom name from database");
+//        }
+//
+//        if (topping == null) {
+//            throw new DatabaseException("No bottom found with id: " + name);
+//        }
+//        return topping;
+//    }
 }
