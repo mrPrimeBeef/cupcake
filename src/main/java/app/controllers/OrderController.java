@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.dto.OrderMemberDto;
 import app.entities.*;
 import app.exceptions.DatabaseException;
 import app.persistence.*;
@@ -7,11 +8,11 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 
 public class OrderController {
+
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("kunde", ctx -> addToCart(ctx, connectionPool));
         app.post("kunde", ctx -> addToOrder(ctx, connectionPool));
@@ -19,6 +20,25 @@ public class OrderController {
         app.post("tak", ctx -> thanks(ctx, connectionPool));
         app.post("kurv", ctx -> watchCart(ctx, connectionPool));
         app.get("kurv", ctx -> watchCart(ctx, connectionPool));
+        app.get("adminordrer", ctx -> showAllOrders(ctx, connectionPool));
+    }
+
+    private static void showAllOrders(Context ctx, ConnectionPool connectionPool) {
+        Member currentMember = ctx.sessionAttribute("currentMember");
+        if (currentMember == null || !currentMember.getRole().equals("admin")) {
+            ctx.attribute("errorMessage", "Kun for admin.");
+            ctx.render("error.html");
+            return;
+        }
+
+        try {
+            ArrayList<OrderMemberDto> allOrderMemberDtos = OrderMapper.getAllOrderMemberDtos(connectionPool);
+            ctx.attribute("allOrderMemberDtos", allOrderMemberDtos);
+            ctx.render("adminordrer.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("errorMessage", "Der er sket en fejl: "+e.getMessage());
+            ctx.render("error.html");
+        }
     }
 
     private static void watchCart(Context ctx, ConnectionPool connectionPool) {
