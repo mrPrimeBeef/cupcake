@@ -2,7 +2,6 @@
 -- Please log an issue at https://github.com/pgadmin-org/pgadmin4/issues/new/choose if you find any bugs, including reproduction steps.
 BEGIN;
 
-
 CREATE TABLE IF NOT EXISTS public.bottom
 (
     bottom_id serial NOT NULL,
@@ -105,5 +104,8 @@ INSERT INTO public.member (name, email, mobile, password, role, balance)
 VALUES
     ('admin', 'admin@example.com', '09090909', '1234', 'admin', 0),
     ('test', 'test@example.com', '08080808', '1234', 'customer', 1000);
+
+CREATE SCHEMA IF NOT EXISTS test
+    AUTHORIZATION postgres;
 
 END;
