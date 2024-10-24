@@ -17,13 +17,39 @@ public class OrderController {
         app.post("kunde", ctx -> addToOrder(ctx, connectionPool));
         app.post("tak", ctx -> thanks(ctx, connectionPool));
         app.get("kurv", ctx -> watchCart(ctx, connectionPool));
-        app.get("adminordrer", ctx -> showAllOrders(ctx, connectionPool));
-        app.get("/delete/{id}", ctx -> {int orderlineId = Integer.parseInt(ctx.pathParam("id"));cancelOrderline(ctx, connectionPool, orderlineId);
-        });
+        app.get("/delete/{id}", ctx -> {int orderlineId = Integer.parseInt(ctx.pathParam("id"));cancelOrderline(ctx, connectionPool, orderlineId);});
+        app.get("adminalleordrer", ctx -> adminShowAllOrders(ctx, connectionPool));
+        app.get("adminordre", ctx -> adminShowOrder(ctx, connectionPool));
+    }
+
+    private static void adminShowOrder(Context ctx, ConnectionPool connectionPool) {
+        Member currentMember = ctx.sessionAttribute("currentMember");
+        if (currentMember == null || !currentMember.getRole().equals("admin")) {
+            ctx.attribute("errorMessage", "Kun for admin.");
+            ctx.render("error.html");
+            return;
+        }
+
+        // TODO: Håndter når query parameteren is null
+        int orderNumber = Integer.parseInt(ctx.queryParam("ordrenr"));
+
+        try {
+            OrderMemberDto orderMemberDto = OrderMapper.getOrderMemberDtoByOrderNumber(orderNumber, connectionPool);
+            ctx.attribute("orderMemberDto", orderMemberDto);
+
+            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(orderNumber, connectionPool);
+            ctx.attribute("orderlines", orderlines);
+
+            ctx.render("adminordre.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("errorMessage", "Der er sket en fejl: " + e.getMessage());
+            ctx.render("error.html");
+        }
+
 
     }
 
-    private static void showAllOrders(Context ctx, ConnectionPool connectionPool) {
+    private static void adminShowAllOrders(Context ctx, ConnectionPool connectionPool) {
         Member currentMember = ctx.sessionAttribute("currentMember");
         if (currentMember == null || !currentMember.getRole().equals("admin")) {
             ctx.attribute("errorMessage", "Kun for admin.");
@@ -34,7 +60,7 @@ public class OrderController {
         try {
             ArrayList<OrderMemberDto> allOrderMemberDtos = OrderMapper.getAllOrderMemberDtos(connectionPool);
             ctx.attribute("allOrderMemberDtos", allOrderMemberDtos);
-            ctx.render("adminordrer.html");
+            ctx.render("adminalleordrer.html");
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der er sket en fejl i at hente data");
             ctx.render("error.html");

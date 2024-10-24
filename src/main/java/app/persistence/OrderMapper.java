@@ -78,7 +78,7 @@ public class OrderMapper {
             throw new DatabaseException("Fejl ved sletning af ordrelinje: " + e.getMessage());
         }
     }
-  
+
     public static ArrayList<OrderMemberDto> getAllOrderMemberDtos(ConnectionPool connectionPool) throws DatabaseException {
 
         ArrayList<OrderMemberDto> allOrderMemberDtos = new ArrayList<OrderMemberDto>();
@@ -130,7 +130,7 @@ public class OrderMapper {
                 double orderPrice = rs.getDouble("order_price");
 
                 order = new Order(orderNumber, memberId, date, status, orderPrice);
-            } else{
+            } else {
                 return order;
             }
 
@@ -138,5 +138,33 @@ public class OrderMapper {
             throw new DatabaseException("Error getting active orderlines");
         }
         return order;
+    }
+
+    public static OrderMemberDto getOrderMemberDtoByOrderNumber(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
+
+        OrderMemberDto orderMemberDto = null;
+
+        String sql = "SELECT order_number, name, email, date, status, order_price FROM member_order JOIN member USING(member_id) WHERE order_number=?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, orderNumber);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String memberName = rs.getString("name");
+                String memberEmail = rs.getString("email");
+                Date orderDate = rs.getDate("date");
+                String orderStatus = rs.getString("status");
+                double orderPrice = rs.getDouble("order_price");
+                orderMemberDto = new OrderMemberDto(orderNumber, memberName, memberEmail, orderDate, orderStatus, orderPrice);
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("DB fejl i getOrderMemberDtoByOrderNumbers", e.getMessage());
+        }
+
+        return orderMemberDto;
+
     }
 }

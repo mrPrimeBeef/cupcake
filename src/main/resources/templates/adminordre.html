@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Frontpage</title>
+    <title>Admin se ordre</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
@@ -10,8 +10,7 @@
 
 <body>
 <header th:replace="fragments :: headerFragment"></header>
-<div class="page">
-<h2>Admin: Se alle ordrer</h2>
+<h2>Admin: Se ordre</h2>
 
 <table>
     <tr>
@@ -22,7 +21,7 @@
         <th>Pris</th>
         <th>Status</th>
     </tr>
-    <tr th:each="orderMemberDto: ${allOrderMemberDtos}">
+    <tr>
         <td th:text="${orderMemberDto.orderNumber}"></td>
         <td th:text="${orderMemberDto.memberName}"></td>
         <td th:text="${orderMemberDto.memberEmail}"></td>
@@ -31,7 +30,30 @@
         <td th:text="${orderMemberDto.orderStatus}"></td>
     </tr>
 </table>
+
+
+
+<form class="cart" method="post">
+    <table class="cart-table">
+        <thead>
+        <tr>
+            <th>Bund</th>
+            <th>Topping</th>
+            <th>Antal</th>
+            <th>Pris</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="orderline : ${orderlines}">
+            <td th:text="${orderline.bottom.bottomName}"></td>
+            <td th:text="${orderline.topping.toppingName}"></td>
+            <td th:text="${orderline.quantity}"></td>
+            <td th:text="${orderline.orderlinePrice}"></td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+
 <footer th:replace="fragments :: footer"></footer>
-</div>
 </body>
 </html>
