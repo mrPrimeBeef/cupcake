@@ -165,15 +165,14 @@ public class OrderController {
         double toppingPrice = topping.getToppingPrice();
         double bottomPrice = bottom.getBottomPrice();
 
-        String number = ctx.formParam("antal");
-        int quantity = Integer.parseInt(number);
+        int quantity= Integer.parseInt(ctx.formParam("antal"));
         double orderlinePrice = (toppingPrice + bottomPrice) * quantity;
 
         Orderline orderline = new Orderline(currentOrder.getOrderNumber(), bottom, topping, quantity, orderlinePrice);
         OrderlineMapper.createOrderline(orderline, connectionPool);
 
         updateOrderPrice(currentOrder.getOrderNumber(), connectionPool);
-        addToCart(ctx, connectionPool);
+        showAddToCart(ctx, connectionPool);
     }
 
     private static void updateOrderPrice(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
