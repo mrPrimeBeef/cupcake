@@ -140,7 +140,6 @@ public class OrderController {
             ctx.render("error.html");
             return;
         }
-        Order currentOrder = ctx.sessionAttribute("currentOrder");
 
         if (currentOrder == null) {
             ctx.attribute("errorMessage", "læg noget i kurven for at købe");
