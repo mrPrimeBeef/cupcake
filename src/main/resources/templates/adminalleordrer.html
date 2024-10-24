@@ -26,7 +26,8 @@
             <td><a href="adminordre.html" th:href="@{/adminordre(ordrenr=${orderMemberDto.orderNumber})}"
                    th:text="${orderMemberDto.orderNumber}"></a></td>
             <td th:text="${orderMemberDto.memberName}"></td>
-            <td th:text="${orderMemberDto.memberEmail}"></td>
+            <td><a href="adminkunde.html" th:href="@{/adminkunde(kundenr=${orderMemberDto.memberId})}"
+                   th:text="${orderMemberDto.memberEmail}"></a></td>
             <td th:text="${orderMemberDto.orderDate}"></td>
             <td th:text="${orderMemberDto.orderStatus}"></td>
             <td th:text="${orderMemberDto.orderPrice}"></td>
