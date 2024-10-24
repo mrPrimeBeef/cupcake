@@ -18,7 +18,6 @@ public class OrderController {
         app.post("kunde", ctx -> addToOrder(ctx, connectionPool));
         app.get("tak", ctx -> thanks(ctx, connectionPool));
         app.post("tak", ctx -> thanks(ctx, connectionPool));
-        app.post("kurv", ctx -> watchCart(ctx, connectionPool));
         app.get("kurv", ctx -> watchCart(ctx, connectionPool));
         app.get("adminordrer", ctx -> showAllOrders(ctx, connectionPool));
     }
@@ -41,10 +40,17 @@ public class OrderController {
         }
     }
 
-    private static void watchCart(Context ctx, ConnectionPool connectionPool) {
+    private static boolean watchCart(Context ctx, ConnectionPool connectionPool) {
         Order currentOrder = ctx.sessionAttribute("currentOrder");
+        boolean activeOrder = false;
+
+        if (currentOrder == null) {
+            ctx.render("kurv.html");
+            return activeOrder;
+        }
 
         try {
+            activeOrder = true;
             ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(currentOrder.getOrderNumber(), connectionPool);
 
             double totalPrice = 0;
@@ -60,6 +66,7 @@ public class OrderController {
             throw new RuntimeException(e);
         }
         ctx.render("kurv.html");
+        return activeOrder;
     }
 
     private static boolean validateBalance(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
