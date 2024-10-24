@@ -17,7 +17,6 @@ public class OrderController {
         app.get("kunde", ctx -> addToCart(ctx, connectionPool));
         app.post("kunde", ctx -> addToOrder(ctx, connectionPool));
         app.get("tak", ctx -> thanks(ctx, connectionPool));
-        app.post("tak", ctx -> thanks(ctx, connectionPool));
         app.get("kurv", ctx -> watchCart(ctx, connectionPool));
         app.get("adminordrer", ctx -> showAllOrders(ctx, connectionPool));
     }
@@ -41,8 +40,14 @@ public class OrderController {
     }
 
     private static boolean watchCart(Context ctx, ConnectionPool connectionPool) {
-        Order currentOrder = ctx.sessionAttribute("currentOrder");
+        Member currentMember = ctx.sessionAttribute("currentMember");
+        if (currentMember == null) {
+            ctx.attribute("errorMessage", "log ind for at bestille.");
+            ctx.render("error.html");
+            return false;
+        }
         boolean activeOrder = false;
+        Order currentOrder = ctx.sessionAttribute("currentOrder");
 
         if (currentOrder == null) {
             ctx.attribute("tomKurv","Kurven er tom");
@@ -97,7 +102,12 @@ public class OrderController {
     }
 
     private static void thanks(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-
+        Member currentMember = ctx.sessionAttribute("currentMember");
+        if (currentMember == null) {
+            ctx.attribute("errorMessage", "log ind for at bestille.");
+            ctx.render("error.html");
+            return;
+        }
         try {
            if(validateBalance(ctx, connectionPool)){
                checkoutOrder(ctx, connectionPool);
