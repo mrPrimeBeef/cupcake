@@ -8,6 +8,7 @@ import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.MemberMapper;
 import app.persistence.OrderMapper;
+import app.persistence.OrderlineMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -24,7 +25,31 @@ public class MemberController {
         app.get("logout", ctx -> logout(ctx));
 
         app.get("adminallekunder", ctx -> adminShowAllCustomers(ctx, connectionPool));
-//        app.get("adminkunde", ctx -> adminShowCustomer(ctx, connectionPool));
+        app.get("adminkunde", ctx -> adminShowCustomer(ctx, connectionPool));
+    }
+
+
+    private static void adminShowCustomer(Context ctx, ConnectionPool connectionPool) {
+        Member currentMember = ctx.sessionAttribute("currentMember");
+        if (currentMember == null || !currentMember.getRole().equals("admin")) {
+            ctx.attribute("errorMessage", "Kun for admin.");
+            ctx.render("error.html");
+            return;
+        }
+
+        // TODO: Håndter når query parameteren is null
+        int customerNumber = Integer.parseInt(ctx.queryParam("kundenr"));
+
+        try {
+            Member customer = MemberMapper.getMemberById(customerNumber, connectionPool);
+            ctx.attribute("customer", customer);
+            ctx.render("adminkunde.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("errorMessage", "Der er sket en fejl: " + e.getMessage());
+            ctx.render("error.html");
+        }
+
+
     }
 
 
@@ -38,7 +63,6 @@ public class MemberController {
 
         try {
             ArrayList<Member> allCustomers = MemberMapper.getAllCostumers(connectionPool);
-//            ArrayList<OrderMemberDto> allOrderMemberDtos = OrderMapper.getAllOrderMemberDtos(connectionPool);
             ctx.attribute("allCustomers", allCustomers);
             ctx.render("adminallekunder.html");
         } catch (DatabaseException e) {
