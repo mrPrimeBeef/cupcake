@@ -83,7 +83,7 @@ public class OrderMapper {
 
         ArrayList<OrderMemberDto> allOrderMemberDtos = new ArrayList<OrderMemberDto>();
 
-        String sql = "SELECT order_number, member_id, name, email, date, status, order_price FROM member_order JOIN member USING(member_id)";
+        String sql = "SELECT order_number, member_id, name, email, date, status, order_price FROM member_order JOIN member USING(member_id) ORDER BY order_number";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -151,7 +151,7 @@ public class OrderMapper {
             ps.setInt(1, orderNumber);
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
+            if (rs.next()) {
                 int memberId = rs.getInt("member_id");
                 String memberName = rs.getString("name");
                 String memberEmail = rs.getString("email");
@@ -172,7 +172,7 @@ public class OrderMapper {
 
         ArrayList<Order> orders = new ArrayList<Order>();
 
-        String sql = "SELECT * FROM member_order WHERE member_id=?";
+        String sql = "SELECT * FROM member_order WHERE member_id=? ORDER BY order_number";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {

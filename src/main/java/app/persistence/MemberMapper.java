@@ -109,7 +109,7 @@ public class MemberMapper {
 
         ArrayList<Member> allCostumers = new ArrayList<Member>();
 
-        String sql = "SELECT * FROM member WHERE role='customer'";
+        String sql = "SELECT * FROM member WHERE role='customer' ORDER BY member_id";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
