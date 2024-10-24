@@ -56,7 +56,7 @@ public class OrderController {
 
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der opstod et problem ved hentningen af dataen, prøv igen.");
-            ctx.redirect("error");
+            ctx.redirect("errorAlreadyLogin");
             throw new RuntimeException(e);
         }
         ctx.render("kurv.html");
@@ -82,7 +82,7 @@ public class OrderController {
             MemberMapper.updateMemberBalance(currentMember.getMemberId(), newBalance, connectionPool);
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der opstod en fejl under hentning af orderlines.");
-            ctx.render("error.html");
+            ctx.render("errorAlreadyLogin.html");
             throw new RuntimeException(e);
         }
         return true;
@@ -96,13 +96,13 @@ public class OrderController {
                ctx.render("tak.html");
            } else{
                ctx.attribute("errorMessage", "Ikke nok penge på kontoen til at gennemføre ordren.");
-               ctx.render("error.html");
+               ctx.render("errorAlreadyLogin.html");
            }
 
         } catch (DatabaseException e) {
 
             ctx.attribute("errorMessage", "Der opstod en fejl under behandlingen af din ordre.");
-            ctx.render("error.html");
+            ctx.render("errorAlreadyLogin.html");
         }
     }
 
@@ -122,7 +122,7 @@ public class OrderController {
 
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "There was a problem retrieving your data. Please try again later.");
-            ctx.render("error.html");
+            ctx.render("errorAlreadyLogin.html");
             throw new RuntimeException(e);
         }
         ctx.render("kunde.html");
