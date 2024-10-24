@@ -40,6 +40,7 @@
         <button class="order-button" type="submit">Læg i kurv</button>
         <a href="kurv.html" class="cart-icon" th:href="@{/kurv}"><button class="order-button" type="button">Videre til kurv</button></a>
     </form>
+    <p th:text="${errorMessage}"></p>
     <footer th:replace="fragments :: footer"></footer>
 </div>
 </body>
