@@ -17,7 +17,20 @@ public class OrderController {
         app.post("kunde", ctx -> addToOrder(ctx, connectionPool));
         app.post("tak", ctx -> thanks(ctx, connectionPool));
         app.get("kurv", ctx -> watchCart(ctx, connectionPool));
-        app.get("adminordrer", ctx -> showAllOrders(ctx, connectionPool));
+        app.get("adminalleordrer", ctx -> showAllOrders(ctx, connectionPool));
+        app.get("adminvisordre", ctx -> showOrder(ctx, connectionPool));
+    }
+
+    private static void showOrder(Context ctx, ConnectionPool connectionPool) {
+
+        Member currentMember = ctx.sessionAttribute("currentMember");
+        if (currentMember == null || !currentMember.getRole().equals("admin")) {
+            ctx.attribute("errorMessage", "Kun for admin.");
+            ctx.render("error.html");
+            return;
+        }
+
+
     }
 
     private static void showAllOrders(Context ctx, ConnectionPool connectionPool) {
@@ -31,9 +44,9 @@ public class OrderController {
         try {
             ArrayList<OrderMemberDto> allOrderMemberDtos = OrderMapper.getAllOrderMemberDtos(connectionPool);
             ctx.attribute("allOrderMemberDtos", allOrderMemberDtos);
-            ctx.render("adminordrer.html");
+            ctx.render("adminalleordrer.html");
         } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der er sket en fejl: "+e.getMessage());
+            ctx.attribute("errorMessage", "Der er sket en fejl: " + e.getMessage());
             ctx.render("error.html");
         }
     }
@@ -49,7 +62,7 @@ public class OrderController {
         Order currentOrder = ctx.sessionAttribute("currentOrder");
 
         if (currentOrder == null) {
-            ctx.attribute("tomKurv","Kurven er tom");
+            ctx.attribute("tomKurv", "Kurven er tom");
             ctx.render("kurv.html");
             return activeOrder;
         }
@@ -81,7 +94,7 @@ public class OrderController {
         try {
             double memberBalance = MemberMapper.getBalance(currentMember.getMemberId(), connectionPool);
 
-            double totalOrderPrice = OrderMapper.getActiveOrder(ctx,connectionPool).getPrice();
+            double totalOrderPrice = OrderMapper.getActiveOrder(ctx, connectionPool).getPrice();
 
             if (totalOrderPrice > currentMember.getBalance()) {
                 return false;
@@ -104,13 +117,13 @@ public class OrderController {
             return;
         }
         try {
-           if(validateBalance(ctx, connectionPool)){
-               checkoutOrder(ctx, connectionPool);
-               ctx.render("tak.html");
-           } else{
-               ctx.attribute("errorMessage", "Ikke nok penge på kontoen til at gennemføre ordren.");
-               ctx.render("error.html");
-           }
+            if (validateBalance(ctx, connectionPool)) {
+                checkoutOrder(ctx, connectionPool);
+                ctx.render("tak.html");
+            } else {
+                ctx.attribute("errorMessage", "Ikke nok penge på kontoen til at gennemføre ordren.");
+                ctx.render("error.html");
+            }
 
         } catch (DatabaseException e) {
 
@@ -161,7 +174,7 @@ public class OrderController {
         double toppingPrice = topping.getToppingPrice();
         double bottomPrice = bottom.getBottomPrice();
 
-        int quantity= Integer.parseInt(ctx.formParam("antal"));
+        int quantity = Integer.parseInt(ctx.formParam("antal"));
         double orderlinePrice = (toppingPrice + bottomPrice) * quantity;
 
         Orderline orderline = new Orderline(currentOrder.getOrderNumber(), bottom, topping, quantity, orderlinePrice);

@@ -22,7 +22,7 @@
         <th>Status</th>
     </tr>
     <tr th:each="orderMemberDto: ${allOrderMemberDtos}">
-        <td th:text="${orderMemberDto.orderNumber}"></td>
+        <td><a href="adminvisordre.html" th:href="@{/adminvisordre(ordrenr=${orderMemberDto.orderNumber})}" th:text="${orderMemberDto.orderNumber}"></a></td>
         <td th:text="${orderMemberDto.memberName}"></td>
         <td th:text="${orderMemberDto.memberEmail}"></td>
         <td th:text="${orderMemberDto.orderDate}"></td>

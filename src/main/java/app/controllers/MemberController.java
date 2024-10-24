@@ -61,7 +61,7 @@ public class MemberController {
             ctx.sessionAttribute("currentMember", member);
 
             if (member.getRole().equals("admin")) {
-                ctx.render("adminordrer.html");
+                ctx.redirect("adminalleordrer");
                 return;
             }
 
