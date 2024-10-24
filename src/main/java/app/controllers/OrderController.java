@@ -77,7 +77,6 @@ public class OrderController {
 
     private static boolean validateBalance(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         Member currentMember = ctx.sessionAttribute("currentMember");
-        Order currentOrder = ctx.sessionAttribute("currentOrder");
 
         try {
             double memberBalance = MemberMapper.getBalance(currentMember.getMemberId(), connectionPool);
