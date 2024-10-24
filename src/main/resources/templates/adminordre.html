@@ -18,20 +18,22 @@
         <th>Navn</th>
         <th>Email</th>
         <th>Dato</th>
-        <th>Pris</th>
         <th>Status</th>
+        <th>Pris DKK</th>
     </tr>
     <tr>
         <td th:text="${orderMemberDto.orderNumber}"></td>
         <td th:text="${orderMemberDto.memberName}"></td>
         <td th:text="${orderMemberDto.memberEmail}"></td>
         <td th:text="${orderMemberDto.orderDate}"></td>
-        <td th:text="${orderMemberDto.orderPrice}"></td>
         <td th:text="${orderMemberDto.orderStatus}"></td>
+        <td th:text="${orderMemberDto.orderPrice}"></td>
+
     </tr>
 </table>
 
-
+<br>
+<p>Ordrelinjer i denne ordre:</p>
 
 <form class="cart" method="post">
     <table class="cart-table">
@@ -40,7 +42,7 @@
             <th>Bund</th>
             <th>Topping</th>
             <th>Antal</th>
-            <th>Pris</th>
+            <th>Pris DKK</th>
         </tr>
         </thead>
         <tbody>

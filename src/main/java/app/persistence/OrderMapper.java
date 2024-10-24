@@ -165,4 +165,32 @@ public class OrderMapper {
         return orderMemberDto;
 
     }
+
+    public static ArrayList<Order> getOrdersByMemberId(int memberId, ConnectionPool connectionPool) throws DatabaseException {
+
+        ArrayList<Order> orders = new ArrayList<Order>();
+
+        String sql = "SELECT * FROM member_order WHERE member_id=?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, memberId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int orderNumber = rs.getInt("order_number");
+                Date date = rs.getDate("date");
+                String status = rs.getString("status");
+                double price = rs.getDouble("order_price");
+                orders.add(new Order(orderNumber, memberId, date, status, price));
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("DB fejl i getOrdersByMemberId", e.getMessage());
+        }
+
+        return orders;
+
+    }
+
 }

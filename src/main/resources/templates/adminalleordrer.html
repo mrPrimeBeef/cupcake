@@ -19,8 +19,8 @@
             <th>Navn</th>
             <th>Email</th>
             <th>Dato</th>
-            <th>Pris</th>
             <th>Status</th>
+            <th>Pris DKK</th>
         </tr>
         <tr th:each="orderMemberDto: ${allOrderMemberDtos}">
             <td><a href="adminordre.html" th:href="@{/adminordre(ordrenr=${orderMemberDto.orderNumber})}"
@@ -28,8 +28,8 @@
             <td th:text="${orderMemberDto.memberName}"></td>
             <td th:text="${orderMemberDto.memberEmail}"></td>
             <td th:text="${orderMemberDto.orderDate}"></td>
-            <td th:text="${orderMemberDto.orderPrice}"></td>
             <td th:text="${orderMemberDto.orderStatus}"></td>
+            <td th:text="${orderMemberDto.orderPrice}"></td>
         </tr>
     </table>
     <footer th:replace="fragments :: footer"></footer>

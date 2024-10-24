@@ -43,6 +43,10 @@ public class MemberController {
         try {
             Member customer = MemberMapper.getMemberById(customerNumber, connectionPool);
             ctx.attribute("customer", customer);
+
+            ArrayList<Order> orders = OrderMapper.getOrdersByMemberId(customerNumber, connectionPool);
+            ctx.attribute("orders", orders);
+
             ctx.render("adminkunde.html");
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der er sket en fejl: " + e.getMessage());
