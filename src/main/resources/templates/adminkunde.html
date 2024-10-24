@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Admin se kunde</title>
+    <title th:text="'Kundenr. ' + ${customer.memberId} +' ('+${customer.email}+')'"></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
@@ -11,7 +11,7 @@
 <body>
 <header th:replace="fragments :: headerAdmin"></header>
 <div class="page">
-    <h2>Admin: Se kunde</h2>
+    <h2 th:text="'Kundenr. ' + ${customer.memberId} +' ('+${customer.email}+')'"></h2>
 
     <table>
         <tr>
@@ -29,6 +29,8 @@
     </table>
 
     <br>
+    <p>Alle ondre for denne kunde:</p>
+
     <table>
         <tr>
             <th>Ordrenr.</th>
