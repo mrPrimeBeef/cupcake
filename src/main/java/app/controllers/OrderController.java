@@ -45,6 +45,7 @@ public class OrderController {
         boolean activeOrder = false;
 
         if (currentOrder == null) {
+            ctx.attribute("tomKurv","Kurven er tom");
             ctx.render("kurv.html");
             return activeOrder;
         }
