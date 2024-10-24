@@ -6,7 +6,7 @@ html, body {
     height: 100%;
     width: 100%;
     margin: 0;
-    background-color: #F3F3ED;
+    background-color: #E4E3DB;
     display: flex;
     flex-direction: column;
 }
@@ -16,15 +16,14 @@ header .header-text {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    position: fixed;
-    background-color: #B5B0D4;
+    background-color: #B76E79;
 }
 
 .headerimage {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #AAA4CE;
+    background-color:#BDB5D5;
 }
 
 .left {
@@ -55,7 +54,7 @@ header .header-text {
     display: flex;
     justify-content: space-between;
     text-align: start;
-    background-color: #B76E79;
+    background-color: #BDB5D5;
 }
 
 footer {
@@ -63,7 +62,7 @@ footer {
     left: 0;
     bottom: 0;
     width: 100%;
-    background-color: #B76E79;
+    background-color: #BDB5D5;
     display: flex;
 }
 
@@ -84,3 +83,12 @@ footer {
  .error {
      color: red;
  }
+
+ .page{
+     flex-direction: column;
+     display: flex;
+     font-weight: bold;
+     align-items: center;
+     justify-content: center;
+ }
+

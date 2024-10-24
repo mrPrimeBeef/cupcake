@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <title>Login</title>
     <meta charset="UTF-8">
@@ -14,7 +13,7 @@
     <img th:src="@{/images/cupcakelogo.png}" src="/public/images/cupcakelogo.png" width="30%" height="30%"/>
 </div>
 </header>
-
+<div class="page">
 <h1>Velkommen til Olsker Cupcakes</h1>
 <h2>Log på med din email og kodeord</h2>
 
@@ -34,5 +33,6 @@
 
 <p>Ikke bruger endnu? <a href="opretbruger.html" th:href="@{/opretbruger}">Opret bruger</a></p>
 <footer th:replace="fragments :: footer"></footer>
+</div>
 </body>
 </html>

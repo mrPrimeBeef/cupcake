@@ -8,9 +8,10 @@
     <link href="../public/css/styles.css" th:href="@{css/styles.css}" rel="stylesheet"/>
 </head>
 <body>
-<div class="page">
+
     <header th:replace="fragments :: headerFragment"></header>
     <p><span th:text="${tomKurv}"></span></p>
+    <div class="page">
     <form class="cart" method="post">
         <table class="cart-table">
             <thead>
