@@ -17,8 +17,12 @@ public class OrderController {
         app.post("kunde", ctx -> addToOrder(ctx, connectionPool));
         app.post("tak", ctx -> thanks(ctx, connectionPool));
         app.get("kurv", ctx -> watchCart(ctx, connectionPool));
+        app.get("/delete/{id}", ctx -> {int orderlineId = Integer.parseInt(ctx.pathParam("id"));cancelOrderline(ctx, connectionPool, orderlineId);
         app.get("adminalleordrer", ctx -> adminShowAllOrders(ctx, connectionPool));
         app.get("adminordre", ctx -> adminShowOrder(ctx, connectionPool));
+        });
+
+
     }
 
     private static void adminShowOrder(Context ctx, ConnectionPool connectionPool) {
@@ -230,6 +234,14 @@ public class OrderController {
         OrderMapper.updateOrderStatus(CurrentOrderId, "Canceled", connectionPool);
         ctx.sessionAttribute("CurrentOrderId", null);
     }
+
+    private static void cancelOrderline(Context ctx, ConnectionPool connectionPool, int orderlineId) throws DatabaseException {
+
+        OrderMapper.deleteOrderline(orderlineId, connectionPool);
+        ctx.redirect("/kurv");
+    }
+
+
 
     private static void checkoutOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         Integer CurrentOrderId = ctx.sessionAttribute("CurrentOrderId");
