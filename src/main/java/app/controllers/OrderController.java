@@ -212,8 +212,6 @@ public class OrderController {
         ctx.redirect("/kurv");
     }
 
-
-
     private static void checkoutOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         Integer CurrentOrderId = ctx.sessionAttribute("CurrentOrderId");
 
