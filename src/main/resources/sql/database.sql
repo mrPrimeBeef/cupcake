@@ -2,7 +2,6 @@
 -- Please log an issue at https://github.com/pgadmin-org/pgadmin4/issues/new/choose if you find any bugs, including reproduction steps.
 BEGIN;
 
-
 CREATE TABLE IF NOT EXISTS public.bottom
 (
     bottom_id serial NOT NULL,
@@ -19,7 +18,7 @@ CREATE TABLE IF NOT EXISTS public.member
     mobile character varying COLLATE pg_catalog."default" NOT NULL,
     password character varying COLLATE pg_catalog."default" NOT NULL,
     role character varying COLLATE pg_catalog."default" NOT NULL DEFAULT 'customer'::character varying,
-    balance integer NOT NULL,
+    balance numeric NOT NULL,
     CONSTRAINT customer_pkey PRIMARY KEY (member_id),
     CONSTRAINT email UNIQUE (email)
     );
@@ -41,7 +40,7 @@ CREATE TABLE IF NOT EXISTS public.orderline
     bottom_id integer NOT NULL,
     topping_id integer NOT NULL,
     quantity integer NOT NULL,
-    orderline_price integer NOT NULL,
+    orderline_price numeric NOT NULL,
     CONSTRAINT orderline_pkey PRIMARY KEY (orderline_id)
     );
 
@@ -105,5 +104,8 @@ INSERT INTO public.member (name, email, mobile, password, role, balance)
 VALUES
     ('admin', 'admin@example.com', '09090909', '1234', 'admin', 0),
     ('test', 'test@example.com', '08080808', '1234', 'customer', 1000);
+
+CREATE SCHEMA IF NOT EXISTS test
+    AUTHORIZATION postgres;
 
 END;

@@ -66,33 +66,4 @@ public class ToppingMapper {
         }
         return topping;
     }
-//    public static Topping getToppingByName(String name, ConnectionPool connectionPool) throws DatabaseException {
-//        Topping topping = null;
-//
-//        String sql = "SELECT * " +
-//                     "FROM topping WHERE topping_name = ?";
-//
-//        try (Connection connection = connectionPool.getConnection();
-//             PreparedStatement ps = connection.prepareStatement(sql)){
-//
-//            ps.setString(1, name);
-//            ResultSet rs = ps.executeQuery();
-//
-//            if (rs.next()) {
-//                int toppingId = rs.getInt("topping_id");
-//                String toppingName = rs.getString("topping_name");
-//                double toppingPrice = rs.getDouble("topping_price");
-//
-//                topping = new Topping(toppingId, toppingName, toppingPrice);
-//            }
-//
-//        } catch (SQLException e){
-//            throw new DatabaseException("Error in getting bottom name from database");
-//        }
-//
-//        if (topping == null) {
-//            throw new DatabaseException("No bottom found with id: " + name);
-//        }
-//        return topping;
-//    }
 }

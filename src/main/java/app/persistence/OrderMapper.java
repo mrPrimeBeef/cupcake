@@ -101,7 +101,7 @@ public class OrderMapper {
                 allOrderMemberDtos.add(new OrderMemberDto(orderNumber, memberName, memberEmail, orderDate, orderStatus, orderPrice));
             }
         } catch (SQLException e) {
-            throw new DatabaseException("DB fejl i getAllOrderMemberDtos", e.getMessage());
+            throw new DatabaseException("DB error in getAllOrderMemberDtos", e.getMessage());
         }
 
         return allOrderMemberDtos;
@@ -110,6 +110,8 @@ public class OrderMapper {
     public static Order getActiveOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         Member member = ctx.sessionAttribute("currentMember");
         Order order = null;
+
+        // TODO problem efter tryk på køb med tom kurv
 
         String sql = "SELECT * FROM member_order WHERE member_id = ? AND status = ?";
 
