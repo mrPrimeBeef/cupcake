@@ -28,10 +28,10 @@
                 <td th:text="${orderline.topping.toppingName}"></td>
                 <td th:text="${orderline.quantity}"></td>
                 <td th:text="${orderline.orderlinePrice}"></td>
-<!--                <td th:text="${orderline.orderlineId}"></td>-->
-<!--                <td> <div class="delete-icon">-->
-<!--                    <a href="#" class="delete-btn" th:href="@{/delete/{id}(id=${orderline.orderlineId})}">&#128465;</a>-->
-<!--                </div></td>-->
+                <td th:text="${orderline.orderlineId}"></td>
+                <td> <div class="delete-icon">
+                    <a href="#" class="delete-btn" th:href="@{/delete/{id}(id=${orderline.orderlineId})}">&#128465;</a>
+                </div></td>
             </tr>
             </tbody>
         </table>

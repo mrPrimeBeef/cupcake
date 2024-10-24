@@ -10,6 +10,7 @@
 <header th:replace="fragments :: headerFragment"></header>
 <div class="page">
 <h1>Tak for dit køb <span th:text="${session.currentMember.name}"></span></h1>
+    <h2>Dit ordrernummer er: <span th:text="${session.currentOrder.orderNumber}"></span></h2>
 <footer th:replace="fragments :: footer"></footer>
 </div>
 </body>

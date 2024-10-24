@@ -131,7 +131,10 @@ public class OrderController {
     }
 
     private static void thanks(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        Order currentOrder = ctx.sessionAttribute("currentOrder");
         Member currentMember = ctx.sessionAttribute("currentMember");
+        ctx.sessionAttribute("currentOrder", currentOrder);
+
         if (currentMember == null) {
             ctx.attribute("errorMessage", "Log ind for at bestille.");
             ctx.render("error.html");
@@ -149,6 +152,7 @@ public class OrderController {
            if(validateBalance(ctx, connectionPool)){
                checkoutOrder(ctx, connectionPool);
                ctx.render("tak.html");
+               ctx.sessionAttribute("currentOrder", null);
            } else{
                ctx.attribute("errorMessage", "Ikke nok penge på kontoen til at gennemføre ordren.");
                ctx.render("error.html");
@@ -190,7 +194,7 @@ public class OrderController {
             ctx.render("error.html");
             return;
         }
-            Order currentOrder = ctx.sessionAttribute("currentOrderId");
+            Order currentOrder = ctx.sessionAttribute("currentOrder");
 
         if (currentOrder == null) {
             Date date = new Date(System.currentTimeMillis());
@@ -254,6 +258,5 @@ public class OrderController {
         }
         updateOrderPrice(currentOrder.getOrderNumber(), connectionPool);
         OrderMapper.updateOrderStatus(currentOrder.getOrderNumber(), "Completed", connectionPool);
-        ctx.sessionAttribute("currentOrder", null);
     }
 }
