@@ -59,7 +59,7 @@ public class OrderController {
         try {
             ArrayList<OrderMemberDto> allOrderMemberDtos = OrderMapper.getAllOrderMemberDtos(connectionPool);
             ctx.attribute("allOrderMemberDtos", allOrderMemberDtos);
-            ctx.render("adminordrer.html");
+            ctx.render("adminalleordrer.html");
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der er sket en fejl i at hente data");
             ctx.render("error.html");
