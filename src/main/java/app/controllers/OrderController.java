@@ -10,13 +10,12 @@ import io.javalin.http.Context;
 import java.sql.Date;
 import java.util.ArrayList;
 
-
 public class OrderController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("kunde", ctx -> addToCart(ctx, connectionPool));
         app.post("kunde", ctx -> addToOrder(ctx, connectionPool));
-        app.get("tak", ctx -> thanks(ctx, connectionPool));
+        app.post("tak", ctx -> thanks(ctx, connectionPool));
         app.get("kurv", ctx -> watchCart(ctx, connectionPool));
         app.get("adminordrer", ctx -> showAllOrders(ctx, connectionPool));
     }
