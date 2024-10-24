@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class OrderController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("kunde", ctx -> addToCart(ctx, connectionPool));
+        app.get("kunde", ctx -> showAddToCart(ctx, connectionPool));
         app.post("kunde", ctx -> addToOrder(ctx, connectionPool));
         app.post("tak", ctx -> thanks(ctx, connectionPool));
         app.get("kurv", ctx -> watchCart(ctx, connectionPool));
@@ -123,7 +123,7 @@ public class OrderController {
         }
     }
 
-    private static void addToCart(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+    private static void showAddToCart(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         Member currentMember = ctx.sessionAttribute("currentMember");
         if (currentMember == null) {
             ctx.attribute("errorMessage", "log ind for at bestille.");
