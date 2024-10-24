@@ -24,7 +24,6 @@ public class OrderController {
     }
 
     private static void adminShowOrder(Context ctx, ConnectionPool connectionPool) {
-
         Member currentMember = ctx.sessionAttribute("currentMember");
         if (currentMember == null || !currentMember.getRole().equals("admin")) {
             ctx.attribute("errorMessage", "Kun for admin.");
@@ -35,13 +34,11 @@ public class OrderController {
         // TODO: Håndter når query parameteren is null
         int orderNumber = Integer.parseInt(ctx.queryParam("ordrenr"));
 
-
         try {
-            OrderMemberDto orderMemberDto = OrderMapper.getOrderMemberDtoByOrderNumber(orderNumber,connectionPool);
+            OrderMemberDto orderMemberDto = OrderMapper.getOrderMemberDtoByOrderNumber(orderNumber, connectionPool);
             ctx.attribute("orderMemberDto", orderMemberDto);
-            System.out.println(orderMemberDto);
 
-            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(orderNumber,connectionPool);
+            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(orderNumber, connectionPool);
             ctx.attribute("orderlines", orderlines);
 
             ctx.render("adminordre.html");
