@@ -6,8 +6,10 @@ import app.exceptions.DatabaseException;
 import app.persistence.*;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import kotlin.collections.ShortIterator;
 
 import java.sql.Date;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class OrderController {
@@ -17,11 +19,11 @@ public class OrderController {
         app.post("kunde", ctx -> addToOrder(ctx, connectionPool));
         app.post("tak", ctx -> thanks(ctx, connectionPool));
         app.get("kurv", ctx -> watchCart(ctx, connectionPool));
-        app.get("adminalleordrer", ctx -> showAllOrders(ctx, connectionPool));
-        app.get("adminvisordre", ctx -> showOrder(ctx, connectionPool));
+        app.get("adminalleordrer", ctx -> adminShowAllOrders(ctx, connectionPool));
+        app.get("adminordre", ctx -> adminShowOrder(ctx, connectionPool));
     }
 
-    private static void showOrder(Context ctx, ConnectionPool connectionPool) {
+    private static void adminShowOrder(Context ctx, ConnectionPool connectionPool) {
 
         Member currentMember = ctx.sessionAttribute("currentMember");
         if (currentMember == null || !currentMember.getRole().equals("admin")) {
@@ -30,10 +32,23 @@ public class OrderController {
             return;
         }
 
+        int orderNumber = Integer.parseInt(ctx.queryParam("ordrenr"));
+        // TODO: Håndter når query parameteren is null
+        System.out.println(orderNumber);
+
+        try {
+            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(orderNumber,connectionPool);
+            ctx.attribute("orderlines", orderlines);
+            ctx.render("adminordre.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("errorMessage", "Der er sket en fejl: " + e.getMessage());
+            ctx.render("error.html");
+        }
+
 
     }
 
-    private static void showAllOrders(Context ctx, ConnectionPool connectionPool) {
+    private static void adminShowAllOrders(Context ctx, ConnectionPool connectionPool) {
         Member currentMember = ctx.sessionAttribute("currentMember");
         if (currentMember == null || !currentMember.getRole().equals("admin")) {
             ctx.attribute("errorMessage", "Kun for admin.");

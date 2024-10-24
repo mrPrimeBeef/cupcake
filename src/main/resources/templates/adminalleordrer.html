@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Frontpage</title>
+    <title>Admin se alle ordrer</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
@@ -22,7 +22,7 @@
         <th>Status</th>
     </tr>
     <tr th:each="orderMemberDto: ${allOrderMemberDtos}">
-        <td><a href="adminvisordre.html" th:href="@{/adminvisordre(ordrenr=${orderMemberDto.orderNumber})}" th:text="${orderMemberDto.orderNumber}"></a></td>
+        <td><a href="adminordre.html" th:href="@{/adminordre(ordrenr=${orderMemberDto.orderNumber})}" th:text="${orderMemberDto.orderNumber}"></a></td>
         <td th:text="${orderMemberDto.memberName}"></td>
         <td th:text="${orderMemberDto.memberEmail}"></td>
         <td th:text="${orderMemberDto.orderDate}"></td>
