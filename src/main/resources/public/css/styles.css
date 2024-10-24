@@ -27,6 +27,7 @@ header .header-text, .admin-text {
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    height: 25px;
     background-color: #F5A582;
 }
 
@@ -35,6 +36,15 @@ header .header-text, .admin-text {
     justify-content: center;
     align-items: center;
     background-color: #F5BA83;
+}
+
+.header-link, .cart-icon, .email {
+    display: flex;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    align-items: center;
+    margin-left: 25%;
 }
 
 .left {
@@ -51,6 +61,10 @@ header .header-text, .admin-text {
 
 .email {
     margin-left: 20px;
+}
+
+.cart-icon{
+    font-size: 20px;
 }
 
 .admin-link {
@@ -98,21 +112,6 @@ footer {
     margin-top: 0;
 }
 
-/*kunde.html styling*/
-.header-link, .cart-icon, .email {
-    display: flex;
-    color: black;
-    text-decoration: none;
-    font-weight: bold;
-    align-items: center;
-    margin-left: 25%;
-}
-
-.cart-icon {
-    font-size: 24px;
-    margin-left: 5px;
-}
-
 /*login.html styling*/
 .error {
     color: red;
@@ -132,7 +131,6 @@ label{
 #email, #password {
     width: 230px;
     height: 30px;
-    /*font-family: "Helvetica Neue";*/
     font-size: 15px;
     text-align: center;
     background-color: #D9D9D9;
@@ -149,13 +147,11 @@ label{
     margin-top: 25px;
     padding: 5px 40px;
     background-color: #F5A582;
-;
     border-radius: 15px;
     border: none;
     outline: none;
     color: white;
     font-size: large;
-    /*font-family: "Helvetica Neue";*/
     box-shadow: 0 9px #999;
 }
 
@@ -168,4 +164,57 @@ label{
     transform: translateY(4px);
 }
 
+/*kunde.html styling*/
+.intro-headline{
+    font-size: 30px;
+}
 
+.intro-text{
+    font-size: 15px;
+}
+#bund, #topping, #antal {
+    width: 180px;
+    height: 20px;
+    font-size: 10px;
+    text-align: center;
+    background-color: #D9D9D9;
+    border-style: none;
+    border-radius: 10%;
+    margin-bottom: 10%;
+    margin-top: 15px;
+}
+
+#update-button{
+    display: flex;
+    align-items: center;
+}
+
+.kurv {
+    display: flex;
+    justify-content: flex-end;
+    margin-left: 75%;
+    font-size: 24px;
+    text-decoration: none;
+}
+
+.order-button {
+    display: block;
+    justify-content: center;
+    height: 20px;
+    margin-top: 25px;
+    background-color: #F5A582;
+    border-radius: 15px;
+    border: none;
+    outline: none;
+    color: white;
+    box-shadow: 0 9px #999;
+}
+
+.order-button:hover{
+        background-color: #F3986F;
+    }
+
+.order-button:active {
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}

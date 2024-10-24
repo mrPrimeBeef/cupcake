@@ -37,8 +37,10 @@
             </select>
         </div>
 
+        <div id="update-button">
         <button class="order-button" type="submit">Læg i kurv</button>
-        <a href="kurv.html" class="cart-icon" th:href="@{/kurv}"><button class="order-button" type="button">Videre til kurv</button></a>
+        <a href="kurv.html" class="kurv" th:href="@{/kurv}"><button class="order-button" type="button">Videre til kurv</button></a>
+        </div>
     </form>
     <p th:text="${errorMessage}"></p>
     <footer th:replace="fragments :: footer"></footer>
