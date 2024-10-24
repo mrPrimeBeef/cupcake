@@ -246,7 +246,7 @@ tbody{
 .total{
     font-size: 20px;
     margin-top: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
 .køb-knap{
@@ -254,7 +254,7 @@ tbody{
     justify-content: center;
     width: 70px;
     height: 25px;
-    margin-top: 30px;
+    margin-top: 15px;
     background-color: #F5A582;
     border-radius: 15px;
     border: none;
@@ -271,6 +271,8 @@ tbody{
     box-shadow: 0 5px #666;
     transform: translateY(4px);
 }
+
+/* opretbruger.html styling*/
 #name, #opret-email, #mobile, #password1, #password2 {
     width: 200px;
     height: 20px;
