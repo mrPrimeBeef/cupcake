@@ -63,6 +63,21 @@ public class OrderMapper {
             throw new DatabaseException("Error updating order status for order number: " + orderNumber);
         }
     }
+
+    public static void deleteOrderline(int orderlineId, ConnectionPool connectionPool) throws DatabaseException {
+        try (Connection conn = connectionPool.getConnection()) {
+            String sql = "DELETE FROM orderline WHERE orderline_id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, orderlineId);
+                int rowsAffected = stmt.executeUpdate();
+                if (rowsAffected == 0) {
+                    throw new DatabaseException("Ingen ordrelinje blev slettet, kontrolér om ID'et findes.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Fejl ved sletning af ordrelinje: " + e.getMessage());
+        }
+    }
   
     public static ArrayList<OrderMemberDto> getAllOrderMemberDtos(ConnectionPool connectionPool) throws DatabaseException {
 
