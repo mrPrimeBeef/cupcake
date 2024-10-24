@@ -17,9 +17,9 @@
       <div class="header-text">
         <a href="#" class="header-link">Mine ordrer</a>
         <div class="left">
-          <a href="#" class="header-link" th:if="${#ctx.session.currentMember} != null" th:href="@{/logout}">Logud</a>
+          <a href="login.html" class="header-link" th:if="${#ctx.session.currentMember} != null" th:href="@{/logout}">Logud</a>
         <span class="email" th:text="${session.currentMember.email}"></span>
-          <a href="#" class="cart-icon" th:href="@{/kurv}">&#128722; </a>
+          <a href="kurv.html" class="cart-icon" th:href="@{/kurv}">&#128722; </a>
         </div>
       </div>
     </header>
@@ -31,7 +31,7 @@
       </div>
       <div class="admin-text">
         <div class="right">
-        <a href="#" class="admin-link"th:href="@{/adminordrer}">Ordrer</a>
+        <a href="adminordrer.html" class="admin-link"th:href="@{/adminordrer}">Ordrer</a>
           <a href="#" class="admin-link">Kunder</a>
         </div>
         <span class="admin-email" th:text="${session.currentMember.email}"></span>
