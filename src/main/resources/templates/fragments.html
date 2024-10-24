@@ -2,52 +2,53 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head th:fragment="head(title)">
-  <title th:text="${title}">Frontpage</title>
-  <meta charset="UTF-8">
+    <title th:text="${title}">Frontpage</title>
+    <meta charset="UTF-8">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
 </head>
 <body>
-    <header th:fragment="headerFragment" class="header-container">
-      <div class="headerimage">
+<header th:fragment="headerFragment" class="header-container">
+    <div class="headerimage">
         <img th:src="@{/images/logo.png}" src="/public/images/logo.png" width="100" height="100"/>
         <img th:src="@{/images/cupcakelogo.png}" src="/public/images/cupcakelogo.png" width="30%" height="30%"/>
-      </div>
-      <div class="header-text">
+    </div>
+    <div class="header-text">
         <a href="#" class="header-link">Mine ordrer</a>
         <div class="left">
-          <a href="login.html" class="header-link" th:if="${#ctx.session.currentMember} != null" th:href="@{/logout}">Logud</a>
-        <span class="email" th:text="${session.currentMember.email}"></span>
-          <a href="kurv.html" class="cart-icon" th:href="@{/kurv}">&#128722; </a>
+            <a href="login.html" class="header-link" th:if="${#ctx.session.currentMember} != null" th:href="@{/logout}">Logud</a>
+            <span class="email" th:text="${session.currentMember.email}"></span>
+            <a href="kurv.html" class="cart-icon" th:href="@{/kurv}">&#128722; </a>
         </div>
-      </div>
-    </header>
+    </div>
+</header>
 
-    <header th:fragment="headerAdmin" class="header-admin">
-      <div class="admin-image">
+<header th:fragment="headerAdmin" class="header-admin">
+    <div class="admin-image">
         <img th:src="@{/images/logo.png}" src="/public/images/logo.png" width="100" height="100"/>
         <img th:src="@{/images/cupcakelogo.png}" src="/public/images/cupcakelogo.png" width="30%" height="30%"/>
-      </div>
-      <div class="admin-text">
+    </div>
+    <div class="admin-text">
         <div class="right">
-        <a href="adminalleordrer.html" class="admin-link" th:href="@{/adminalleordrer}">Ordrer</a>
-          <a href="adminallekunder.html" class="admin-link" th:href="@{/adminallekunder}">Kunder</a>
+            <a href="adminalleordrer.html" class="admin-link" th:href="@{/adminalleordrer}">Ordrer</a>
+            <a href="adminallekunder.html" class="admin-link" th:href="@{/adminallekunder}">Kunder</a>
         </div>
+        <a href="login.html" class="header-link" th:if="${#ctx.session.currentMember} != null" th:href="@{/logout}">Logud</a>
         <span class="admin-email" th:text="${session.currentMember.email}"></span>
-        </div>
+    </div>
 
-    </header>
-    <footer th:fragment="footer" class="footer-container">
-      <div class="adresse">
+</header>
+<footer th:fragment="footer" class="footer-container">
+    <div class="adresse">
         <p>Olsker Cupcakes <br>Olsker Hovedgade 10 <br>3770 Allinge <br>CVR-nr. 08 08 08 08</p>
-      </div>
-        <div class="nummer">
-          <p>Ring til os på: <br>+45 08 08 08 08</p>
-        </div>
-      <div class="åbningstider">
+    </div>
+    <div class="nummer">
+        <p>Ring til os på: <br>+45 08 08 08 08</p>
+    </div>
+    <div class="åbningstider">
         <p>Åbningstider: <br>mandag - fredag: 07.00-15.00 <br>Weekend 08.00-14.00</p>
-      </div>
-    </footer>
+    </div>
+</footer>
 </body>
 </html>
