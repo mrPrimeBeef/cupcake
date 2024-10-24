@@ -56,13 +56,13 @@ public class OrderController {
 
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der opstod et problem ved hentningen af dataen, prøv igen.");
-            ctx.render("error.html");
+            ctx.redirect("error");
             throw new RuntimeException(e);
         }
         ctx.render("kurv.html");
     }
 
-    private static void validateBalance(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+    private static boolean validateBalance(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         Member currentMember = ctx.sessionAttribute("currentMember");
         Order currentOrder = ctx.sessionAttribute("currentOrder");
 
@@ -74,9 +74,9 @@ public class OrderController {
             for (Orderline orderline : orderlines) {
                 totalOrderPrice += orderline.getOrderlinePrice();
             }
+
             if (totalOrderPrice > currentMember.getBalance()) {
-                ctx.attribute("errorMessage", "Ikke nok penge på kontoen til at gennemføre ordren.");
-                ctx.render("error.html");
+                return false;
             }
             double newBalance = currentMember.getBalance() - totalOrderPrice;
             MemberMapper.updateMemberBalance(currentMember.getMemberId(), newBalance, connectionPool);
@@ -85,14 +85,20 @@ public class OrderController {
             ctx.render("error.html");
             throw new RuntimeException(e);
         }
+        return true;
     }
 
     private static void thanks(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
 
         try {
-            validateBalance(ctx, connectionPool);
-            checkoutOrder(ctx, connectionPool);
-            ctx.render("tak.html");
+           if(validateBalance(ctx, connectionPool)){
+               checkoutOrder(ctx, connectionPool);
+               ctx.render("tak.html");
+           } else{
+               ctx.attribute("errorMessage", "Ikke nok penge på kontoen til at gennemføre ordren.");
+               ctx.render("error.html");
+           }
+
         } catch (DatabaseException e) {
 
             ctx.attribute("errorMessage", "Der opstod en fejl under behandlingen af din ordre.");
