@@ -14,8 +14,8 @@
 </div>
 </header>
 <div class="page">
-<h1>Velkommen til Olsker Cupcakes</h1>
-<h2>Log på med din email og kodeord</h2>
+<h1 id="velkommen">Velkommen til Olsker Cupcakes</h1>
+<h2 id="log-text">Log på med din email og kodeord</h2>
 
 <form method="post">
 
@@ -27,11 +27,11 @@
 
     <p class="error" th:text="${message}"></p>
 
-    <button type="submit" formaction="/login">Login</button>
+    <button id="sub_button" type="submit" formaction="/login">Login</button>
 
 </form>
 
-<p>Ikke bruger endnu? <a href="opretbruger.html" th:href="@{/opretbruger}">Opret bruger</a></p>
+<p class="opret-bruger">Ikke bruger endnu? <a href="opretbruger.html" th:href="@{/opretbruger}">Opret bruger</a></p>
 <footer th:replace="fragments :: footer"></footer>
 </div>
 </body>

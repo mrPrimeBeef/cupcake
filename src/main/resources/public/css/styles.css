@@ -1,3 +1,5 @@
+
+/*general styling*/
 * {
     box-sizing: border-box;
 }
@@ -6,24 +8,33 @@ html, body {
     height: 100%;
     width: 100%;
     margin: 0;
-    background-color: #E4E3DB;
+    background-color: #F9D9BB;
     display: flex;
     flex-direction: column;
 }
 
-header .header-text, .admin-text{
+.page {
+    flex-direction: column;
+    display: flex;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+}
+
+/*fragment styling*/
+header .header-text, .admin-text {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    background-color: #B76E79;
+    background-color: #F5A582;
 }
 
 .headerimage, .admin-image {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color:#BDB5D5;
+    background-color: #F5BA83;
 }
 
 .left {
@@ -31,18 +42,10 @@ header .header-text, .admin-text{
     justify-content: flex-end;
     margin-right: 25%;
 }
+
 .right {
     display: flex;
     justify-content: flex-start;
-    margin-left: 25%;
-}
-
-.header-link, .cart-icon, .email {
-    display: flex;
-    color: black;
-    text-decoration: none;
-    font-weight: bold;
-    align-items: center;
     margin-left: 25%;
 }
 
@@ -50,12 +53,7 @@ header .header-text, .admin-text{
     margin-left: 20px;
 }
 
-.cart-icon {
-    font-size: 24px;
-    margin-left: 5px;
-}
-
-.admin-link{
+.admin-link {
     display: flex;
     color: black;
     text-decoration: none;
@@ -63,17 +61,18 @@ header .header-text, .admin-text{
     margin-left: 25%;
 }
 
-.admin-email{
+.admin-email {
     display: flex;
     justify-content: flex-end;
     margin-right: 25%;
 }
 
+/*footer styling*/
 .footer-container {
     display: flex;
     justify-content: space-between;
     text-align: start;
-    background-color: #BDB5D5;
+    background-color: #F5BA83;
 }
 
 footer {
@@ -81,7 +80,7 @@ footer {
     left: 0;
     bottom: 0;
     width: 100%;
-    background-color: #BDB5D5;
+    background-color: #F5BA83;
     display: flex;
 }
 
@@ -94,20 +93,79 @@ footer {
     margin-right: 15%;
 }
 
-.åbningstider{
+.åbningstider {
     margin-right: 25%;
     margin-top: 0;
 }
 
- .error {
-     color: red;
- }
+/*kunde.html styling*/
+.header-link, .cart-icon, .email {
+    display: flex;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    align-items: center;
+    margin-left: 25%;
+}
 
- .page{
-     flex-direction: column;
-     display: flex;
-     font-weight: bold;
-     align-items: center;
-     justify-content: center;
- }
+.cart-icon {
+    font-size: 24px;
+    margin-left: 5px;
+}
+
+/*login.html styling*/
+.error {
+    color: red;
+}
+
+#velkommen, #log-text{
+    margin-bottom: 20px;
+}
+
+label{
+    font-size: 20px;
+}
+
+.opret-bruger{
+    font-size: 20px;
+}
+#email, #password {
+    width: 230px;
+    height: 30px;
+    /*font-family: "Helvetica Neue";*/
+    font-size: 15px;
+    text-align: center;
+    background-color: #D9D9D9;
+    border-style: none;
+    border-radius: 5%;
+    margin-bottom: 10%;
+    margin-top: 5%;
+}
+
+#sub_button {
+    display: block;
+    margin: auto;
+    margin-bottom: 15%;
+    margin-top: 25px;
+    padding: 5px 40px;
+    background-color: #F5A582;
+;
+    border-radius: 15px;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: large;
+    /*font-family: "Helvetica Neue";*/
+    box-shadow: 0 9px #999;
+}
+
+#sub_button:hover {
+    background-color: #F3986F;
+}
+
+#sub_button:active {
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
 
