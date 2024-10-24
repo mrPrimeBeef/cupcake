@@ -37,7 +37,8 @@
             <th>Pris DKK</th>
         </tr>
         <tr th:each="order: ${orders}">
-            <td th:text="${order.orderNumber}"></td>
+            <td><a href="adminordre.html" th:href="@{/adminordre(ordrenr=${order.orderNumber})}"
+                   th:text="${order.orderNumber}"></a></td>
             <td th:text="${order.date}"></td>
             <td th:text="${order.status}"></td>
             <td th:text="${order.price}"></td>
