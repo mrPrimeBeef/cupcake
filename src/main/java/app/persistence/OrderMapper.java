@@ -111,8 +111,6 @@ public class OrderMapper {
         Member member = ctx.sessionAttribute("currentMember");
         Order order = null;
 
-        // TODO problem efter tryk på køb med tom kurv
-
         String sql = "SELECT * FROM member_order WHERE member_id = ? AND status = ?";
 
         try (Connection connection = connectionPool.getConnection();

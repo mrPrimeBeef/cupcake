@@ -76,9 +76,9 @@ public class OrderController {
         }
 
         boolean activeOrder = false;
-        Integer CurrentOrderId = ctx.sessionAttribute("CurrentOrderId");
+        Order currentOrder = ctx.sessionAttribute("currentOrder");
 
-        if (CurrentOrderId == null) {
+        if (currentOrder == null) {
             ctx.attribute("tomKurv","Kurven er tom.");
             ctx.render("kurv.html");
             return activeOrder;
@@ -87,7 +87,7 @@ public class OrderController {
         try {
             activeOrder = true;
 
-            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(CurrentOrderId, connectionPool);
+            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(currentOrder.getOrderNumber(), connectionPool);
 
             double totalPrice = 0;
             for (Orderline orderline : orderlines) {
@@ -183,14 +183,13 @@ public class OrderController {
             ctx.render("error.html");
             return;
         }
-        Integer CurrentOrderId = ctx.sessionAttribute("CurrentOrderId");
+            Order currentOrder = ctx.sessionAttribute("currentOrderId");
 
-
-        if (CurrentOrderId == null) {
+        if (currentOrder == null) {
             Date date = new Date(System.currentTimeMillis());
             int orderNumber = OrderMapper.createOrder(currentMember.getMemberId(), date, "In progress", 0, connectionPool);
-//            Order currentOrder = new Order(orderNumber, currentMember.getMemberId(), date, "In progress", 0.0);
-//            ctx.sessionAttribute("currentOrder", currentOrder);
+            currentOrder = new Order(orderNumber, currentMember.getMemberId(), date, "In progress", 0.0);
+            ctx.sessionAttribute("currentOrder", currentOrder);
         }
 
         int selectedBottom = Integer.parseInt(ctx.formParam("bund"));
@@ -205,10 +204,10 @@ public class OrderController {
         int quantity= Integer.parseInt(ctx.formParam("antal"));
         double orderlinePrice = (toppingPrice + bottomPrice) * quantity;
 
-        Orderline orderline = new Orderline(CurrentOrderId, bottom, topping, quantity, orderlinePrice);
+        Orderline orderline = new Orderline(currentOrder.getOrderNumber(), bottom, topping, quantity, orderlinePrice);
         OrderlineMapper.createOrderline(orderline, connectionPool);
 
-        updateOrderPrice(CurrentOrderId, connectionPool);
+        updateOrderPrice(currentOrder.getOrderNumber(), connectionPool);
         showAddToCart(ctx, connectionPool);
     }
 
@@ -223,13 +222,13 @@ public class OrderController {
     }
 
     private static void cancelOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        Integer CurrentOrderId = ctx.sessionAttribute("CurrentOrderId");
+        Order currentOrder = ctx.sessionAttribute("currentOrder");
 
-        if (CurrentOrderId == null) {
+        if (currentOrder == null) {
             throw new DatabaseException("No active order to cancel.");
         }
-        OrderMapper.updateOrderStatus(CurrentOrderId, "Canceled", connectionPool);
-        ctx.sessionAttribute("CurrentOrderId", null);
+        OrderMapper.updateOrderStatus(currentOrder.getOrderNumber(), "Canceled", connectionPool);
+        ctx.sessionAttribute("currentOrder", null);
     }
 
     private static void cancelOrderline(Context ctx, ConnectionPool connectionPool, int orderlineId) throws DatabaseException {
@@ -241,13 +240,13 @@ public class OrderController {
 
 
     private static void checkoutOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        Integer CurrentOrderId = ctx.sessionAttribute("CurrentOrderId");
+        Order currentOrder = ctx.sessionAttribute("currentOrder");
 
-        if (CurrentOrderId == null) {
+        if (currentOrder == null) {
             ctx.attribute("errorMessage", "Du har ikke nogen igangværende ordre.");
         }
-        updateOrderPrice(CurrentOrderId, connectionPool);
-        OrderMapper.updateOrderStatus(CurrentOrderId, "Completed", connectionPool);
+        updateOrderPrice(currentOrder.getOrderNumber(), connectionPool);
+        OrderMapper.updateOrderStatus(currentOrder.getOrderNumber(), "Completed", connectionPool);
         ctx.sessionAttribute("currentOrder", null);
     }
 }
