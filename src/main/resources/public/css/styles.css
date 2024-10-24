@@ -11,7 +11,7 @@ html, body {
     flex-direction: column;
 }
 
-header .header-text {
+header .header-text, .admin-text{
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -19,7 +19,7 @@ header .header-text {
     background-color: #B76E79;
 }
 
-.headerimage {
+.headerimage, .admin-image {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -30,6 +30,11 @@ header .header-text {
     display: flex;
     justify-content: flex-end;
     margin-right: 25%;
+}
+.right {
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 25%;
 }
 
 .header-link, .cart-icon, .email {
@@ -48,6 +53,20 @@ header .header-text {
 .cart-icon {
     font-size: 24px;
     margin-left: 5px;
+}
+
+.admin-link{
+    display: flex;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 25%;
+}
+
+.admin-email{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 25%;
 }
 
 .footer-container {
