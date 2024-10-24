@@ -56,6 +56,7 @@ public class OrderController {
 
         try {
             activeOrder = true;
+
             ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(currentOrder.getOrderNumber(), connectionPool);
 
             double totalPrice = 0;
@@ -79,13 +80,9 @@ public class OrderController {
         Order currentOrder = ctx.sessionAttribute("currentOrder");
 
         try {
-            currentMember = MemberMapper.getBalance(currentMember.getMemberId(), currentMember.getBalance(), ctx, connectionPool);
+            double memberBalance = MemberMapper.getBalance(currentMember.getMemberId(), connectionPool);
 
-            double totalOrderPrice = 0.0;
-            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(currentOrder.getOrderNumber(), connectionPool);
-            for (Orderline orderline : orderlines) {
-                totalOrderPrice += orderline.getOrderlinePrice();
-            }
+            double totalOrderPrice = OrderMapper.getActiveOrder(ctx,connectionPool).getPrice();
 
             if (totalOrderPrice > currentMember.getBalance()) {
                 return false;

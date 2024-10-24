@@ -64,9 +64,8 @@ public class MemberMapper {
     }
 
 
-    public static Member getBalance(int memberId, int balance, Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        Member member = null;
-        String sql = "SELECT * FROM member WHERE member_id=?";
+    public static double getBalance(int memberId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT balance FROM member WHERE member_id=?";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -76,10 +75,8 @@ public class MemberMapper {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                int currentBalance = rs.getInt("balance");
-
-                member = new Member(memberId, currentBalance);
-                return member;
+                int memberBalance = rs.getInt("balance");
+                return memberBalance;
             } else {
                 throw new DatabaseException("Medlem ikke fundet.");
             }
