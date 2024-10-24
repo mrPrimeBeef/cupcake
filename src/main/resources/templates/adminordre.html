@@ -12,6 +12,27 @@
 <header th:replace="fragments :: headerFragment"></header>
 <h2>Admin: Se ordre</h2>
 
+<table>
+    <tr>
+        <th>Ordrenr.</th>
+        <th>Navn</th>
+        <th>Email</th>
+        <th>Dato</th>
+        <th>Pris</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td th:text="${orderMemberDto.orderNumber}"></td>
+        <td th:text="${orderMemberDto.memberName}"></td>
+        <td th:text="${orderMemberDto.memberEmail}"></td>
+        <td th:text="${orderMemberDto.orderDate}"></td>
+        <td th:text="${orderMemberDto.orderPrice}"></td>
+        <td th:text="${orderMemberDto.orderStatus}"></td>
+    </tr>
+</table>
+
+
+
 <form class="cart" method="post">
     <table class="cart-table">
         <thead>

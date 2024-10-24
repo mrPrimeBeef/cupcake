@@ -32,13 +32,18 @@ public class OrderController {
             return;
         }
 
-        int orderNumber = Integer.parseInt(ctx.queryParam("ordrenr"));
         // TODO: Håndter når query parameteren is null
-        System.out.println(orderNumber);
+        int orderNumber = Integer.parseInt(ctx.queryParam("ordrenr"));
+
 
         try {
+            OrderMemberDto orderMemberDto = OrderMapper.getOrderMemberDtoByOrderNumber(orderNumber,connectionPool);
+            ctx.attribute("orderMemberDto", orderMemberDto);
+            System.out.println(orderMemberDto);
+
             ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(orderNumber,connectionPool);
             ctx.attribute("orderlines", orderlines);
+
             ctx.render("adminordre.html");
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der er sket en fejl: " + e.getMessage());
