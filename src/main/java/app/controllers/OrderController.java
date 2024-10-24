@@ -183,7 +183,7 @@ public class OrderController {
             ctx.render("error.html");
             return;
         }
-            Order currentOrder = ctx.sessionAttribute("currentOrderId");
+            Order currentOrder = ctx.sessionAttribute("currentOrder");
 
         if (currentOrder == null) {
             Date date = new Date(System.currentTimeMillis());

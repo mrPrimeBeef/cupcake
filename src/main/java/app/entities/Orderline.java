@@ -31,4 +31,6 @@ public class Orderline {
     public Topping getTopping() { return topping; }
     public int getQuantity() { return quantity; }
     public double getOrderlinePrice() { return orderlinePrice; }
+
+    public int getOrderlineId() {return orderlineId;}
 }
