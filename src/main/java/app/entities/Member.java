@@ -7,9 +7,9 @@ public class Member {
     private String mobile;
     private String password;
     private String role;
-    private int balance;
+    private double balance;
 
-    public Member(int memberId, String name, String email, String mobile, String password, String role, int balance) {
+    public Member(int memberId, String name, String email, String mobile, String password, String role, double balance) {
         this.memberId = memberId;
         this.name = name;
         this.email = email;
@@ -43,7 +43,7 @@ public class Member {
         return role;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
