@@ -34,7 +34,7 @@ public class MemberMapper {
                 throw new DatabaseException("Forkert brugernavn eller password");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("DB fejl", e.getMessage());
+            throw new DatabaseException("DB fejl in login", e.getMessage());
         }
     }
 
@@ -81,7 +81,7 @@ public class MemberMapper {
                 throw new DatabaseException("Medlem ikke fundet.");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Databasefejl: " + e.getMessage());
+            throw new DatabaseException("Databasefejl in getting balance: " + e.getMessage());
         }
     }
 
@@ -96,10 +96,10 @@ public class MemberMapper {
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected == 0) {
-                throw new DatabaseException("Medlemmet blev ikke fundet.");
+                throw new DatabaseException("Member was not found.");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl ved opdatering af medlemsbalance.", e.getMessage());
+            throw new DatabaseException("Error updating memeber balance.", e.getMessage());
         }
     }
 
@@ -120,12 +120,13 @@ public class MemberMapper {
                 String mobile = rs.getString("mobile");
                 String password = rs.getString("password");
                 String role = rs.getString("role");
-                int balance = rs.getInt("balance");
+                double balance = rs.getInt("balance");
                 member = new Member(memberId, name, email, mobile, password, role, balance);
+            } else{
+                throw new DatabaseException("Member not found.");
             }
-            // TODO: Evt. tilføj else som thrower en exception hvis der ikke findes nogen member med den id
         } catch (SQLException e) {
-            throw new DatabaseException("DB fejl ved hentning af member med id = " + memberId, e.getMessage());
+            throw new DatabaseException("DB error in getting memeber with id: " + memberId, e.getMessage());
         }
         return member;
     }

@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS public.member
     mobile character varying COLLATE pg_catalog."default" NOT NULL,
     password character varying COLLATE pg_catalog."default" NOT NULL,
     role character varying COLLATE pg_catalog."default" NOT NULL DEFAULT 'customer'::character varying,
-    balance integer NOT NULL,
+    balance numeric NOT NULL,
     CONSTRAINT customer_pkey PRIMARY KEY (member_id),
     CONSTRAINT email UNIQUE (email)
     );
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS public.orderline
     bottom_id integer NOT NULL,
     topping_id integer NOT NULL,
     quantity integer NOT NULL,
-    orderline_price integer NOT NULL,
+    orderline_price numeric NOT NULL,
     CONSTRAINT orderline_pkey PRIMARY KEY (orderline_id)
     );
 
