@@ -102,7 +102,6 @@ public class OrderController {
 
     private static void addToCart(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         Member currentMember = ctx.sessionAttribute("currentMember");
-
         if (currentMember == null) {
             ctx.attribute("errorMessage", "log ind for at bestille.");
             ctx.render("error.html");

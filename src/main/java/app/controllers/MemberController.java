@@ -68,8 +68,6 @@ public class MemberController {
             Order currentOrder = OrderMapper.getActiveOrder(ctx, connectionPool);
             ctx.sessionAttribute("currentOrder", currentOrder);
             ctx.redirect("kunde");
-
-
         } catch (DatabaseException e) {
             ctx.attribute("message", e.getMessage());
             ctx.render("login.html");
