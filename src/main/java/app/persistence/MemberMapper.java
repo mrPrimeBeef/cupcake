@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class MemberMapper {
 
@@ -103,9 +104,40 @@ public class MemberMapper {
         }
     }
 
-   public static Member getMemberById(int memberId, ConnectionPool connectionPool) throws DatabaseException {
+
+    public static ArrayList<Member> getAllCostumers(ConnectionPool connectionPool) throws DatabaseException {
+
+        ArrayList<Member> allCostumers = new ArrayList<Member>();
+
+        String sql = "SELECT * FROM member WHERE role='customer'";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int memberId = rs.getInt("member_id");
+                String name = rs.getString("name");
+                String email = rs.getString("email");
+                String mobile = rs.getString("mobile");
+                String password = rs.getString("password");
+                String role = rs.getString("role");
+                double balance = rs.getInt("balance");
+                allCostumers.add(new Member(memberId, name, email, mobile, password, role, balance));
+
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("DB error in getAllCostumers", e.getMessage());
+        }
+        return allCostumers;
+
+    }
+
+
+    public static Member getMemberById(int memberId, ConnectionPool connectionPool) throws DatabaseException {
         Member member = null;
-  
+
         String sql = "SELECT * FROM member WHERE member_id=?";
 
         try (
@@ -122,7 +154,7 @@ public class MemberMapper {
                 String role = rs.getString("role");
                 double balance = rs.getInt("balance");
                 member = new Member(memberId, name, email, mobile, password, role, balance);
-            } else{
+            } else {
                 throw new DatabaseException("Member not found.");
             }
         } catch (SQLException e) {

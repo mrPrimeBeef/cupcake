@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.dto.OrderMemberDto;
 import app.entities.Member;
 import app.entities.Order;
 import app.entities.Orderline;
@@ -21,7 +22,32 @@ public class MemberController {
         app.post("opretbruger", ctx -> createMember(ctx, connectionPool));
 
         app.get("logout", ctx -> logout(ctx));
+
+        app.get("adminallekunder", ctx -> adminShowAllCustomers(ctx, connectionPool));
+//        app.get("adminkunde", ctx -> adminShowCustomer(ctx, connectionPool));
     }
+
+
+    private static void adminShowAllCustomers(Context ctx, ConnectionPool connectionPool) {
+        Member currentMember = ctx.sessionAttribute("currentMember");
+        if (currentMember == null || !currentMember.getRole().equals("admin")) {
+            ctx.attribute("errorMessage", "Kun for admin.");
+            ctx.render("error.html");
+            return;
+        }
+
+        try {
+            ArrayList<Member> allCustomers = MemberMapper.getAllCostumers(connectionPool);
+//            ArrayList<OrderMemberDto> allOrderMemberDtos = OrderMapper.getAllOrderMemberDtos(connectionPool);
+            ctx.attribute("allCustomers", allCustomers);
+            ctx.render("adminallekunder.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data");
+            ctx.render("error.html");
+        }
+    }
+
+
 
     private static void createMember(Context ctx, ConnectionPool connectionPool) {
         String name = ctx.formParam("name");
