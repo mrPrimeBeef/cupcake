@@ -307,3 +307,23 @@ tbody{
     box-shadow: 0 5px #666;
     transform: translateY(4px);
 }
+
+/* Admin styling */
+
+.admin-tabel, th, td {
+    font-size: 1.5em;
+    padding-left: 1vw;
+    padding-right: 4.5vw;
+    text-align: left;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    border-radius: 0;
+
+}
+tr:nth-of-type(even) {
+    background-color: #F5A582 !important;
+}
+
+.admin-centertext{
+    text-align: center;
+}

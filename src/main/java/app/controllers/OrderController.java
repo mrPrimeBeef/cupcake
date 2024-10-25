@@ -169,7 +169,6 @@ public class OrderController {
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der opstod en fejl under behandlingen af din ordre.");
             ctx.render("errorAlreadyLogin.html");
-            throw new RuntimeException(e);
         }
     }
 

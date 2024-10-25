@@ -10,9 +10,9 @@
 
 <body>
 <header th:replace="fragments :: headerAdmin"></header>
-<h2 th:text="'Ordrenr. ' + ${orderMemberDto.orderNumber}"></h2>
+<h1 class="admin-centertext" th:text="'Ordrenr. ' + ${orderMemberDto.orderNumber}"></h1>
 
-<table>
+<table class="admin-tabel">
     <tr>
         <th>Kundenr.</th>
         <th>Navn</th>
@@ -34,7 +34,7 @@
 </table>
 
 <br>
-<p>Ordrelinjer i denne ordre:</p>
+<h2 class="admin-centertext">Ordrelinjer i denne ordre:</h2>
 
 <form class="cart" method="post">
     <table class="cart-table">
