@@ -12,7 +12,7 @@
 <header th:fragment="headerFragment">
     <div class="headerimage">
         <img src="/public/images/logo.png" th:src="@{/images/logo.png}" width="100" height="100"/>
-        <img src="/public/images/cupcakelogo.png" th:src="@{/images/cupcakelogo.png}" width="30%" height="30%"/>
+        <img src="/public/images/cupcakelogo.png" th:src="@{/images/cupcakelogo.png}" width="40%" height="75%"/>
     </div>
     <div class="header-text">
         <a href="#" class="header-link">Mine ordrer</a>
@@ -26,8 +26,8 @@
 
 <header th:fragment="headerAdmin">
     <div class="admin-image">
-        <img th:src="@{/images/logo.png}" src="/public/images/logo.png" width="100" height="100"/>
-        <img th:src="@{/images/cupcakelogo.png}" src="/public/images/cupcakelogo.png" width="30%" height="30%"/>
+        <img th:src="@{/images/logo.png}" class="logo" src="/public/images/logo.png" width="100" height="100"/>
+        <img th:src="@{/images/cupcakelogo.png}" src="/public/images/cupcakelogo.png" width="40%" height="75%"/>
     </div>
     <div class="admin-text">
         <div class="right">
@@ -35,7 +35,7 @@
             <a href="adminallekunder.html" class="admin-link" th:href="@{/adminallekunder}">Kunder</a>
         </div>
         <a href="login.html" class="header-link" th:if="${#ctx.session.currentMember} != null" th:href="@{/logout}">Logud</a>
-        <span class="admin-email" th:text="${session.currentMember.email}"></span>
+        <span class="admin-email" th:text="'Admin: ' + ${session.currentMember.email}"></span>
     </div>
 
 </header>
