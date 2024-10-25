@@ -15,19 +15,19 @@
 </header>
 <div class="page">
 <h1 id="velkommen">Velkommen til Olsker Cupcakes</h1>
-<h2 id="log-text">Log på med din email og kodeord</h2>
+<h2 id="log-text">Log ind med din email og adgangskode</h2>
 
 <form method="post">
 
-    <label for="email">Brugernavn</label><br>
+    <label for="email">Email</label><br>
     <input type="email" id="email" name="email" placeholder="Email" required/><br>
 
-    <label for="password">Kodeord</label><br>
-    <input type="password" id="password" name="password" placeholder="Kodeord" required/><br>
+    <label for="password">Adgangskode</label><br>
+    <input type="password" id="password" name="password" placeholder="Adgangskode" required/><br>
 
     <p class="error" th:text="${message}"></p>
 
-    <button id="sub_button" type="submit" formaction="/login">Login</button>
+    <button id="sub_button" type="submit" formaction="/login">Log ind</button>
 
 </form>
 

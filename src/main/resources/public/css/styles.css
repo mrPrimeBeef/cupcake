@@ -121,6 +121,15 @@ footer {
     margin-bottom: 20px;
 }
 
+.intro-text{
+    font-size: 20px;
+}
+
+.menu-drop{
+    font-size: 15px;
+    text-align: center;
+}
+
 label{
     font-size: 20px;
 }
@@ -174,8 +183,8 @@ label{
 }
 #bund, #topping, #antal {
     width: 180px;
-    height: 20px;
-    font-size: 10px;
+    height: 25px;
+    font-size: 15px;
     text-align: center;
     background-color: #D9D9D9;
     border-style: none;
@@ -184,23 +193,25 @@ label{
     margin-top: 15px;
 }
 
-#update-button{
+#container-kunde-bottons{
     display: flex;
     align-items: center;
+    justify-content: space-evenly;
+    height: 25px;
+    padding: 5px 40px;
 }
 
 .kurv {
     display: flex;
-    justify-content: flex-end;
-    margin-left: 75%;
     font-size: 24px;
     text-decoration: none;
 }
 
 .order-button {
     display: block;
-    justify-content: center;
-    height: 20px;
+    height: 30px;
+    width: 130px;
+    font-size: 15px;
     margin-top: 25px;
     background-color: #F5A582;
     border-radius: 15px;
@@ -215,6 +226,29 @@ label{
     }
 
 .order-button:active {
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
+.toCart-button {
+    display: block;
+    height: 30px;
+    width: 130px;
+    font-size: 15px;
+    margin-top: 25px;
+    background-color: #F5A582;
+    border-radius: 15px;
+    border: none;
+    outline: none;
+    color: white;
+    box-shadow: 0 9px #999;
+}
+
+.toCart-button:hover{
+    background-color: #F3986F;
+}
+
+.toCart-button:active {
     box-shadow: 0 5px #666;
     transform: translateY(4px);
 }
@@ -252,8 +286,9 @@ tbody{
 .køb-knap{
     display: block;
     justify-content: center;
-    width: 70px;
-    height: 25px;
+    height: 30px;
+    width: 120px;
+    font-size: 15px;
     margin-top: 15px;
     background-color: #F5A582;
     border-radius: 15px;
@@ -288,7 +323,7 @@ tbody{
 .opret-knap{
     display: block;
     justify-content: center;
-    width: 70px;
+    width: 110px;
     height: 25px;
     margin-top: 30px;
     background-color: #F5A582;
