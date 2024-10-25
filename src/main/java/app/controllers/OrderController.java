@@ -19,9 +19,39 @@ public class OrderController {
         app.get("kurv", ctx -> watchCart(ctx, connectionPool));
         app.get("/delete/{id}", ctx -> {int orderlineId = Integer.parseInt(ctx.pathParam("id"));cancelOrderline(ctx, connectionPool, orderlineId);});
         app.get("mineordrer", ctx -> showAllOrders(ctx, connectionPool));
+        app.get("ordredetaljer", ctx -> showOrder(ctx, connectionPool));
         app.get("adminalleordrer", ctx -> adminShowAllOrders(ctx, connectionPool));
         app.get("adminordre", ctx -> adminShowOrder(ctx, connectionPool));
     }
+
+
+    private static void showOrder(Context ctx, ConnectionPool connectionPool) {
+        Member currentMember = ctx.sessionAttribute("currentMember");
+        // TODO: Her skal være et check så currentMember kun har lov til at se sine egne ordre. Ikke andres.
+        if (currentMember == null) {
+            ctx.attribute("errorMessage", "Log ind for at se ordredetaljer.");
+            ctx.render("error.html");
+            return;
+        }
+
+        // TODO: Håndter når query parameteren is null
+        int orderNumber = Integer.parseInt(ctx.queryParam("ordrenr"));
+
+        try {
+//            ArrayList<Order> orders = OrderMapper.getOrdersByMemberId(currentMember.getMemberId(),connectionPool);
+            OrderMemberDto orderMemberDto = OrderMapper.getOrderMemberDtoByOrderNumber(orderNumber, connectionPool);
+            ctx.attribute("orderMemberDto", orderMemberDto);
+
+            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(orderNumber, connectionPool);
+            ctx.attribute("orderlines", orderlines);
+
+            ctx.render("ordredetaljer.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data");
+            ctx.render("error.html");
+        }
+    }
+
 
     private static void showAllOrders(Context ctx, ConnectionPool connectionPool) {
         Member currentMember = ctx.sessionAttribute("currentMember");
