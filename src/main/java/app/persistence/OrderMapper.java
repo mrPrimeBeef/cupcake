@@ -83,7 +83,7 @@ public class OrderMapper {
 
         ArrayList<OrderMemberDto> allOrderMemberDtos = new ArrayList<OrderMemberDto>();
 
-        String sql = "SELECT order_number, name, email, date, status, order_price FROM member_order JOIN member USING(member_id)";
+        String sql = "SELECT order_number, member_id, name, email, date, status, order_price FROM member_order JOIN member USING(member_id) ORDER BY order_number";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -93,12 +93,13 @@ public class OrderMapper {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 int orderNumber = rs.getInt("order_number");
+                int memberId = rs.getInt("member_id");
                 String memberName = rs.getString("name");
                 String memberEmail = rs.getString("email");
                 Date orderDate = rs.getDate("date");
                 String orderStatus = rs.getString("status");
                 double orderPrice = rs.getDouble("order_price");
-                allOrderMemberDtos.add(new OrderMemberDto(orderNumber, memberName, memberEmail, orderDate, orderStatus, orderPrice));
+                allOrderMemberDtos.add(new OrderMemberDto(orderNumber, memberId, memberName, memberEmail, orderDate, orderStatus, orderPrice));
             }
         } catch (SQLException e) {
             throw new DatabaseException("DB error in getAllOrderMemberDtos", e.getMessage());
@@ -142,7 +143,7 @@ public class OrderMapper {
 
         OrderMemberDto orderMemberDto = null;
 
-        String sql = "SELECT order_number, name, email, date, status, order_price FROM member_order JOIN member USING(member_id) WHERE order_number=?";
+        String sql = "SELECT order_number, member_id, name, email, date, status, order_price FROM member_order JOIN member USING(member_id) WHERE order_number=?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -150,13 +151,14 @@ public class OrderMapper {
             ps.setInt(1, orderNumber);
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
+            if (rs.next()) {
+                int memberId = rs.getInt("member_id");
                 String memberName = rs.getString("name");
                 String memberEmail = rs.getString("email");
                 Date orderDate = rs.getDate("date");
                 String orderStatus = rs.getString("status");
                 double orderPrice = rs.getDouble("order_price");
-                orderMemberDto = new OrderMemberDto(orderNumber, memberName, memberEmail, orderDate, orderStatus, orderPrice);
+                orderMemberDto = new OrderMemberDto(orderNumber, memberId, memberName, memberEmail, orderDate, orderStatus, orderPrice);
             }
         } catch (SQLException e) {
             throw new DatabaseException("DB fejl i getOrderMemberDtoByOrderNumbers", e.getMessage());
@@ -165,4 +167,32 @@ public class OrderMapper {
         return orderMemberDto;
 
     }
+
+    public static ArrayList<Order> getOrdersByMemberId(int memberId, ConnectionPool connectionPool) throws DatabaseException {
+
+        ArrayList<Order> orders = new ArrayList<Order>();
+
+        String sql = "SELECT * FROM member_order WHERE member_id=? ORDER BY order_number";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, memberId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int orderNumber = rs.getInt("order_number");
+                Date date = rs.getDate("date");
+                String status = rs.getString("status");
+                double price = rs.getDouble("order_price");
+                orders.add(new Order(orderNumber, memberId, date, status, price));
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("DB fejl i getOrdersByMemberId", e.getMessage());
+        }
+
+        return orders;
+
+    }
+
 }

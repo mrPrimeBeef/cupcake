@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Admin se alle ordrer</title>
+    <title>Alle ordrer for alle kunder</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
@@ -11,27 +11,33 @@
 <body>
 <header th:replace="fragments :: headerAdmin"></header>
 <div class="page">
-<h2>Admin: Se alle ordrer</h2>
+    <h2>Alle ordrer for alle kunder</h2>
 
-<table>
-    <tr>
-        <th>Ordrenr.</th>
-        <th>Navn</th>
-        <th>Email</th>
-        <th>Dato</th>
-        <th>Pris</th>
-        <th>Status</th>
-    </tr>
-    <tr th:each="orderMemberDto: ${allOrderMemberDtos}">
-        <td><a href="adminordre.html" th:href="@{/adminordre(ordrenr=${orderMemberDto.orderNumber})}" th:text="${orderMemberDto.orderNumber}"></a></td>
-        <td th:text="${orderMemberDto.memberName}"></td>
-        <td th:text="${orderMemberDto.memberEmail}"></td>
-        <td th:text="${orderMemberDto.orderDate}"></td>
-        <td th:text="${orderMemberDto.orderPrice}"></td>
-        <td th:text="${orderMemberDto.orderStatus}"></td>
-    </tr>
-</table>
-<footer th:replace="fragments :: footer"></footer>
-    </div>
+    <table>
+        <tr>
+            <th>Ordrenr.</th>
+            <th>Kundenr.</th>
+            <th>Navn</th>
+            <th>Email</th>
+            <th>Dato</th>
+            <th>Status</th>
+            <th>Pris DKK</th>
+        </tr>
+        <tr th:each="orderMemberDto: ${allOrderMemberDtos}">
+            <td><a href="adminordre.html" th:href="@{/adminordre(ordrenr=${orderMemberDto.orderNumber})}"
+                   th:text="${orderMemberDto.orderNumber}"></a></td>
+            <td th:text="${orderMemberDto.memberId}"></td>
+<!--            <td><a href="adminkunde.html" th:href="@{/adminkunde(kundenr=${orderMemberDto.memberId})}"-->
+<!--                   th:text="${orderMemberDto.memberId}"></a></td>-->
+            <td th:text="${orderMemberDto.memberName}"></td>
+            <td><a href="adminkunde.html" th:href="@{/adminkunde(kundenr=${orderMemberDto.memberId})}"
+                   th:text="${orderMemberDto.memberEmail}"></a></td>
+            <td th:text="${orderMemberDto.orderDate}"></td>
+            <td th:text="${orderMemberDto.orderStatus}"></td>
+            <td th:text="${orderMemberDto.orderPrice}"></td>
+        </tr>
+    </table>
+    <footer th:replace="fragments :: footer"></footer>
+</div>
 </body>
 </html>

@@ -5,14 +5,16 @@ import java.sql.Date;
 public class OrderMemberDto {
 
     private int orderNumber;
+    private int memberId;
     private String memberName;
     private String memberEmail;
     private Date orderDate;
     private String orderStatus;
     private double orderPrice;
 
-    public OrderMemberDto(int orderNumber, String memberName, String memberEmail, Date orderDate, String orderStatus, double orderPrice) {
+    public OrderMemberDto(int orderNumber, int memberId, String memberName, String memberEmail, Date orderDate, String orderStatus, double orderPrice) {
         this.orderNumber = orderNumber;
+        this.memberId = memberId;
         this.memberName = memberName;
         this.memberEmail = memberEmail;
         this.orderDate = orderDate;
@@ -23,6 +25,8 @@ public class OrderMemberDto {
     public int getOrderNumber() {
         return orderNumber;
     }
+
+    public int getMemberId() {return memberId;}
 
     public String getMemberName() {
         return memberName;
@@ -48,6 +52,7 @@ public class OrderMemberDto {
     public String toString() {
         return "OrderMemberDto{" +
                 "orderNumber=" + orderNumber +
+                ", memberId=" + memberId +
                 ", memberName='" + memberName + '\'' +
                 ", memberEmail='" + memberEmail + '\'' +
                 ", orderDate=" + orderDate +

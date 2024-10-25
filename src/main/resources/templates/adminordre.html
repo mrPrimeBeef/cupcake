@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Admin se ordre</title>
+    <title th:text="'Ordrenr. ' + ${orderMemberDto.orderNumber}"></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
@@ -9,29 +9,32 @@
 </head>
 
 <body>
-<header th:replace="fragments :: headerFragment"></header>
-<h2>Admin: Se ordre</h2>
+<header th:replace="fragments :: headerAdmin"></header>
+<h2 th:text="'Ordrenr. ' + ${orderMemberDto.orderNumber}"></h2>
 
 <table>
     <tr>
-        <th>Ordrenr.</th>
+        <th>Kundenr.</th>
         <th>Navn</th>
         <th>Email</th>
         <th>Dato</th>
-        <th>Pris</th>
         <th>Status</th>
+        <th>Pris DKK</th>
     </tr>
     <tr>
-        <td th:text="${orderMemberDto.orderNumber}"></td>
+        <td th:text="${orderMemberDto.memberId}"></td>
         <td th:text="${orderMemberDto.memberName}"></td>
-        <td th:text="${orderMemberDto.memberEmail}"></td>
+        <td><a href="adminkunde.html" th:href="@{/adminkunde(kundenr=${orderMemberDto.memberId})}"
+               th:text="${orderMemberDto.memberEmail}"></a></td>
         <td th:text="${orderMemberDto.orderDate}"></td>
-        <td th:text="${orderMemberDto.orderPrice}"></td>
         <td th:text="${orderMemberDto.orderStatus}"></td>
+        <td th:text="${orderMemberDto.orderPrice}"></td>
+
     </tr>
 </table>
 
-
+<br>
+<p>Ordrelinjer i denne ordre:</p>
 
 <form class="cart" method="post">
     <table class="cart-table">
@@ -40,7 +43,7 @@
             <th>Bund</th>
             <th>Topping</th>
             <th>Antal</th>
-            <th>Pris</th>
+            <th>Pris DKK</th>
         </tr>
         </thead>
         <tbody>
