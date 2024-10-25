@@ -9,11 +9,15 @@
 <body>
 <header th:replace="fragments :: headerFragment"></header>
 <div class="page">
-    <h1 th:text="'Kære '+${session.currentMember.name}"></h1>
-    <h1>Mange tak for dit køb</h1>
-    <h2 th:text="'Dit ordrenummer er: '+${session.currentOrder.orderNumber}"></h2>
-    <h2>Dine cupcakes er klar til afhentning næste hverdag kl. 12.00</h2>
-    <h2>Afhentningsadresse:<br>Olsker Hovedgade 10<br>3770 Allinge</h2>
+    <h2 th:text="'Kære '+${session.currentMember.name}"></h2>
+    <h2>Mange tak for dit køb</h2>
+    <p th:text="'Dit ordrenummer er: '+${session.currentOrder.orderNumber}"></p>
+    <p>Dine cupcakes er klar til afhentning næste hverdag kl. 12.00</p>
+    <div class="tak-adresse">
+        <p>Afhentningsadresse:</p>
+        <p>Olsker Hovedgade 10</p>
+        <p>3770 Allinge</p>
+    </div>
     <footer th:replace="fragments :: footer"></footer>
 </div>
 </body>

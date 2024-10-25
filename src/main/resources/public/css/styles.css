@@ -307,3 +307,15 @@ tbody{
     box-shadow: 0 5px #666;
     transform: translateY(4px);
 }
+
+
+/*tak.html styling*/
+.tak-adresse {
+    margin-top: 20px;
+}
+
+.tak-adresse p {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    text-align: center;
+}
