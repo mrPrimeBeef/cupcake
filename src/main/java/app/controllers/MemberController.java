@@ -87,14 +87,14 @@ public class MemberController {
         if (password1.equals(password2)) {
             try {
                 MemberMapper.createMember(name, email, mobile, password1, connectionPool);
-                ctx.attribute("message", "Du er hermed oprettet med brugernavn: " + email + ". Nu kan du logge ind.");
+                ctx.attribute("message", "Du er hermed oprettet som bruger med emailen: " + email + ". Nu kan du logge ind.");
                 ctx.render("login.html");
             } catch (DatabaseException e) {
-                ctx.attribute("message", "Brugernavnet findes allerede");
+                ctx.attribute("message", "Email allerede i brug");
                 ctx.render("opretbruger.html");
             }
         } else {
-            ctx.attribute("message", "Kodeord matcher ikke");
+            ctx.attribute("message", "Adgangskoder matcher ikke");
             ctx.render("opretbruger.html");
         }
 

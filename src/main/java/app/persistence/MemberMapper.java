@@ -32,7 +32,7 @@ public class MemberMapper {
                 int balance = rs.getInt("balance");
                 return new Member(memberId, name, email, mobile, password, role, balance);
             } else {
-                throw new DatabaseException("Forkert brugernavn eller password");
+                throw new DatabaseException("Forkert email eller adgangskode");
             }
         } catch (SQLException e) {
             throw new DatabaseException("DB fejl in login", e.getMessage());
@@ -58,7 +58,7 @@ public class MemberMapper {
         } catch (SQLException e) {
             String msg = "Der er sket en fejl. Prøv igen";
             if (e.getMessage().startsWith("ERROR: duplicate key value ")) {
-                msg = "Brugernavnet findes allerede. Vælg et andet";
+                msg = "Email allerede i brug";
             }
             throw new DatabaseException(msg, e.getMessage());
         }
@@ -100,7 +100,7 @@ public class MemberMapper {
                 throw new DatabaseException("Member was not found.");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Error updating memeber balance.", e.getMessage());
+            throw new DatabaseException("Error updating member balance.", e.getMessage());
         }
     }
 
@@ -158,7 +158,7 @@ public class MemberMapper {
                 throw new DatabaseException("Member not found.");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("DB error in getting memeber with id: " + memberId, e.getMessage());
+            throw new DatabaseException("DB error in getting member with id: " + memberId, e.getMessage());
         }
         return member;
     }

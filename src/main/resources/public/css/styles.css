@@ -362,3 +362,15 @@ tr:nth-of-type(even) {
 .admin-centertext{
     text-align: center;
 }
+
+
+/*tak.html styling*/
+.tak-adresse {
+    margin-top: 20px;
+}
+
+.tak-adresse p {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    text-align: center;
+}
