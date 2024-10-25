@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Frontpage</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
-<link rel="icon" type="image/x-icon" href="/images/cupcake.ico">
+    <title>Frontpage</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link rel="icon" type="image/x-icon" href="/images/cupcake.ico">
 </head>
 
 <body>
@@ -20,12 +20,14 @@
 
             <select id="bund" name="bund" required>
                 <option value="">Vælg bund</option>
-                <option th:each="bottom : ${bottoms}" th:value="${bottom.bottomId}" th:text="${bottom.bottomName}"></option>
+                <option th:each="bottom : ${bottoms}" th:value="${bottom.bottomId}"
+                        th:text="${bottom.bottomName}"></option>
             </select>
 
             <select id="topping" name="topping" required>
                 <option value="">Vælg topping</option>
-                <option th:each="topping : ${toppings}" th:value="${topping.toppingId}" th:text="${topping.toppingName}"></option>
+                <option th:each="topping : ${toppings}" th:value="${topping.toppingId}"
+                        th:text="${topping.toppingName}"></option>
             </select>
 
             <select id="antal" name="antal" required>
@@ -38,11 +40,13 @@
         </div>
 
         <div id="container-kunde-bottons">
-        <button class="order-button" type="submit">Læg i kurv</button>
-        <a href="kurv.html" class="kurv" th:href="@{/kurv}"><button class="toCart-button" type="button">Videre til kurv</button></a>
+            <button class="order-button" type="submit">Læg i kurv</button>
+            <a href="kurv.html" class="kurv" th:href="@{/kurv}">
+                <button class="toCart-button" type="button">Videre til kurv</button>
+            </a>
         </div>
     </form>
-<!--    <p th:text="${errorMessage}"></p>-->
+    <!--    <p th:text="${errorMessage}"></p>-->
     <p class="plads-top" th:text="${session.errorMessage}"></p>
     <footer th:replace="fragments :: footer"></footer>
 </div>
