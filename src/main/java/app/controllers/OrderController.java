@@ -97,8 +97,8 @@ public class OrderController {
             ctx.attribute("totalPrice", totalPrice);
 
         } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der opstod et problem ved at hente data til din kurv, prøv igen.");
-            ctx.redirect("error");
+            ctx.attribute("errorMessage", "Der opstod et problem ved hentningen af dataen, prøv igen.");
+            ctx.redirect("errorAlreadyLogin");
             throw new RuntimeException(e);
         }
         ctx.render("kurv.html");
@@ -123,9 +123,9 @@ public class OrderController {
             double newBalance = currentMember.getBalance() - totalOrderPrice;
             MemberMapper.updateMemberBalance(currentMember.getMemberId(), newBalance, connectionPool);
         } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Fejl i at hente din balance.");
-            ctx.render("error.html");
-            throw new DatabaseException("There was an error getting the balance");
+            ctx.attribute("errorMessage", "Der opstod en fejl under hentning af orderlines.");
+            ctx.render("errorAlreadyLogin.html");
+            throw new RuntimeException(e);
         }
         return true;
     }
@@ -163,12 +163,12 @@ public class OrderController {
                ctx.sessionAttribute("currentOrder", null);
            } else{
                ctx.attribute("errorMessage", "Ikke nok penge på kontoen til at gennemføre ordren.");
-               ctx.render("error.html");
+               ctx.render("errorAlreadyLogin.html");
            }
 
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der opstod en fejl under behandlingen af din ordre.");
-            ctx.render("error.html");
+            ctx.render("errorAlreadyLogin.html");
             throw new RuntimeException(e);
         }
     }
@@ -189,7 +189,7 @@ public class OrderController {
 
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der var et problem ved at hente siden pga. fejl ved at hente data");
-            ctx.render("error.html");
+            ctx.render("errorAlreadyLogin.html");
            throw new RuntimeException(e);
         }
         ctx.render("kunde.html");
