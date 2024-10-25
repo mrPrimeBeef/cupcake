@@ -24,11 +24,12 @@ html, body {
 /*fragment styling*/
 header .header-text, .admin-text {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
-    width: 100%;
-    height: 25px;
+    height: 38px;
     background-color: #F5A582;
+    padding-top: 14px;
+    padding-bottom: 10px;
 }
 
 .headerimage, .admin-image {
@@ -36,6 +37,7 @@ header .header-text, .admin-text {
     justify-content: center;
     align-items: center;
     background-color: #F5BA83;
+    height: 18vh;
 }
 
 .header-link, .cart-icon, .email {
@@ -44,19 +46,18 @@ header .header-text, .admin-text {
     text-decoration: none;
     font-weight: bold;
     align-items: center;
-    margin-left: 25%;
 }
 
 .left {
     display: flex;
     justify-content: flex-end;
-    margin-right: 25%;
+
 }
 
 .right {
     display: flex;
-    justify-content: flex-start;
-    margin-left: 25%;
+    justify-content: flex-end;
+    margin-left: 10%;
 }
 
 .email {
@@ -84,32 +85,13 @@ header .header-text, .admin-text {
 /*footer styling*/
 .footer-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     text-align: start;
     background-color: #F5BA83;
-}
-
-footer {
     position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
-    background-color: #F5BA83;
-    display: flex;
-}
-
-.adresse {
-    margin-right: 35px;
-    margin-left: 25%;
-}
-
-.nummer {
-    margin-right: 15%;
-}
-
-.åbningstider {
-    margin-right: 25%;
-    margin-top: 0;
 }
 
 /*login.html styling*/
@@ -252,7 +234,9 @@ label{
     box-shadow: 0 5px #666;
     transform: translateY(4px);
 }
-
+.plads-top{
+    margin-top: 5%;
+}
 /* kurv.html styling*/
 
 .cart-table, th, td {
