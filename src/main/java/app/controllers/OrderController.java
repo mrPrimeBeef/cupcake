@@ -18,8 +18,27 @@ public class OrderController {
         app.post("tak", ctx -> thanks(ctx, connectionPool));
         app.get("kurv", ctx -> watchCart(ctx, connectionPool));
         app.get("/delete/{id}", ctx -> {int orderlineId = Integer.parseInt(ctx.pathParam("id"));cancelOrderline(ctx, connectionPool, orderlineId);});
+        app.get("mineordrer", ctx -> showAllOrders(ctx, connectionPool));
         app.get("adminalleordrer", ctx -> adminShowAllOrders(ctx, connectionPool));
         app.get("adminordre", ctx -> adminShowOrder(ctx, connectionPool));
+    }
+
+    private static void showAllOrders(Context ctx, ConnectionPool connectionPool) {
+        Member currentMember = ctx.sessionAttribute("currentMember");
+        if (currentMember == null) {
+            ctx.attribute("errorMessage", "Log ind for at se dine ordrer.");
+            ctx.render("error.html");
+            return;
+        }
+
+        try {
+            ArrayList<Order> orders = OrderMapper.getOrdersByMemberId(currentMember.getMemberId(),connectionPool);
+            ctx.attribute("orders", orders);
+            ctx.render("mineordrer.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data");
+            ctx.render("error.html");
+        }
     }
 
     private static void adminShowOrder(Context ctx, ConnectionPool connectionPool) {

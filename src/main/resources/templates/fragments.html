@@ -15,7 +15,7 @@
         <img src="/public/images/cupcakelogo.png" th:src="@{/images/cupcakelogo.png}" width="30%" height="30%"/>
     </div>
     <div class="header-text">
-        <a href="#" class="header-link">Mine ordrer</a>
+        <a href="mineordrer.html" th:href="@{/mineordrer}" class="header-link">Mine ordrer</a>
         <div class="left">
             <a href="login.html" class="header-link" th:if="${#ctx.session.currentMember} != null" th:href="@{/logout}">Logud</a>
             <span class="email" th:text="${session.currentMember.email}"></span>
