@@ -42,7 +42,8 @@
         <a href="kurv.html" class="kurv" th:href="@{/kurv}"><button class="order-button" type="button">Videre til kurv</button></a>
         </div>
     </form>
-    <p th:text="${errorMessage}"></p>
+<!--    <p th:text="${errorMessage}"></p>-->
+    <p th:text="${session.errorMessage}"></p>
     <footer th:replace="fragments :: footer"></footer>
 </div>
 </body>

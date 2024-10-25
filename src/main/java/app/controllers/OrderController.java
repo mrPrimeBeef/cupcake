@@ -142,8 +142,17 @@ public class OrderController {
         }
 
         if (currentOrder == null) {
-            ctx.attribute("errorMessage", "læg noget i kurven for at købe");
-            ctx.render("kunde.html");
+            // ctx.attribute("errorMessage", "læg noget i kurven for at købe");
+            ctx.sessionAttribute("errorMessage", "læg noget i kurven for at købe");
+            ctx.redirect("kunde");
+            return;
+        }
+
+        ArrayList<Orderline> anyOrderlines = OrderlineMapper.getOrderlinesByOrderNumber(currentOrder.getOrderNumber(), connectionPool);
+        if (anyOrderlines.isEmpty()) {
+            //ctx.attribute("errorMessage","læg noget i kurven for at købe" );
+            ctx.sessionAttribute("errorMessage", "læg noget i kurven for at købe");
+            ctx.redirect("kunde");
             return;
         }
 
