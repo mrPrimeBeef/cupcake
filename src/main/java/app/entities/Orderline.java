@@ -17,14 +17,6 @@ public class Orderline {
         this.orderlinePrice = orderlinePrice;
     }
 
-    public Orderline(int orderNumber, Bottom bottom, Topping topping, int quantity, double orderlinePrice) {
-        this.orderNumber = orderNumber;
-        this.bottom = bottom;
-        this.topping = topping;
-        this.quantity = quantity;
-        this.orderlinePrice = orderlinePrice;
-    }
-
     public int getOrderlineId() {
         return orderlineId;
     }

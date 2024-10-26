@@ -64,20 +64,15 @@ public class OrderController {
             ctx.sessionAttribute("currentOrder", currentOrder);
         }
 
-        int selectedBottom = Integer.parseInt(ctx.formParam("bund"));
-        Bottom bottom = BottomMapper.getBottomById(selectedBottom, connectionPool);
-
-        int selectedTopping = Integer.parseInt(ctx.formParam("topping"));
-        Topping topping = ToppingMapper.getToppingById(selectedTopping, connectionPool);
-
-        double toppingPrice = topping.getToppingPrice();
-        double bottomPrice = bottom.getBottomPrice();
-
+        int bottomId = Integer.parseInt(ctx.formParam("bund"));
+        int toppingId = Integer.parseInt(ctx.formParam("topping"));
         int quantity = Integer.parseInt(ctx.formParam("antal"));
+
+        double bottomPrice = BottomMapper.getBottomById(bottomId, connectionPool).getBottomPrice();
+        double toppingPrice = ToppingMapper.getToppingById(toppingId, connectionPool).getToppingPrice();
         double orderlinePrice = (toppingPrice + bottomPrice) * quantity;
 
-        Orderline orderline = new Orderline(currentOrder.getOrderNumber(), bottom, topping, quantity, orderlinePrice);
-        OrderlineMapper.createOrderline(orderline, connectionPool);
+        OrderlineMapper.createOrderline(currentOrder.getOrderNumber(), bottomId, toppingId, quantity, orderlinePrice, connectionPool);
 
         updateOrderPrice(currentOrder.getOrderNumber(), connectionPool);
         showOrderingPage(ctx, connectionPool);

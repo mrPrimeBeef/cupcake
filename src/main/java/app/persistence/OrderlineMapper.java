@@ -34,27 +34,28 @@ public class OrderlineMapper {
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Error retrieving order lines for order number: " + orderNumber);
+            throw new DatabaseException("Error retrieving orderlines for order number: " + orderNumber);
         }
         return orderlines;
     }
 
-
-    public static void createOrderline(Orderline orderline, ConnectionPool connectionPool) throws DatabaseException {
+    public static void createOrderline(int orderNumber, int bottomId, int toppingId, int quantity, double orderlinePrice, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "INSERT INTO orderline (order_number, bottom_id, topping_id, quantity, orderline_price) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            ps.setInt(1, orderline.getOrderNumber());
-            ps.setInt(2, orderline.getBottom().getBottomId());
-            ps.setInt(3, orderline.getTopping().getToppingId());
-            ps.setInt(4, orderline.getQuantity());
-            ps.setDouble(5, orderline.getOrderlinePrice());
+            ps.setInt(1, orderNumber);
+            ps.setInt(2, bottomId);
+            ps.setInt(3, toppingId);
+            ps.setInt(4, quantity);
+            ps.setDouble(5, orderlinePrice);
             ps.executeUpdate();
 
+            // TODO: Check om det går godt
+
         } catch (SQLException e) {
-            throw new DatabaseException("Error creating orderline: " + orderline.getOrderNumber());
+            throw new DatabaseException("Error creating orderline for order number: " + orderNumber);
         }
     }
 }

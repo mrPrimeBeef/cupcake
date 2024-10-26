@@ -194,12 +194,15 @@ class OrderlineMapperTest {
         Bottom bottom = new Bottom(1, "Chokolade", 5.00);
         Topping topping = new Topping(2, "Vanilje", 5.00);
 
-        Orderline orderlines = new Orderline(1, bottom,topping,4,40);
+        // TODO: Få denne test op at køre igen
+//        Orderline orderlines = new Orderline(1, bottom,topping,4,40);
+//        OrderlineMapper.createOrderline(orderlines, connectionPool);
 
-        OrderlineMapper.createOrderline(orderlines, connectionPool);
+        OrderlineMapper.createOrderline(1,bottom.getBottomId(), topping.getToppingId(), 4,40,connectionPool);
 
         Orderline actual = OrderlineMapper.getOrderlinesByOrderNumber(1,connectionPool).get(1);
 
-        assertEquals(orderlines.getQuantity(),actual.getQuantity());
+//        assertEquals(orderlines.getQuantity(),actual.getQuantity());
+        assertEquals(true, false);
     }
 }
