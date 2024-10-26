@@ -15,7 +15,7 @@ public class OrderController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("bestil", ctx -> showAddToCart(ctx, connectionPool));
         app.post("bestil", ctx -> addToOrder(ctx, connectionPool));
-        app.get("kurv", ctx -> watchCart(ctx, connectionPool));
+        app.get("kurv", ctx -> showCart(ctx, connectionPool));
         app.get("/delete/{id}", ctx -> {
             int orderlineId = Integer.parseInt(ctx.pathParam("id"));
             cancelOrderline(ctx, connectionPool, orderlineId);
@@ -27,7 +27,66 @@ public class OrderController {
         app.get("adminalleordrer", ctx -> adminShowAllOrders(ctx, connectionPool));
     }
 
-    private static boolean watchCart(Context ctx, ConnectionPool connectionPool) {
+
+    private static void showAddToCart(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        Member currentMember = ctx.sessionAttribute("currentMember");
+        if (currentMember == null) {
+            ctx.attribute("errorMessage", "Log ind for at bestille.");
+            ctx.render("error.html");
+            return;
+        }
+        try {
+            ArrayList<Bottom> bottoms = BottomMapper.getAllBottoms(connectionPool);
+            ArrayList<Topping> toppings = ToppingMapper.getAllBToppings(connectionPool);
+
+            ctx.attribute("bottoms", bottoms);
+            ctx.attribute("toppings", toppings);
+
+        } catch (DatabaseException e) {
+            ctx.attribute("errorMessage", "Der var et problem ved at hente siden pga. fejl ved at hente data");
+            ctx.render("errorAlreadyLogin.html");
+            throw new RuntimeException(e);
+        }
+        ctx.render("bestil.html");
+    }
+
+
+    private static void addToOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        Member currentMember = ctx.sessionAttribute("currentMember");
+        if (currentMember == null) {
+            ctx.attribute("errorMessage", "Log ind for at bestille.");
+            ctx.render("error.html");
+            return;
+        }
+        Order currentOrder = ctx.sessionAttribute("currentOrder");
+
+        if (currentOrder == null) {
+            Date date = new Date(System.currentTimeMillis());
+            int orderNumber = OrderMapper.createOrder(currentMember.getMemberId(), date, "In progress", 0, connectionPool);
+            currentOrder = new Order(orderNumber, currentMember.getMemberId(), date, "In progress", 0.0);
+            ctx.sessionAttribute("currentOrder", currentOrder);
+        }
+
+        int selectedBottom = Integer.parseInt(ctx.formParam("bund"));
+        Bottom bottom = BottomMapper.getBottomNameById(selectedBottom, connectionPool);
+
+        int selectedTopping = Integer.parseInt(ctx.formParam("topping"));
+        Topping topping = ToppingMapper.getToppingNameById(selectedTopping, connectionPool);
+
+        double toppingPrice = topping.getToppingPrice();
+        double bottomPrice = bottom.getBottomPrice();
+
+        int quantity = Integer.parseInt(ctx.formParam("antal"));
+        double orderlinePrice = (toppingPrice + bottomPrice) * quantity;
+
+        Orderline orderline = new Orderline(currentOrder.getOrderNumber(), bottom, topping, quantity, orderlinePrice);
+        OrderlineMapper.createOrderline(orderline, connectionPool);
+
+        updateOrderPrice(currentOrder.getOrderNumber(), connectionPool);
+        showAddToCart(ctx, connectionPool);
+    }
+
+    private static boolean showCart(Context ctx, ConnectionPool connectionPool) {
         Member currentMember = ctx.sessionAttribute("currentMember");
         if (currentMember == null) {
             ctx.attribute("errorMessage", "Log ind for at bestille.");
@@ -90,6 +149,44 @@ public class OrderController {
         return true;
     }
 
+    private static void updateOrderPrice(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
+        ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(orderNumber, connectionPool);
+
+        double totalPrice = 0;
+        for (Orderline orderline : orderlines) {
+            totalPrice += orderline.getOrderlinePrice();
+        }
+        OrderMapper.updateOrderPrice(orderNumber, totalPrice, connectionPool);
+    }
+
+    private static void cancelOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        Order currentOrder = ctx.sessionAttribute("currentOrder");
+
+        if (currentOrder == null) {
+            throw new DatabaseException("No active order to cancel.");
+        }
+        OrderMapper.updateOrderStatus(currentOrder.getOrderNumber(), "Canceled", connectionPool);
+        ctx.sessionAttribute("currentOrder", null);
+    }
+
+    private static void cancelOrderline(Context ctx, ConnectionPool connectionPool, int orderlineId) throws DatabaseException {
+
+        OrderMapper.deleteOrderline(orderlineId, connectionPool);
+        ctx.redirect("/kurv");
+    }
+
+
+    private static void checkoutOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        Order currentOrder = ctx.sessionAttribute("currentOrder");
+
+        if (currentOrder == null) {
+            ctx.attribute("errorMessage", "Du har ikke nogen igangværende ordre.");
+        }
+        updateOrderPrice(currentOrder.getOrderNumber(), connectionPool);
+        OrderMapper.updateOrderStatus(currentOrder.getOrderNumber(), "Completed", connectionPool);
+    }
+
+
     private static void thanks(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         Order currentOrder = ctx.sessionAttribute("currentOrder");
         Member currentMember = ctx.sessionAttribute("currentMember");
@@ -131,101 +228,6 @@ public class OrderController {
             ctx.render("errorAlreadyLogin.html");
         }
     }
-
-    private static void showAddToCart(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        Member currentMember = ctx.sessionAttribute("currentMember");
-        if (currentMember == null) {
-            ctx.attribute("errorMessage", "Log ind for at bestille.");
-            ctx.render("error.html");
-            return;
-        }
-        try {
-            ArrayList<Bottom> bottoms = BottomMapper.getAllBottoms(connectionPool);
-            ArrayList<Topping> toppings = ToppingMapper.getAllBToppings(connectionPool);
-
-            ctx.attribute("bottoms", bottoms);
-            ctx.attribute("toppings", toppings);
-
-        } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der var et problem ved at hente siden pga. fejl ved at hente data");
-            ctx.render("errorAlreadyLogin.html");
-            throw new RuntimeException(e);
-        }
-        ctx.render("bestil.html");
-    }
-
-    private static void addToOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        Member currentMember = ctx.sessionAttribute("currentMember");
-        if (currentMember == null) {
-            ctx.attribute("errorMessage", "Log ind for at bestille.");
-            ctx.render("error.html");
-            return;
-        }
-        Order currentOrder = ctx.sessionAttribute("currentOrder");
-
-        if (currentOrder == null) {
-            Date date = new Date(System.currentTimeMillis());
-            int orderNumber = OrderMapper.createOrder(currentMember.getMemberId(), date, "In progress", 0, connectionPool);
-            currentOrder = new Order(orderNumber, currentMember.getMemberId(), date, "In progress", 0.0);
-            ctx.sessionAttribute("currentOrder", currentOrder);
-        }
-
-        int selectedBottom = Integer.parseInt(ctx.formParam("bund"));
-        Bottom bottom = BottomMapper.getBottomNameById(selectedBottom, connectionPool);
-
-        int selectedTopping = Integer.parseInt(ctx.formParam("topping"));
-        Topping topping = ToppingMapper.getToppingNameById(selectedTopping, connectionPool);
-
-        double toppingPrice = topping.getToppingPrice();
-        double bottomPrice = bottom.getBottomPrice();
-
-        int quantity = Integer.parseInt(ctx.formParam("antal"));
-        double orderlinePrice = (toppingPrice + bottomPrice) * quantity;
-
-        Orderline orderline = new Orderline(currentOrder.getOrderNumber(), bottom, topping, quantity, orderlinePrice);
-        OrderlineMapper.createOrderline(orderline, connectionPool);
-
-        updateOrderPrice(currentOrder.getOrderNumber(), connectionPool);
-        showAddToCart(ctx, connectionPool);
-    }
-
-    private static void updateOrderPrice(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
-        ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(orderNumber, connectionPool);
-
-        double totalPrice = 0;
-        for (Orderline orderline : orderlines) {
-            totalPrice += orderline.getOrderlinePrice();
-        }
-        OrderMapper.updateOrderPrice(orderNumber, totalPrice, connectionPool);
-    }
-
-    private static void cancelOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        Order currentOrder = ctx.sessionAttribute("currentOrder");
-
-        if (currentOrder == null) {
-            throw new DatabaseException("No active order to cancel.");
-        }
-        OrderMapper.updateOrderStatus(currentOrder.getOrderNumber(), "Canceled", connectionPool);
-        ctx.sessionAttribute("currentOrder", null);
-    }
-
-    private static void cancelOrderline(Context ctx, ConnectionPool connectionPool, int orderlineId) throws DatabaseException {
-
-        OrderMapper.deleteOrderline(orderlineId, connectionPool);
-        ctx.redirect("/kurv");
-    }
-
-
-    private static void checkoutOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        Order currentOrder = ctx.sessionAttribute("currentOrder");
-
-        if (currentOrder == null) {
-            ctx.attribute("errorMessage", "Du har ikke nogen igangværende ordre.");
-        }
-        updateOrderPrice(currentOrder.getOrderNumber(), connectionPool);
-        OrderMapper.updateOrderStatus(currentOrder.getOrderNumber(), "Completed", connectionPool);
-    }
-
 
     private static void showOrder(Context ctx, ConnectionPool connectionPool) {
         Member currentMember = ctx.sessionAttribute("currentMember");
