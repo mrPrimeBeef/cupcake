@@ -191,7 +191,7 @@ class ToppingMapperTest {
     void getToppingNameById() throws DatabaseException {
         Topping topping = null;
 
-        topping = ToppingMapper.getToppingNameById(1,connectionPool);
+        topping = ToppingMapper.getToppingById(1,connectionPool);
 
         assertEquals("Chokolade",topping.getToppingName());
 

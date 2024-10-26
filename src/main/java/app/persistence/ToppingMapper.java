@@ -37,7 +37,7 @@ public class ToppingMapper {
         return bottomNames;
     }
 
-    public static Topping getToppingNameById(int id, ConnectionPool connectionPool) throws DatabaseException {
+    public static Topping getToppingById(int id, ConnectionPool connectionPool) throws DatabaseException {
         Topping topping = null;
 
         String sql = "SELECT * " +

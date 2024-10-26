@@ -193,7 +193,7 @@ public class BottomMapperTest {
         void getBottomNameById () throws DatabaseException {
             Bottom bottom = null;
 
-           bottom = BottomMapper.getBottomNameById(1,connectionPool);
+           bottom = BottomMapper.getBottomById(1,connectionPool);
             assertEquals("Chokolade",bottom.getBottomName());
 
             // will fail

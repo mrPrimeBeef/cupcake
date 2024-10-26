@@ -36,7 +36,7 @@ public class BottomMapper {
         return bottomNames;
     }
 
-    public static Bottom getBottomNameById(int id, ConnectionPool connectionPool) throws DatabaseException {
+    public static Bottom getBottomById(int id, ConnectionPool connectionPool) throws DatabaseException {
         Bottom bottom = null;
 
         String sql = "SELECT * " +

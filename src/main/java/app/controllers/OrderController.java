@@ -68,10 +68,10 @@ public class OrderController {
         }
 
         int selectedBottom = Integer.parseInt(ctx.formParam("bund"));
-        Bottom bottom = BottomMapper.getBottomNameById(selectedBottom, connectionPool);
+        Bottom bottom = BottomMapper.getBottomById(selectedBottom, connectionPool);
 
         int selectedTopping = Integer.parseInt(ctx.formParam("topping"));
-        Topping topping = ToppingMapper.getToppingNameById(selectedTopping, connectionPool);
+        Topping topping = ToppingMapper.getToppingById(selectedTopping, connectionPool);
 
         double toppingPrice = topping.getToppingPrice();
         double bottomPrice = bottom.getBottomPrice();

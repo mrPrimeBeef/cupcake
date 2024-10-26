@@ -40,8 +40,8 @@ public class OrderlineMapper {
         int quantity = rs.getInt("quantity");
         double orderlinePrice = rs.getDouble("orderline_price");
 
-        Bottom bottom = BottomMapper.getBottomNameById(bottomId, connectionPool);
-        Topping topping = ToppingMapper.getToppingNameById(toppingId, connectionPool);
+        Bottom bottom = BottomMapper.getBottomById(bottomId, connectionPool);
+        Topping topping = ToppingMapper.getToppingById(toppingId, connectionPool);
 
         return new Orderline(orderlineId, orderNumber, bottom, topping, quantity, orderlinePrice);
     }
