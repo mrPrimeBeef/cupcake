@@ -1,9 +1,9 @@
 package app.entities;
 
 public class Bottom {
-    int bottom_id;
-    String bottom_name;
-    double bottom_price;
+    private int bottom_id;
+    private String bottom_name;
+    private double bottom_price;
 
     public Bottom(int bottom_id, String bottom_name, double bottom_price) {
         this.bottom_id = bottom_id;

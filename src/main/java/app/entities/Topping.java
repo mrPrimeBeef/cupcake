@@ -1,9 +1,9 @@
 package app.entities;
 
 public class Topping {
-    int toppingId;
-    String toppingName;
-    double toppingPrice;
+    private int toppingId;
+    private String toppingName;
+    private double toppingPrice;
 
     public Topping(int toppingId, String toppingName, double toppingPrice) {
         this.toppingId = toppingId;
