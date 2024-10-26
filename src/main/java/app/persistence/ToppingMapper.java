@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ToppingMapper {
-    public static ArrayList<Topping> getAllBToppings(ConnectionPool connectionPool) throws DatabaseException {
+    public static ArrayList<Topping> getAllToppings(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<Topping> bottomNames = new ArrayList<>();
 
         String sql = "SELECT * FROM topping";

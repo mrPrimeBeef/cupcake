@@ -37,7 +37,7 @@ public class OrderController {
         }
         try {
             ArrayList<Bottom> bottoms = BottomMapper.getAllBottoms(connectionPool);
-            ArrayList<Topping> toppings = ToppingMapper.getAllBToppings(connectionPool);
+            ArrayList<Topping> toppings = ToppingMapper.getAllToppings(connectionPool);
 
             ctx.attribute("bottoms", bottoms);
             ctx.attribute("toppings", toppings);

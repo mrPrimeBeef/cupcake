@@ -171,7 +171,7 @@ class ToppingMapperTest {
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            topping = ToppingMapper.getAllBToppings(connectionPool);
+            topping = ToppingMapper.getAllToppings(connectionPool);
 
         } catch (SQLException e) {
             e.printStackTrace();
