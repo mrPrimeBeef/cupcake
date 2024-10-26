@@ -108,7 +108,6 @@ public class OrderMapper {
     }
 
     public static Order getActiveOrder(int memberId, ConnectionPool connectionPool) throws DatabaseException {
-//        Member member = ctx.sessionAttribute("currentMember");
         Order order = null;
 
         String sql = "SELECT * FROM member_order WHERE member_id = ? AND status = 'In progress'";
