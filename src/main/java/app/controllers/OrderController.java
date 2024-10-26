@@ -45,7 +45,7 @@ public class OrderController {
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der var et problem ved at hente siden pga. fejl ved at hente data");
             ctx.render("errorAlreadyLogin.html");
-            throw new RuntimeException(e);
+            return;
         }
         ctx.render("bestil.html");
     }
@@ -118,7 +118,7 @@ public class OrderController {
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der opstod et problem ved hentningen af dataen, prøv igen.");
             ctx.redirect("errorAlreadyLogin");
-            throw new RuntimeException(e);
+            return false;
         }
         ctx.render("kurv.html");
         return activeOrder;
@@ -144,7 +144,7 @@ public class OrderController {
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der opstod en fejl under hentning af orderlines.");
             ctx.render("errorAlreadyLogin.html");
-            throw new RuntimeException(e);
+            return false;
         }
         return true;
     }
