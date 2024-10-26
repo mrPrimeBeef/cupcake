@@ -28,8 +28,8 @@ public class Main
         }).start(7070);
 
         // Routing
-        app.get("/", ctx -> ctx.render("login.html"));
-        OrderController.addRoutes(app, connectionPool);
         MemberController.addRoutes(app, connectionPool);
+        OrderController.addRoutes(app, connectionPool);
+
     }
 }

@@ -17,65 +17,41 @@ import java.util.ArrayList;
 public class MemberController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
+        app.get("/", ctx -> ctx.render("login.html"));
         app.post("login", ctx -> login(ctx, connectionPool));
-
+        app.get("logout", ctx -> logout(ctx));
         app.get("opretbruger", ctx -> ctx.render("opretbruger.html"));
         app.post("opretbruger", ctx -> createMember(ctx, connectionPool));
-
-        app.get("logout", ctx -> logout(ctx));
-
-        app.get("adminallekunder", ctx -> adminShowAllCustomers(ctx, connectionPool));
         app.get("adminkunde", ctx -> adminShowCustomer(ctx, connectionPool));
+        app.get("adminallekunder", ctx -> adminShowAllCustomers(ctx, connectionPool));
     }
 
-
-    private static void adminShowCustomer(Context ctx, ConnectionPool connectionPool) {
-        Member currentMember = ctx.sessionAttribute("currentMember");
-        if (currentMember == null || !currentMember.getRole().equals("admin")) {
-            ctx.attribute("errorMessage", "Kun for admin.");
-            ctx.render("error.html");
-            return;
-        }
-
-        // TODO: Håndter når query parameteren is null
-        int customerNumber = Integer.parseInt(ctx.queryParam("kundenr"));
+    public static void login(Context ctx, ConnectionPool connectionPool) {
+        String email = ctx.formParam("email");
+        String password = ctx.formParam("password");
 
         try {
-            Member customer = MemberMapper.getMemberById(customerNumber, connectionPool);
-            ctx.attribute("customer", customer);
+            Member member = MemberMapper.login(email, password, connectionPool);
+            ctx.sessionAttribute("currentMember", member);
 
-            ArrayList<Order> orders = OrderMapper.getOrdersByMemberId(customerNumber, true,connectionPool);
-            ctx.attribute("orders", orders);
+            if (member.getRole().equals("admin")) {
+                ctx.redirect("adminalleordrer");
+                return;
+            }
 
-            ctx.render("adminkunde.html");
+            Order CurrentOrderId = OrderMapper.getActiveOrder(ctx, connectionPool);
+            ctx.sessionAttribute("CurrentOrderId", CurrentOrderId);
+            ctx.redirect("bestil");
         } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der er sket en fejl: " + e.getMessage());
-            ctx.render("error.html");
-        }
-
-
-    }
-
-
-    private static void adminShowAllCustomers(Context ctx, ConnectionPool connectionPool) {
-        Member currentMember = ctx.sessionAttribute("currentMember");
-        if (currentMember == null || !currentMember.getRole().equals("admin")) {
-            ctx.attribute("errorMessage", "Kun for admin.");
-            ctx.render("error.html");
-            return;
-        }
-
-        try {
-            ArrayList<Member> allCustomers = MemberMapper.getAllCostumers(connectionPool);
-            ctx.attribute("allCustomers", allCustomers);
-            ctx.render("adminallekunder.html");
-        } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data");
-            ctx.render("error.html");
+            ctx.attribute("message", e.getMessage());
+            ctx.render("login.html");
         }
     }
 
-
+    private static void logout(Context ctx) {
+        ctx.req().getSession().invalidate();
+        ctx.redirect("/");
+    }
 
     private static void createMember(Context ctx, ConnectionPool connectionPool) {
         String name = ctx.formParam("name");
@@ -100,31 +76,48 @@ public class MemberController {
 
     }
 
-    private static void logout(Context ctx) {
-        ctx.req().getSession().invalidate();
-        ctx.redirect("/");
-    }
+    private static void adminShowCustomer(Context ctx, ConnectionPool connectionPool) {
+        Member currentMember = ctx.sessionAttribute("currentMember");
+        if (currentMember == null || !currentMember.getRole().equals("admin")) {
+            ctx.attribute("errorMessage", "Kun for admin.");
+            ctx.render("error.html");
+            return;
+        }
 
-
-    public static void login(Context ctx, ConnectionPool connectionPool) {
-        String email = ctx.formParam("email");
-        String password = ctx.formParam("password");
+        // TODO: Håndter når query parameteren is null
+        int customerNumber = Integer.parseInt(ctx.queryParam("kundenr"));
 
         try {
-            Member member = MemberMapper.login(email, password, connectionPool);
-            ctx.sessionAttribute("currentMember", member);
+            Member customer = MemberMapper.getMemberById(customerNumber, connectionPool);
+            ctx.attribute("customer", customer);
 
-            if (member.getRole().equals("admin")) {
-                ctx.redirect("adminalleordrer");
-                return;
-            }
+            ArrayList<Order> orders = OrderMapper.getOrdersByMemberId(customerNumber, true, connectionPool);
+            ctx.attribute("orders", orders);
 
-            Order CurrentOrderId = OrderMapper.getActiveOrder(ctx, connectionPool);
-            ctx.sessionAttribute("CurrentOrderId", CurrentOrderId);
-            ctx.redirect("bestil");
+            ctx.render("adminkunde.html");
         } catch (DatabaseException e) {
-            ctx.attribute("message", e.getMessage());
-            ctx.render("login.html");
+            ctx.attribute("errorMessage", "Der er sket en fejl: " + e.getMessage());
+            ctx.render("error.html");
+        }
+
+
+    }
+
+    private static void adminShowAllCustomers(Context ctx, ConnectionPool connectionPool) {
+        Member currentMember = ctx.sessionAttribute("currentMember");
+        if (currentMember == null || !currentMember.getRole().equals("admin")) {
+            ctx.attribute("errorMessage", "Kun for admin.");
+            ctx.render("error.html");
+            return;
+        }
+
+        try {
+            ArrayList<Member> allCustomers = MemberMapper.getAllCostumers(connectionPool);
+            ctx.attribute("allCustomers", allCustomers);
+            ctx.render("adminallekunder.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data");
+            ctx.render("error.html");
         }
     }
 }

@@ -15,104 +15,16 @@ public class OrderController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("bestil", ctx -> showAddToCart(ctx, connectionPool));
         app.post("bestil", ctx -> addToOrder(ctx, connectionPool));
-        app.post("tak", ctx -> thanks(ctx, connectionPool));
         app.get("kurv", ctx -> watchCart(ctx, connectionPool));
-        app.get("/delete/{id}", ctx -> {int orderlineId = Integer.parseInt(ctx.pathParam("id"));cancelOrderline(ctx, connectionPool, orderlineId);});
-        app.get("mineordrer", ctx -> showAllOrders(ctx, connectionPool));
+        app.get("/delete/{id}", ctx -> {
+            int orderlineId = Integer.parseInt(ctx.pathParam("id"));
+            cancelOrderline(ctx, connectionPool, orderlineId);
+        });
+        app.post("tak", ctx -> thanks(ctx, connectionPool));
         app.get("ordredetaljer", ctx -> showOrder(ctx, connectionPool));
-        app.get("adminalleordrer", ctx -> adminShowAllOrders(ctx, connectionPool));
+        app.get("mineordrer", ctx -> showAllOrders(ctx, connectionPool));
         app.get("adminordre", ctx -> adminShowOrder(ctx, connectionPool));
-    }
-
-
-    private static void showOrder(Context ctx, ConnectionPool connectionPool) {
-        Member currentMember = ctx.sessionAttribute("currentMember");
-        // TODO: Her skal være et check så currentMember kun har lov til at se sine egne ordre. Ikke andres.
-        if (currentMember == null) {
-            ctx.attribute("errorMessage", "Log ind for at se ordredetaljer.");
-            ctx.render("error.html");
-            return;
-        }
-
-        // TODO: Håndter når query parameteren is null
-        int orderNumber = Integer.parseInt(ctx.queryParam("ordrenr"));
-
-        try {
-            OrderMemberDto orderMemberDto = OrderMapper.getOrderMemberDtoByOrderNumber(orderNumber, connectionPool);
-            ctx.attribute("orderMemberDto", orderMemberDto);
-
-            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(orderNumber, connectionPool);
-            ctx.attribute("orderlines", orderlines);
-
-            ctx.render("ordredetaljer.html");
-        } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data");
-            ctx.render("error.html");
-        }
-    }
-
-
-    private static void showAllOrders(Context ctx, ConnectionPool connectionPool) {
-        Member currentMember = ctx.sessionAttribute("currentMember");
-        if (currentMember == null) {
-            ctx.attribute("errorMessage", "Log ind for at se dine ordrer.");
-            ctx.render("error.html");
-            return;
-        }
-
-        try {
-            ArrayList<Order> orders = OrderMapper.getOrdersByMemberId(currentMember.getMemberId(),false,connectionPool);
-            ctx.attribute("orders", orders);
-            ctx.render("mineordrer.html");
-        } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data");
-            ctx.render("error.html");
-        }
-    }
-
-    private static void adminShowOrder(Context ctx, ConnectionPool connectionPool) {
-        Member currentMember = ctx.sessionAttribute("currentMember");
-        if (currentMember == null || !currentMember.getRole().equals("admin")) {
-            ctx.attribute("errorMessage", "Kun for admin.");
-            ctx.render("error.html");
-            return;
-        }
-
-        // TODO: Håndter når query parameteren is null
-        int orderNumber = Integer.parseInt(ctx.queryParam("ordrenr"));
-
-        try {
-            OrderMemberDto orderMemberDto = OrderMapper.getOrderMemberDtoByOrderNumber(orderNumber, connectionPool);
-            ctx.attribute("orderMemberDto", orderMemberDto);
-
-            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(orderNumber, connectionPool);
-            ctx.attribute("orderlines", orderlines);
-
-            ctx.render("adminordre.html");
-        } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der er sket en fejl: " + e.getMessage());
-            ctx.render("error.html");
-        }
-
-
-    }
-
-    private static void adminShowAllOrders(Context ctx, ConnectionPool connectionPool) {
-        Member currentMember = ctx.sessionAttribute("currentMember");
-        if (currentMember == null || !currentMember.getRole().equals("admin")) {
-            ctx.attribute("errorMessage", "Kun for admin.");
-            ctx.render("error.html");
-            return;
-        }
-
-        try {
-            ArrayList<OrderMemberDto> allOrderMemberDtos = OrderMapper.getAllOrderMemberDtos(connectionPool);
-            ctx.attribute("allOrderMemberDtos", allOrderMemberDtos);
-            ctx.render("adminalleordrer.html");
-        } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data");
-            ctx.render("error.html");
-        }
+        app.get("adminalleordrer", ctx -> adminShowAllOrders(ctx, connectionPool));
     }
 
     private static boolean watchCart(Context ctx, ConnectionPool connectionPool) {
@@ -127,7 +39,7 @@ public class OrderController {
         Order currentOrder = ctx.sessionAttribute("currentOrder");
 
         if (currentOrder == null) {
-            ctx.attribute("tomKurv","Kurven er tom.");
+            ctx.attribute("tomKurv", "Kurven er tom.");
             ctx.render("kurv.html");
             return activeOrder;
         }
@@ -163,7 +75,7 @@ public class OrderController {
 
         try {
             double memberBalance = MemberMapper.getBalance(currentMember.getMemberId(), connectionPool);
-            double totalOrderPrice = OrderMapper.getActiveOrder(ctx,connectionPool).getPrice();
+            double totalOrderPrice = OrderMapper.getActiveOrder(ctx, connectionPool).getPrice();
 
             if (totalOrderPrice > memberBalance) {
                 return false;
@@ -205,14 +117,14 @@ public class OrderController {
         }
 
         try {
-           if(validateBalance(ctx, connectionPool)){
-               checkoutOrder(ctx, connectionPool);
-               ctx.render("tak.html");
-               ctx.sessionAttribute("currentOrder", null);
-           } else{
-               ctx.attribute("errorMessage", "Ikke nok penge på kontoen til at gennemføre ordren.");
-               ctx.render("errorAlreadyLogin.html");
-           }
+            if (validateBalance(ctx, connectionPool)) {
+                checkoutOrder(ctx, connectionPool);
+                ctx.render("tak.html");
+                ctx.sessionAttribute("currentOrder", null);
+            } else {
+                ctx.attribute("errorMessage", "Ikke nok penge på kontoen til at gennemføre ordren.");
+                ctx.render("errorAlreadyLogin.html");
+            }
 
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der opstod en fejl under behandlingen af din ordre.");
@@ -237,7 +149,7 @@ public class OrderController {
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der var et problem ved at hente siden pga. fejl ved at hente data");
             ctx.render("errorAlreadyLogin.html");
-           throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
         ctx.render("bestil.html");
     }
@@ -249,7 +161,7 @@ public class OrderController {
             ctx.render("error.html");
             return;
         }
-            Order currentOrder = ctx.sessionAttribute("currentOrder");
+        Order currentOrder = ctx.sessionAttribute("currentOrder");
 
         if (currentOrder == null) {
             Date date = new Date(System.currentTimeMillis());
@@ -267,7 +179,7 @@ public class OrderController {
         double toppingPrice = topping.getToppingPrice();
         double bottomPrice = bottom.getBottomPrice();
 
-        int quantity= Integer.parseInt(ctx.formParam("antal"));
+        int quantity = Integer.parseInt(ctx.formParam("antal"));
         double orderlinePrice = (toppingPrice + bottomPrice) * quantity;
 
         Orderline orderline = new Orderline(currentOrder.getOrderNumber(), bottom, topping, quantity, orderlinePrice);
@@ -304,7 +216,6 @@ public class OrderController {
     }
 
 
-
     private static void checkoutOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         Order currentOrder = ctx.sessionAttribute("currentOrder");
 
@@ -313,5 +224,95 @@ public class OrderController {
         }
         updateOrderPrice(currentOrder.getOrderNumber(), connectionPool);
         OrderMapper.updateOrderStatus(currentOrder.getOrderNumber(), "Completed", connectionPool);
+    }
+
+
+    private static void showOrder(Context ctx, ConnectionPool connectionPool) {
+        Member currentMember = ctx.sessionAttribute("currentMember");
+        // TODO: Her skal være et check så currentMember kun har lov til at se sine egne ordre. Ikke andres.
+        if (currentMember == null) {
+            ctx.attribute("errorMessage", "Log ind for at se ordredetaljer.");
+            ctx.render("error.html");
+            return;
+        }
+
+        // TODO: Håndter når query parameteren is null
+        int orderNumber = Integer.parseInt(ctx.queryParam("ordrenr"));
+
+        try {
+            OrderMemberDto orderMemberDto = OrderMapper.getOrderMemberDtoByOrderNumber(orderNumber, connectionPool);
+            ctx.attribute("orderMemberDto", orderMemberDto);
+
+            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(orderNumber, connectionPool);
+            ctx.attribute("orderlines", orderlines);
+
+            ctx.render("ordredetaljer.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data");
+            ctx.render("error.html");
+        }
+    }
+
+
+    private static void showAllOrders(Context ctx, ConnectionPool connectionPool) {
+        Member currentMember = ctx.sessionAttribute("currentMember");
+        if (currentMember == null) {
+            ctx.attribute("errorMessage", "Log ind for at se dine ordrer.");
+            ctx.render("error.html");
+            return;
+        }
+
+        try {
+            ArrayList<Order> orders = OrderMapper.getOrdersByMemberId(currentMember.getMemberId(), false, connectionPool);
+            ctx.attribute("orders", orders);
+            ctx.render("mineordrer.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data");
+            ctx.render("error.html");
+        }
+    }
+
+    private static void adminShowOrder(Context ctx, ConnectionPool connectionPool) {
+        Member currentMember = ctx.sessionAttribute("currentMember");
+        if (currentMember == null || !currentMember.getRole().equals("admin")) {
+            ctx.attribute("errorMessage", "Kun for admin.");
+            ctx.render("error.html");
+            return;
+        }
+
+        // TODO: Håndter når query parameteren is null
+        int orderNumber = Integer.parseInt(ctx.queryParam("ordrenr"));
+
+        try {
+            OrderMemberDto orderMemberDto = OrderMapper.getOrderMemberDtoByOrderNumber(orderNumber, connectionPool);
+            ctx.attribute("orderMemberDto", orderMemberDto);
+
+            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(orderNumber, connectionPool);
+            ctx.attribute("orderlines", orderlines);
+
+            ctx.render("adminordre.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("errorMessage", "Der er sket en fejl: " + e.getMessage());
+            ctx.render("error.html");
+        }
+
+    }
+
+    private static void adminShowAllOrders(Context ctx, ConnectionPool connectionPool) {
+        Member currentMember = ctx.sessionAttribute("currentMember");
+        if (currentMember == null || !currentMember.getRole().equals("admin")) {
+            ctx.attribute("errorMessage", "Kun for admin.");
+            ctx.render("error.html");
+            return;
+        }
+
+        try {
+            ArrayList<OrderMemberDto> allOrderMemberDtos = OrderMapper.getAllOrderMemberDtos(connectionPool);
+            ctx.attribute("allOrderMemberDtos", allOrderMemberDtos);
+            ctx.render("adminalleordrer.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data");
+            ctx.render("error.html");
+        }
     }
 }
