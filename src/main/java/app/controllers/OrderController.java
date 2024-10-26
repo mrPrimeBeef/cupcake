@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class OrderController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("bestil", ctx -> showAddToCart(ctx, connectionPool));
+        app.get("bestil", ctx -> showOrderingPage(ctx, connectionPool));
         app.post("bestil", ctx -> addToOrder(ctx, connectionPool));
         app.get("kurv", ctx -> showCart(ctx, connectionPool));
         app.get("/delete/{id}", ctx -> {
@@ -28,7 +28,7 @@ public class OrderController {
     }
 
 
-    private static void showAddToCart(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+    private static void showOrderingPage(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         Member currentMember = ctx.sessionAttribute("currentMember");
         if (currentMember == null) {
             ctx.attribute("errorMessage", "Log ind for at bestille.");
@@ -83,7 +83,7 @@ public class OrderController {
         OrderlineMapper.createOrderline(orderline, connectionPool);
 
         updateOrderPrice(currentOrder.getOrderNumber(), connectionPool);
-        showAddToCart(ctx, connectionPool);
+        showOrderingPage(ctx, connectionPool);
     }
 
     private static boolean showCart(Context ctx, ConnectionPool connectionPool) {
