@@ -44,7 +44,7 @@ public class MemberController {
             Member customer = MemberMapper.getMemberById(customerNumber, connectionPool);
             ctx.attribute("customer", customer);
 
-            ArrayList<Order> orders = OrderMapper.getOrdersByMemberId(customerNumber, connectionPool);
+            ArrayList<Order> orders = OrderMapper.getOrdersByMemberId(customerNumber, true,connectionPool);
             ctx.attribute("orders", orders);
 
             ctx.render("adminkunde.html");

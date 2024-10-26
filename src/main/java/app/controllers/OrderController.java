@@ -38,7 +38,6 @@ public class OrderController {
         int orderNumber = Integer.parseInt(ctx.queryParam("ordrenr"));
 
         try {
-//            ArrayList<Order> orders = OrderMapper.getOrdersByMemberId(currentMember.getMemberId(),connectionPool);
             OrderMemberDto orderMemberDto = OrderMapper.getOrderMemberDtoByOrderNumber(orderNumber, connectionPool);
             ctx.attribute("orderMemberDto", orderMemberDto);
 
@@ -62,7 +61,7 @@ public class OrderController {
         }
 
         try {
-            ArrayList<Order> orders = OrderMapper.getOrdersByMemberId(currentMember.getMemberId(),connectionPool);
+            ArrayList<Order> orders = OrderMapper.getOrdersByMemberId(currentMember.getMemberId(),false,connectionPool);
             ctx.attribute("orders", orders);
             ctx.render("mineordrer.html");
         } catch (DatabaseException e) {

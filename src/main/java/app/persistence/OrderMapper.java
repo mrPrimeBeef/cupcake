@@ -168,11 +168,16 @@ public class OrderMapper {
 
     }
 
-    public static ArrayList<Order> getOrdersByMemberId(int memberId, ConnectionPool connectionPool) throws DatabaseException {
+    public static ArrayList<Order> getOrdersByMemberId(int memberId, boolean includeActiveOrder, ConnectionPool connectionPool) throws DatabaseException {
 
         ArrayList<Order> orders = new ArrayList<Order>();
 
-        String sql = "SELECT * FROM member_order WHERE member_id=? ORDER BY order_number";
+        String sql;
+        if (includeActiveOrder) {
+            sql = "SELECT * FROM member_order WHERE member_id=? ORDER BY order_number";
+        } else {
+            sql = "SELECT * FROM member_order WHERE member_id=? AND status!='In progress' ORDER BY order_number";
+        }
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
