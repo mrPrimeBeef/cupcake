@@ -22,8 +22,16 @@ public class OrderlineMapper {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Orderline orderline = mapRowToOrderline(rs, connectionPool);
-                orderlines.add(orderline);
+                int orderlineId = rs.getInt("orderline_id");
+                int bottomId = rs.getInt("bottom_id");
+                int toppingId = rs.getInt("topping_id");
+                int quantity = rs.getInt("quantity");
+                double orderlinePrice = rs.getDouble("orderline_price");
+
+                Bottom bottom = BottomMapper.getBottomById(bottomId, connectionPool);
+                Topping topping = ToppingMapper.getToppingById(toppingId, connectionPool);
+
+                orderlines.add(new Orderline(orderlineId, orderNumber, bottom, topping, quantity, orderlinePrice));
             }
 
         } catch (SQLException e) {
@@ -32,19 +40,6 @@ public class OrderlineMapper {
         return orderlines;
     }
 
-    private static Orderline mapRowToOrderline(ResultSet rs, ConnectionPool connectionPool) throws SQLException, DatabaseException {
-        int orderlineId = rs.getInt("orderline_id");
-        int orderNumber = rs.getInt("order_number");
-        int bottomId = rs.getInt("bottom_id");
-        int toppingId = rs.getInt("topping_id");
-        int quantity = rs.getInt("quantity");
-        double orderlinePrice = rs.getDouble("orderline_price");
-
-        Bottom bottom = BottomMapper.getBottomById(bottomId, connectionPool);
-        Topping topping = ToppingMapper.getToppingById(toppingId, connectionPool);
-
-        return new Orderline(orderlineId, orderNumber, bottom, topping, quantity, orderlinePrice);
-    }
 
     public static void createOrderline(Orderline orderline, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "INSERT INTO orderline (order_number, bottom_id, topping_id, quantity, orderline_price) VALUES (?, ?, ?, ?, ?)";
