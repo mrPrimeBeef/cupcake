@@ -134,7 +134,7 @@ public class OrderController {
 
         try {
             double memberBalance = MemberMapper.getBalance(currentMember.getMemberId(), connectionPool);
-            double totalOrderPrice = OrderMapper.getActiveOrder(ctx, connectionPool).getPrice();
+            double totalOrderPrice = OrderMapper.getActiveOrder(currentMember.getMemberId(), connectionPool).getPrice();
 
             if (totalOrderPrice > memberBalance) {
                 return false;

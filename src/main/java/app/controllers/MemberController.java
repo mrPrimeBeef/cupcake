@@ -39,7 +39,7 @@ public class MemberController {
                 return;
             }
 
-            Order CurrentOrderId = OrderMapper.getActiveOrder(ctx, connectionPool);
+            Order CurrentOrderId = OrderMapper.getActiveOrder(member.getMemberId(), connectionPool);
             ctx.sessionAttribute("CurrentOrderId", CurrentOrderId);
             ctx.redirect("bestil");
         } catch (DatabaseException e) {
