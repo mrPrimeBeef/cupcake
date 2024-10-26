@@ -3,7 +3,6 @@ package app.persistence;
 import app.dto.OrderMemberDto;
 import app.entities.*;
 import app.exceptions.DatabaseException;
-import io.javalin.http.Context;
 
 import java.sql.*;
 import java.util.ArrayList;

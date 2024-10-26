@@ -1,7 +1,6 @@
 package app.persistence;
 
 import app.entities.Bottom;
-import app.entities.Order;
 import app.entities.Topping;
 import app.entities.Orderline;
 import app.exceptions.DatabaseException;

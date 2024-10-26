@@ -1,9 +1,7 @@
 package app.persistence;
 
 import app.entities.Member;
-import app.entities.Order;
 import app.exceptions.DatabaseException;
-import io.javalin.http.Context;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

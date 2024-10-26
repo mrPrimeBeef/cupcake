@@ -1,6 +1,5 @@
 package app.persistence;
 
-import app.entities.Bottom;
 import app.entities.Topping;
 import app.exceptions.DatabaseException;
 import org.junit.jupiter.api.BeforeAll;
