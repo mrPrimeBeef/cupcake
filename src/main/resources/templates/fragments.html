@@ -16,11 +16,12 @@
         <img src="/public/images/cupcakelogo.png" th:src="@{/images/cupcakelogo.png}" width="40%" height="75%"/>
     </div>
     <div class="header-text">
+        <a href="kunde.html" th:href="@{/kunde}" class="header-link">Bestil cupcakes</a>
         <a href="mineordrer.html" th:href="@{/mineordrer}" class="header-link">Mine ordrer</a>
         <div class="left">
             <a href="login.html" class="header-link" th:if="${#ctx.session.currentMember} != null" th:href="@{/logout}">Logud</a>
             <span class="email" th:text="${session.currentMember.email}"></span>
-            <a href="kurv.html" th:href="@{/kurv}" class="cart-icon" >&#128722;</a>
+            <a href="kurv.html" th:href="@{/kurv}" class="cart-icon">&#128722;</a>
         </div>
     </div>
 </header>
