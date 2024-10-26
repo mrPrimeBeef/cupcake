@@ -16,10 +16,7 @@ public class OrderController {
         app.get("bestil", ctx -> showOrderingPage(ctx, connectionPool));
         app.post("bestil", ctx -> addToOrder(ctx, connectionPool));
         app.get("kurv", ctx -> showCart(ctx, connectionPool));
-        app.get("/delete/{id}", ctx -> {
-            int orderlineId = Integer.parseInt(ctx.pathParam("id"));
-            cancelOrderline(ctx, connectionPool, orderlineId);
-        });
+        app.get("/delete/{id}", ctx -> deleteOrderline(ctx, connectionPool));
         app.post("tak", ctx -> thanks(ctx, connectionPool));
         app.get("ordredetaljer", ctx -> showOrder(ctx, connectionPool));
         app.get("mineordrer", ctx -> showAllOrders(ctx, connectionPool));
@@ -124,6 +121,13 @@ public class OrderController {
         return activeOrder;
     }
 
+
+    private static void deleteOrderline(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+        int orderlineId = Integer.parseInt(ctx.pathParam("id"));
+        OrderMapper.deleteOrderline(orderlineId, connectionPool);
+        ctx.redirect("/kurv");
+    }
+
     private static boolean validateBalance(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         Member currentMember = ctx.sessionAttribute("currentMember");
         if (currentMember == null) {
@@ -159,21 +163,17 @@ public class OrderController {
         OrderMapper.updateOrderPrice(orderNumber, totalPrice, connectionPool);
     }
 
-    private static void cancelOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        Order currentOrder = ctx.sessionAttribute("currentOrder");
+//    private static void cancelOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+//        Order currentOrder = ctx.sessionAttribute("currentOrder");
+//
+//        if (currentOrder == null) {
+//            throw new DatabaseException("No active order to cancel.");
+//        }
+//        OrderMapper.updateOrderStatus(currentOrder.getOrderNumber(), "Canceled", connectionPool);
+//        ctx.sessionAttribute("currentOrder", null);
+//    }
 
-        if (currentOrder == null) {
-            throw new DatabaseException("No active order to cancel.");
-        }
-        OrderMapper.updateOrderStatus(currentOrder.getOrderNumber(), "Canceled", connectionPool);
-        ctx.sessionAttribute("currentOrder", null);
-    }
 
-    private static void cancelOrderline(Context ctx, ConnectionPool connectionPool, int orderlineId) throws DatabaseException {
-
-        OrderMapper.deleteOrderline(orderlineId, connectionPool);
-        ctx.redirect("/kurv");
-    }
 
 
     private static void checkoutOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
