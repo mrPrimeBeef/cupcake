@@ -1,36 +1,52 @@
 package app.entities;
 
 public class Orderline {
-    private int ordernumber;
+    private int orderlineId;
+    private int orderNumber;
     private Bottom bottom;
     private Topping topping;
     private int quantity;
     private double orderlinePrice;
-    private int orderlineId;
 
-    public Orderline(int orderlineId, int ordernumber, Bottom bottom, Topping topping, int quantity, double orderlinePrice) {
-        this.orderlineId=orderlineId;
-        this.ordernumber = ordernumber;
+    public Orderline(int orderlineId, int orderNumber, Bottom bottom, Topping topping, int quantity, double orderlinePrice) {
+        this.orderlineId = orderlineId;
+        this.orderNumber = orderNumber;
         this.bottom = bottom;
         this.topping = topping;
         this.quantity = quantity;
         this.orderlinePrice = orderlinePrice;
     }
 
-    public Orderline(int ordernumber, Bottom bottom, Topping topping, int quantity, double orderlinePrice) {
-        this.ordernumber = ordernumber;
+    public Orderline(int orderNumber, Bottom bottom, Topping topping, int quantity, double orderlinePrice) {
+        this.orderNumber = orderNumber;
         this.bottom = bottom;
         this.topping = topping;
         this.quantity = quantity;
         this.orderlinePrice = orderlinePrice;
     }
 
-    // Getters and Setters
-    public int getOrderNumber() { return ordernumber; }
-    public Bottom getBottom() { return bottom; }
-    public Topping getTopping() { return topping; }
-    public int getQuantity() { return quantity; }
-    public double getOrderlinePrice() { return orderlinePrice; }
+    public int getOrderlineId() {
+        return orderlineId;
+    }
 
-    public int getOrderlineId() {return orderlineId;}
+    public int getOrderNumber() {
+        return orderNumber;
+    }
+
+    public Bottom getBottom() {
+        return bottom;
+    }
+
+    public Topping getTopping() {
+        return topping;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public double getOrderlinePrice() {
+        return orderlinePrice;
+    }
+
 }
