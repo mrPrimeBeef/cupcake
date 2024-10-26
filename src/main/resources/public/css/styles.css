@@ -155,7 +155,7 @@ label{
     transform: translateY(4px);
 }
 
-/*kunde.html styling*/
+/*bestil.html styling*/
 .intro-headline{
     font-size: 30px;
 }
@@ -175,7 +175,7 @@ label{
     margin-top: 15px;
 }
 
-#container-kunde-bottons{
+#container-bestil-bottons{
     display: flex;
     align-items: center;
     justify-content: space-evenly;

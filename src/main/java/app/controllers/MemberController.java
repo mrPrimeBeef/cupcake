@@ -121,7 +121,7 @@ public class MemberController {
 
             Order CurrentOrderId = OrderMapper.getActiveOrder(ctx, connectionPool);
             ctx.sessionAttribute("CurrentOrderId", CurrentOrderId);
-            ctx.redirect("kunde");
+            ctx.redirect("bestil");
         } catch (DatabaseException e) {
             ctx.attribute("message", e.getMessage());
             ctx.render("login.html");

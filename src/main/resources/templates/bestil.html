@@ -15,7 +15,7 @@
     <h1 class="intro-headline">Velkommen ombord</h1>
     <p class="intro-text">Øens bedste cupcakes. Vælg og bestil her:</p>
 
-    <form action="/kunde" method="post">
+    <form action="/bestil" method="post">
         <div class="menu-drop">
 
             <select id="bund" name="bund" required>
@@ -39,7 +39,7 @@
             </select>
         </div>
 
-        <div id="container-kunde-bottons">
+        <div id="container-bestil-bottons">
             <button class="order-button" type="submit">Læg i kurv</button>
             <a href="kurv.html" class="kurv" th:href="@{/kurv}">
                 <button class="toCart-button" type="button">Videre til kurv</button>

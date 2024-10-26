@@ -13,8 +13,8 @@ import java.util.ArrayList;
 public class OrderController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
-        app.get("kunde", ctx -> showAddToCart(ctx, connectionPool));
-        app.post("kunde", ctx -> addToOrder(ctx, connectionPool));
+        app.get("bestil", ctx -> showAddToCart(ctx, connectionPool));
+        app.post("bestil", ctx -> addToOrder(ctx, connectionPool));
         app.post("tak", ctx -> thanks(ctx, connectionPool));
         app.get("kurv", ctx -> watchCart(ctx, connectionPool));
         app.get("/delete/{id}", ctx -> {int orderlineId = Integer.parseInt(ctx.pathParam("id"));cancelOrderline(ctx, connectionPool, orderlineId);});
@@ -193,7 +193,7 @@ public class OrderController {
         if (currentOrder == null) {
             // ctx.attribute("errorMessage", "læg noget i kurven for at købe");
             ctx.sessionAttribute("errorMessage", "læg noget i kurven for at købe");
-            ctx.redirect("kunde");
+            ctx.redirect("bestil");
             return;
         }
 
@@ -201,7 +201,7 @@ public class OrderController {
         if (anyOrderlines.isEmpty()) {
             //ctx.attribute("errorMessage","læg noget i kurven for at købe" );
             ctx.sessionAttribute("errorMessage", "læg noget i kurven for at købe");
-            ctx.redirect("kunde");
+            ctx.redirect("bestil");
             return;
         }
 
@@ -240,7 +240,7 @@ public class OrderController {
             ctx.render("errorAlreadyLogin.html");
            throw new RuntimeException(e);
         }
-        ctx.render("kunde.html");
+        ctx.render("bestil.html");
     }
 
     private static void addToOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
