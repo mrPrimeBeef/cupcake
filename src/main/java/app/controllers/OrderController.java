@@ -40,7 +40,7 @@ public class OrderController {
             ctx.attribute("toppings", toppings);
 
         } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der var et problem ved at hente siden pga. fejl ved at hente data");
+            ctx.attribute("errorMessage", "Der var et problem ved at hente siden pga. fejl ved at hente data.");
             ctx.render("errorAlreadyLogin.html");
             return;
         }
