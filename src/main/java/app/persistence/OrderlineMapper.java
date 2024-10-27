@@ -24,7 +24,7 @@ public class OrderlineMapper {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected == 1) {
-                OrderMapper.PBupdateOrderPrice(orderNumber, connectionPool);
+                OrderMapper.updateOrderPrice(orderNumber, connectionPool);
             } else {
                 throw new DatabaseException("Error creating orderline for order number: " + orderNumber);
             }
@@ -35,7 +35,7 @@ public class OrderlineMapper {
 
     }
 
-    public static void PBdeleteOrderline(int orderlineId, ConnectionPool connectionPool) throws DatabaseException {
+    public static void deleteOrderline(int orderlineId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "DELETE FROM orderline WHERE orderline_id = ? RETURNING order_number";
 
         try (Connection connection = connectionPool.getConnection();
@@ -46,7 +46,7 @@ public class OrderlineMapper {
 
             if (rs.next()) {
                 int orderNumber = rs.getInt("order_number");
-                OrderMapper.PBupdateOrderPrice(orderNumber, connectionPool);
+                OrderMapper.updateOrderPrice(orderNumber, connectionPool);
             } else {
                 throw new DatabaseException("Ingen ordrelinje blev slettet, kontrollér om ID'et findes.");
             }

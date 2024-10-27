@@ -65,9 +65,9 @@ public class OrderController {
             double toppingPrice = ToppingMapper.getToppingById(toppingId, connectionPool).getToppingPrice();
             double orderlinePrice = (toppingPrice + bottomPrice) * quantity;
 
-            int activeOrderNumber = OrderMapper.PBgetActiveOrderNumber(currentMember.getMemberId(), connectionPool);
+            int activeOrderNumber = OrderMapper.getActiveOrderNumber(currentMember.getMemberId(), connectionPool);
             if (activeOrderNumber == -1) {
-                activeOrderNumber = OrderMapper.PBcreateActiveOrder(currentMember.getMemberId(), connectionPool);
+                activeOrderNumber = OrderMapper.createActiveOrder(currentMember.getMemberId(), connectionPool);
             }
 
             OrderlineMapper.createOrderline(activeOrderNumber, bottomId, toppingId, quantity, orderlinePrice, connectionPool);
@@ -91,7 +91,7 @@ public class OrderController {
 
         try {
 
-            int activeOrderNumber = OrderMapper.PBgetActiveOrderNumber(currentMember.getMemberId(), connectionPool);
+            int activeOrderNumber = OrderMapper.getActiveOrderNumber(currentMember.getMemberId(), connectionPool);
             if (activeOrderNumber == -1) {
                 ctx.attribute("tomKurv", "Kurven er tom.");
                 ctx.render("kurv.html");
@@ -105,7 +105,7 @@ public class OrderController {
                 return;
             }
 
-            double totalPrice = OrderMapper.PBgetOrderPrice(activeOrderNumber, connectionPool);
+            double totalPrice = OrderMapper.getOrderPrice(activeOrderNumber, connectionPool);
 
             ctx.attribute("orderlines", orderlines);
             ctx.attribute("totalPrice", totalPrice);
@@ -122,7 +122,7 @@ public class OrderController {
         // TODO: I rapporten kan vi skrive om hvad det farlige er ved delete ud fra GET request
         int orderlineId = Integer.parseInt(ctx.pathParam("id"));
         try {
-            OrderlineMapper.PBdeleteOrderline(orderlineId, connectionPool);
+            OrderlineMapper.deleteOrderline(orderlineId, connectionPool);
             ctx.redirect("/kurv");
         }
         catch (DatabaseException e) {
@@ -142,7 +142,7 @@ public class OrderController {
 
         try {
 
-            int activeOrderNumber = OrderMapper.PBgetActiveOrderNumber(currentMember.getMemberId(), connectionPool);
+            int activeOrderNumber = OrderMapper.getActiveOrderNumber(currentMember.getMemberId(), connectionPool);
             if (activeOrderNumber == -1) {
                 ctx.attribute("errorMessage", "læg noget i kurven for at købe");
                 showOrderingPage(ctx, connectionPool);
@@ -158,7 +158,7 @@ public class OrderController {
 
             // Validate balance: Check that member has sufficient balance to buy the order
             double memberBalance = MemberMapper.getBalance(currentMember.getMemberId(), connectionPool);
-            double totalOrderPrice = OrderMapper.PBgetOrderPrice(activeOrderNumber, connectionPool);
+            double totalOrderPrice = OrderMapper.getOrderPrice(activeOrderNumber, connectionPool);
             if (totalOrderPrice > memberBalance) {
                 ctx.attribute("errorMessage", "Der er ikke nok penge på din konto til at gennemføre ordren.");
                 ctx.render("errorAlreadyLogin.html");

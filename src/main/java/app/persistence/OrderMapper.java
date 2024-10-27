@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class OrderMapper {
 
     // Returns activeOrderNumber or -1 if there is no active order
-    public static int PBgetActiveOrderNumber(int memberId, ConnectionPool connectionPool) throws DatabaseException {
+    public static int getActiveOrderNumber(int memberId, ConnectionPool connectionPool) throws DatabaseException {
         int activeOrderNumber = -1;
 
         String sql = "SELECT order_number FROM member_order WHERE member_id = ? AND status = 'In progress'";
@@ -34,7 +34,7 @@ public class OrderMapper {
         return activeOrderNumber;
     }
 
-    public static int PBcreateActiveOrder(int memberId, ConnectionPool connectionPool) throws DatabaseException {
+    public static int createActiveOrder(int memberId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "INSERT INTO member_order (member_id, status, order_price) VALUES (?, 'In progress', 0) RETURNING order_number";
 
         try (Connection connection = connectionPool.getConnection();
@@ -56,7 +56,7 @@ public class OrderMapper {
     }
 
     // Updates orderPrice in database, by summing the price of all its orderlines
-    public static void PBupdateOrderPrice(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
+    public static void updateOrderPrice(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "UPDATE member_order " +
                 "SET order_price = COALESCE((SELECT SUM(orderline_price) FROM orderline WHERE order_number = ?), 0) " +
                 "WHERE order_number = ?";
@@ -78,7 +78,7 @@ public class OrderMapper {
 
     }
 
-    public static double PBgetOrderPrice(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
+    public static double getOrderPrice(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "SELECT order_price FROM member_order WHERE order_number = ?";
 
         try (Connection connection = connectionPool.getConnection();
