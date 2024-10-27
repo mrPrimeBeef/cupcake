@@ -9,6 +9,29 @@ import java.util.ArrayList;
 
 public class OrderMapper {
 
+    public static int PBcreateActiveOrder(int memberId, ConnectionPool connectionPool) throws DatabaseException {
+
+        int orderNumber = -1;
+
+        String sql = "INSERT INTO member_order (member_id, status, order_price) VALUES (?, 'In progress', 0) RETURNING order_number";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, memberId);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                orderNumber = rs.getInt("order_number");
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Error creating an active order");
+        }
+        return orderNumber;
+    }
+
+
     public static int createOrder(int memberId, Date orderDate, String status, double orderPrice, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "INSERT INTO member_order (member_id, date, status, order_price) VALUES (?, ?, ?, ?) RETURNING order_number";
         int orderNumber = -1;
@@ -31,6 +54,55 @@ public class OrderMapper {
         }
         return orderNumber;
     }
+
+
+    public static Order getActiveOrder(int memberId, ConnectionPool connectionPool) throws DatabaseException {
+        Order order = null;
+
+        String sql = "SELECT * FROM member_order WHERE member_id = ? AND status = 'In progress'";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, memberId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int orderNumber = rs.getInt("order_number");
+                Date date = rs.getDate("date");
+                String status = rs.getString("status");
+                double orderPrice = rs.getDouble("order_price");
+                order = new Order(orderNumber, memberId, date, status, orderPrice);
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Error getting active order");
+        }
+        return order;
+    }
+
+    public static int PBgetActiveOrderNumber(int memberId, ConnectionPool connectionPool) throws DatabaseException {
+
+        int orderNumber = -1;
+
+        String sql = "SELECT order_number FROM member_order WHERE member_id = ? AND status = 'In progress'";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, memberId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                orderNumber = rs.getInt("order_number");
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Error getting active order number");
+        }
+        return orderNumber;
+    }
+
 
     public static void updateOrderPrice(int orderNumber, double totalPrice, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "UPDATE member_order SET order_price = ? WHERE order_number = ?";
@@ -78,88 +150,6 @@ public class OrderMapper {
         }
     }
 
-    public static ArrayList<OrderMemberDto> getAllOrderMemberDtos(ConnectionPool connectionPool) throws DatabaseException {
-
-        ArrayList<OrderMemberDto> allOrderMemberDtos = new ArrayList<OrderMemberDto>();
-
-        String sql = "SELECT order_number, member_id, name, email, date, status, order_price FROM member_order JOIN member USING(member_id) ORDER BY order_number";
-
-        try (
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement ps = connection.prepareStatement(sql)
-        ) {
-
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                int orderNumber = rs.getInt("order_number");
-                int memberId = rs.getInt("member_id");
-                String memberName = rs.getString("name");
-                String memberEmail = rs.getString("email");
-                Date orderDate = rs.getDate("date");
-                String orderStatus = rs.getString("status");
-                double orderPrice = rs.getDouble("order_price");
-                allOrderMemberDtos.add(new OrderMemberDto(orderNumber, memberId, memberName, memberEmail, orderDate, orderStatus, orderPrice));
-            }
-        } catch (SQLException e) {
-            throw new DatabaseException("DB error in getAllOrderMemberDtos", e.getMessage());
-        }
-
-        return allOrderMemberDtos;
-    }
-
-    public static Order getActiveOrder(int memberId, ConnectionPool connectionPool) throws DatabaseException {
-        Order order = null;
-
-        String sql = "SELECT * FROM member_order WHERE member_id = ? AND status = 'In progress'";
-
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-
-            ps.setInt(1, memberId);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                int orderNumber = rs.getInt("order_number");
-                Date date = rs.getDate("date");
-                String status = rs.getString("status");
-                double orderPrice = rs.getDouble("order_price");
-                order = new Order(orderNumber, memberId, date, status, orderPrice);
-            }
-
-        } catch (SQLException e) {
-            throw new DatabaseException("Error getting active order");
-        }
-        return order;
-    }
-
-    public static OrderMemberDto getOrderMemberDtoByOrderNumber(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
-
-        OrderMemberDto orderMemberDto = null;
-
-        String sql = "SELECT order_number, member_id, name, email, date, status, order_price FROM member_order JOIN member USING(member_id) WHERE order_number=?";
-
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-
-            ps.setInt(1, orderNumber);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                int memberId = rs.getInt("member_id");
-                String memberName = rs.getString("name");
-                String memberEmail = rs.getString("email");
-                Date orderDate = rs.getDate("date");
-                String orderStatus = rs.getString("status");
-                double orderPrice = rs.getDouble("order_price");
-                orderMemberDto = new OrderMemberDto(orderNumber, memberId, memberName, memberEmail, orderDate, orderStatus, orderPrice);
-            }
-        } catch (SQLException e) {
-            throw new DatabaseException("DB fejl i getOrderMemberDtoByOrderNumbers", e.getMessage());
-        }
-
-        return orderMemberDto;
-
-    }
 
     public static ArrayList<Order> getOrdersByMemberId(int memberId, boolean includeActiveOrder, ConnectionPool connectionPool) throws DatabaseException {
 
@@ -192,5 +182,65 @@ public class OrderMapper {
         return orders;
 
     }
+
+    public static OrderMemberDto getOrderMemberDtoByOrderNumber(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
+
+        OrderMemberDto orderMemberDto = null;
+
+        String sql = "SELECT order_number, member_id, name, email, date, status, order_price FROM member_order JOIN member USING(member_id) WHERE order_number=?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, orderNumber);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int memberId = rs.getInt("member_id");
+                String memberName = rs.getString("name");
+                String memberEmail = rs.getString("email");
+                Date orderDate = rs.getDate("date");
+                String orderStatus = rs.getString("status");
+                double orderPrice = rs.getDouble("order_price");
+                orderMemberDto = new OrderMemberDto(orderNumber, memberId, memberName, memberEmail, orderDate, orderStatus, orderPrice);
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("DB fejl i getOrderMemberDtoByOrderNumbers", e.getMessage());
+        }
+
+        return orderMemberDto;
+
+    }
+
+
+    public static ArrayList<OrderMemberDto> getAllOrderMemberDtos(ConnectionPool connectionPool) throws DatabaseException {
+
+        ArrayList<OrderMemberDto> allOrderMemberDtos = new ArrayList<OrderMemberDto>();
+
+        String sql = "SELECT order_number, member_id, name, email, date, status, order_price FROM member_order JOIN member USING(member_id) ORDER BY order_number";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int orderNumber = rs.getInt("order_number");
+                int memberId = rs.getInt("member_id");
+                String memberName = rs.getString("name");
+                String memberEmail = rs.getString("email");
+                Date orderDate = rs.getDate("date");
+                String orderStatus = rs.getString("status");
+                double orderPrice = rs.getDouble("order_price");
+                allOrderMemberDtos.add(new OrderMemberDto(orderNumber, memberId, memberName, memberEmail, orderDate, orderStatus, orderPrice));
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("DB error in getAllOrderMemberDtos", e.getMessage());
+        }
+
+        return allOrderMemberDtos;
+    }
+
 
 }

@@ -12,7 +12,7 @@
 <div class="page">
     <h2 th:text="'Kære '+${session.currentMember.name}"></h2>
     <h2>Mange tak for dit køb</h2>
-    <p th:text="'Dit ordrenummer er: '+${session.currentOrder.orderNumber}"></p>
+    <p th:text="'Dit ordrenummer er: '+${activeOrderNumber}"></p>
     <p>Dine cupcakes er klar til afhentning næste hverdag kl. 12.00</p>
     <div class="tak-adresse">
         <p>Afhentningsadresse:</p>

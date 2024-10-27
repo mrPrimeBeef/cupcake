@@ -17,7 +17,7 @@ public class OrderController {
         app.post("bestil", ctx -> addToOrder(ctx, connectionPool));
         app.get("kurv", ctx -> showCart(ctx, connectionPool));
         app.get("/delete/{id}", ctx -> deleteOrderline(ctx, connectionPool));
-        app.post("tak", ctx -> thanks(ctx, connectionPool));
+        app.post("koeb", ctx -> attemptCheckout(ctx, connectionPool));
         app.get("ordredetaljer", ctx -> showOrder(ctx, connectionPool));
         app.get("mineordrer", ctx -> showAllOrders(ctx, connectionPool));
         app.get("adminordre", ctx -> adminShowOrder(ctx, connectionPool));
@@ -25,7 +25,7 @@ public class OrderController {
     }
 
 
-    private static void showOrderingPage(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+    private static void showOrderingPage(Context ctx, ConnectionPool connectionPool) {
         Member currentMember = ctx.sessionAttribute("currentMember");
         if (currentMember == null) {
             ctx.attribute("errorMessage", "Log ind for at bestille.");
@@ -38,82 +38,83 @@ public class OrderController {
 
             ctx.attribute("bottoms", bottoms);
             ctx.attribute("toppings", toppings);
+            ctx.render("bestil.html");
 
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der var et problem ved at hente siden pga. fejl ved at hente data.");
             ctx.render("errorAlreadyLogin.html");
-            return;
         }
-        ctx.render("bestil.html");
+
     }
 
 
-    private static void addToOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+    private static void addToOrder(Context ctx, ConnectionPool connectionPool) {
         Member currentMember = ctx.sessionAttribute("currentMember");
         if (currentMember == null) {
             ctx.attribute("errorMessage", "Log ind for at bestille.");
             ctx.render("error.html");
             return;
-        }
-        Order currentOrder = ctx.sessionAttribute("currentOrder");
-
-        if (currentOrder == null) {
-            Date date = new Date(System.currentTimeMillis());
-            int orderNumber = OrderMapper.createOrder(currentMember.getMemberId(), date, "In progress", 0, connectionPool);
-            currentOrder = new Order(orderNumber, currentMember.getMemberId(), date, "In progress", 0.0);
-            ctx.sessionAttribute("currentOrder", currentOrder);
         }
 
         int bottomId = Integer.parseInt(ctx.formParam("bund"));
         int toppingId = Integer.parseInt(ctx.formParam("topping"));
         int quantity = Integer.parseInt(ctx.formParam("antal"));
 
-        double bottomPrice = BottomMapper.getBottomById(bottomId, connectionPool).getBottomPrice();
-        double toppingPrice = ToppingMapper.getToppingById(toppingId, connectionPool).getToppingPrice();
-        double orderlinePrice = (toppingPrice + bottomPrice) * quantity;
+        try {
 
-        OrderlineMapper.createOrderline(currentOrder.getOrderNumber(), bottomId, toppingId, quantity, orderlinePrice, connectionPool);
+            double bottomPrice = BottomMapper.getBottomById(bottomId, connectionPool).getBottomPrice();
+            double toppingPrice = ToppingMapper.getToppingById(toppingId, connectionPool).getToppingPrice();
+            double orderlinePrice = (toppingPrice + bottomPrice) * quantity;
 
-        updateOrderPrice(currentOrder.getOrderNumber(), connectionPool);
-        showOrderingPage(ctx, connectionPool);
+            int activeOrderNumber = OrderMapper.PBgetActiveOrderNumber(currentMember.getMemberId(), connectionPool);
+            if (activeOrderNumber == -1) {
+                activeOrderNumber = OrderMapper.PBcreateActiveOrder(currentMember.getMemberId(), connectionPool);
+            }
+
+            OrderlineMapper.createOrderline(activeOrderNumber, bottomId, toppingId, quantity, orderlinePrice, connectionPool);
+            updateOrderPrice(activeOrderNumber, connectionPool);
+            showOrderingPage(ctx, connectionPool);
+
+        }
+        catch (DatabaseException e) {
+            ctx.attribute("errorMessage", "Der var et problem med at lægge i kurven.");
+            ctx.render("errorAlreadyLogin.html");
+        }
+
     }
 
-    private static boolean showCart(Context ctx, ConnectionPool connectionPool) {
+    private static void showCart(Context ctx, ConnectionPool connectionPool) {
         Member currentMember = ctx.sessionAttribute("currentMember");
         if (currentMember == null) {
             ctx.attribute("errorMessage", "Log ind for at bestille.");
             ctx.render("error.html");
-            return false;
-        }
-
-        boolean activeOrder = false;
-        Order currentOrder = ctx.sessionAttribute("currentOrder");
-
-        if (currentOrder == null) {
-            ctx.attribute("tomKurv", "Kurven er tom.");
-            ctx.render("kurv.html");
-            return activeOrder;
+            return;
         }
 
         try {
-            activeOrder = true;
 
-            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(currentOrder.getOrderNumber(), connectionPool);
+            int activeOrderNumber = OrderMapper.PBgetActiveOrderNumber(currentMember.getMemberId(), connectionPool);
+            if (activeOrderNumber == -1) {
+                ctx.attribute("tomKurv", "Kurven er tom.");
+                ctx.render("kurv.html");
+                return;
+            }
 
+            ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(activeOrderNumber, connectionPool);
             double totalPrice = 0;
             for (Orderline orderline : orderlines) {
                 totalPrice += orderline.getOrderlinePrice();
             }
+
             ctx.attribute("orderlines", orderlines);
             ctx.attribute("totalPrice", totalPrice);
+            ctx.render("kurv.html");
 
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der opstod et problem ved hentningen af dataen, prøv igen.");
             ctx.redirect("errorAlreadyLogin");
-            return false;
         }
-        ctx.render("kurv.html");
-        return activeOrder;
+
     }
 
 
@@ -122,31 +123,6 @@ public class OrderController {
         int orderlineId = Integer.parseInt(ctx.pathParam("id"));
         OrderMapper.deleteOrderline(orderlineId, connectionPool);
         ctx.redirect("/kurv");
-    }
-
-    private static boolean validateBalance(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        Member currentMember = ctx.sessionAttribute("currentMember");
-        if (currentMember == null) {
-            ctx.attribute("errorMessage", "Log ind for at bestille.");
-            ctx.render("error.html");
-            return false;
-        }
-
-        try {
-            double memberBalance = MemberMapper.getBalance(currentMember.getMemberId(), connectionPool);
-            double totalOrderPrice = OrderMapper.getActiveOrder(currentMember.getMemberId(), connectionPool).getPrice();
-
-            if (totalOrderPrice > memberBalance) {
-                return false;
-            }
-            double newBalance = currentMember.getBalance() - totalOrderPrice;
-            MemberMapper.updateMemberBalance(currentMember.getMemberId(), newBalance, connectionPool);
-        } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der opstod en fejl under hentning af orderlines.");
-            ctx.render("errorAlreadyLogin.html");
-            return false;
-        }
-        return true;
     }
 
     private static void updateOrderPrice(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
@@ -160,57 +136,83 @@ public class OrderController {
     }
 
 
-    private static void checkoutOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        Order currentOrder = ctx.sessionAttribute("currentOrder");
+//    private static void checkoutOrder(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+//        Order currentOrder = ctx.sessionAttribute("currentOrder");
+//
+//        if (currentOrder == null) {
+//            ctx.attribute("errorMessage", "Du har ikke nogen igangværende ordre.");
+//        }
+//        updateOrderPrice(currentOrder.getOrderNumber(), connectionPool);
+//        OrderMapper.updateOrderStatus(currentOrder.getOrderNumber(), "Completed", connectionPool);
+//    }
 
-        if (currentOrder == null) {
-            ctx.attribute("errorMessage", "Du har ikke nogen igangværende ordre.");
-        }
-        updateOrderPrice(currentOrder.getOrderNumber(), connectionPool);
-        OrderMapper.updateOrderStatus(currentOrder.getOrderNumber(), "Completed", connectionPool);
-    }
+    private static void attemptCheckout(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
+//        Order currentOrder = ctx.sessionAttribute("currentOrder");
 
+//        ctx.sessionAttribute("currentOrder", currentOrder);
 
-    private static void thanks(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
-        Order currentOrder = ctx.sessionAttribute("currentOrder");
         Member currentMember = ctx.sessionAttribute("currentMember");
-        ctx.sessionAttribute("currentOrder", currentOrder);
-
         if (currentMember == null) {
             ctx.attribute("errorMessage", "Log ind for at bestille.");
             ctx.render("error.html");
             return;
         }
 
-        if (currentOrder == null) {
-            // ctx.attribute("errorMessage", "læg noget i kurven for at købe");
-            ctx.sessionAttribute("errorMessage", "læg noget i kurven for at købe");
-            ctx.redirect("bestil");
+
+//        if (currentOrder == null) {
+//            // ctx.attribute("errorMessage", "læg noget i kurven for at købe");
+//            ctx.sessionAttribute("errorMessage", "læg noget i kurven for at købe");
+//            ctx.redirect("bestil");
+//            return;
+//        }
+
+        int activeOrderNumber = OrderMapper.PBgetActiveOrderNumber(currentMember.getMemberId(), connectionPool);
+        if (activeOrderNumber == -1) {
+            ctx.attribute("errorMessage", "læg noget i kurven for at købe");
+            showOrderingPage(ctx, connectionPool);
             return;
         }
 
-        ArrayList<Orderline> anyOrderlines = OrderlineMapper.getOrderlinesByOrderNumber(currentOrder.getOrderNumber(), connectionPool);
+        ArrayList<Orderline> anyOrderlines = OrderlineMapper.getOrderlinesByOrderNumber(activeOrderNumber, connectionPool);
         if (anyOrderlines.isEmpty()) {
             //ctx.attribute("errorMessage","læg noget i kurven for at købe" );
-            ctx.sessionAttribute("errorMessage", "læg noget i kurven for at købe");
-            ctx.redirect("bestil");
+//            ctx.sessionAttribute("errorMessage", "læg noget i kurven for at købe");
+//            ctx.redirect("bestil");
+            ctx.attribute("tomKurv", "Læg noget i kurven for at købe.");
+            ctx.render("kurv.html");
             return;
         }
 
-        try {
-            if (validateBalance(ctx, connectionPool)) {
-                checkoutOrder(ctx, connectionPool);
-                ctx.render("tak.html");
-                ctx.sessionAttribute("currentOrder", null);
-            } else {
-                ctx.attribute("errorMessage", "Ikke nok penge på kontoen til at gennemføre ordren.");
-                ctx.render("errorAlreadyLogin.html");
-            }
-
-        } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der opstod en fejl under behandlingen af din ordre.");
+        // Now lets try to validate the balance
+        double memberBalance = MemberMapper.getBalance(currentMember.getMemberId(), connectionPool);
+        double totalOrderPrice = OrderMapper.getActiveOrder(currentMember.getMemberId(), connectionPool).getPrice();
+        if (totalOrderPrice > memberBalance) {
+            ctx.attribute("errorMessage", "Ikke nok penge på kontoen til at gennemføre ordren.");
             ctx.render("errorAlreadyLogin.html");
+            return;
         }
+
+        double newBalance = memberBalance - totalOrderPrice;
+        MemberMapper.updateMemberBalance(currentMember.getMemberId(), newBalance, connectionPool);
+        OrderMapper.updateOrderStatus(activeOrderNumber, "Completed", connectionPool);
+        ctx.attribute("activeOrderNumber", activeOrderNumber);
+        ctx.render("tak.html");
+
+
+//        try {
+//            if (validateBalance(ctx, connectionPool)) {
+//                checkoutOrder(ctx, connectionPool);
+//                ctx.render("tak.html");
+////                ctx.sessionAttribute("currentOrder", null);
+//            } else {
+//                ctx.attribute("errorMessage", "Ikke nok penge på kontoen til at gennemføre ordren.");
+//                ctx.render("errorAlreadyLogin.html");
+//            }
+//
+//        } catch (DatabaseException e) {
+//            ctx.attribute("errorMessage", "Der opstod en fejl under behandlingen af din ordre.");
+//            ctx.render("errorAlreadyLogin.html");
+//        }
     }
 
     private static void showOrder(Context ctx, ConnectionPool connectionPool) {
