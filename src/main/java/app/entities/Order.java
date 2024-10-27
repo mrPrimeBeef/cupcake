@@ -3,6 +3,7 @@ package app.entities;
 import java.sql.Date;
 
 public class Order {
+
     private int orderNumber;
     private int memberId;
     private Date date;

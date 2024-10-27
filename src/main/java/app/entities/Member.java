@@ -1,6 +1,7 @@
 package app.entities;
 
 public class Member {
+
     private int memberId;
     private String name;
     private String email;

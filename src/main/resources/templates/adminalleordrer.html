@@ -23,7 +23,7 @@
             <th>Status</th>
             <th>Pris DKK</th>
         </tr>
-        <tr th:each="orderMemberDto: ${allOrderMemberDtos}">
+        <tr th:each="orderMemberDto: ${orderMemberDtos}">
             <td><a href="adminordre.html" th:href="@{/adminordre(ordrenr=${orderMemberDto.orderNumber})}"
                    th:text="${orderMemberDto.orderNumber}"></a></td>
             <td th:text="${orderMemberDto.memberId}"></td>

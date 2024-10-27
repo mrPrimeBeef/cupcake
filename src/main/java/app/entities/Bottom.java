@@ -1,6 +1,7 @@
 package app.entities;
 
 public class Bottom {
+
     private int bottom_id;
     private String bottom_name;
     private double bottom_price;

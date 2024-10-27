@@ -10,13 +10,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class BottomMapper {
+
     public static ArrayList<Bottom> getAllBottoms(ConnectionPool connectionPool) throws DatabaseException {
-        ArrayList<Bottom> bottomNames = new ArrayList<>();
+        ArrayList<Bottom> bottoms = new ArrayList<>();
 
         String sql = "SELECT * FROM bottom";
 
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)){
+             PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ResultSet rs = ps.executeQuery();
 
@@ -24,45 +25,38 @@ public class BottomMapper {
                 int buttomId = rs.getInt("bottom_id");
                 String bottomName = rs.getString("bottom_name");
                 double bottomPrice = rs.getDouble("bottom_price");
-
-                Bottom bottom = new Bottom(buttomId, bottomName, bottomPrice);
-
-                bottomNames.add(bottom);
+                bottoms.add(new Bottom(buttomId, bottomName, bottomPrice));
             }
 
-        } catch (SQLException e){
-            throw new DatabaseException("Error in getting bottom names from database", e.getMessage());
+        } catch (SQLException e) {
+            throw new DatabaseException("Error in getting bottoms from database", e.getMessage());
         }
-        return bottomNames;
+        return bottoms;
     }
 
-    public static Bottom getBottomById(int id, ConnectionPool connectionPool) throws DatabaseException {
+    public static Bottom getBottomById(int bottomId, ConnectionPool connectionPool) throws DatabaseException {
         Bottom bottom = null;
 
-        String sql = "SELECT * " +
-                     "FROM bottom WHERE bottom_id = ?";
+        String sql = "SELECT * FROM bottom WHERE bottom_id = ?";
 
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)){
+             PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            ps.setInt(1, id);
+            ps.setInt(1, bottomId);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                int bottomId = rs.getInt("bottom_id");
                 String bottomName = rs.getString("bottom_name");
                 double bottomPrice = rs.getDouble("bottom_price");
-
                 bottom = new Bottom(bottomId, bottomName, bottomPrice);
+            } else {
+                throw new DatabaseException("No bottom found with id: " + bottomId);
             }
 
-        } catch (SQLException e){
-            throw new DatabaseException("Error in getting bottom name from database", e.getMessage());
+        } catch (SQLException e) {
+            throw new DatabaseException("DB error when getting bottom with id: " + bottomId, e.getMessage());
         }
 
-        if (bottom == null) {
-            throw new DatabaseException("No bottom found with id: " + id);
-        }
         return bottom;
     }
 }

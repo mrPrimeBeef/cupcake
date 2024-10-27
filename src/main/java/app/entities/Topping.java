@@ -1,6 +1,7 @@
 package app.entities;
 
 public class Topping {
+
     private int toppingId;
     private String toppingName;
     private double toppingPrice;

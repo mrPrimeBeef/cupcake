@@ -21,20 +21,21 @@ public class OrderlineMapper {
             ps.setInt(3, toppingId);
             ps.setInt(4, quantity);
             ps.setDouble(5, orderlinePrice);
-            ps.executeUpdate();
 
-            // TODO: Check om det går godt
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 1) {
+                OrderMapper.PBupdateOrderPrice(orderNumber, connectionPool);
+            } else {
+                throw new DatabaseException("Error creating orderline for order number: " + orderNumber);
+            }
 
         } catch (SQLException e) {
             throw new DatabaseException("Error creating orderline for order number: " + orderNumber, e.getMessage());
         }
 
-        OrderMapper.PBupdateOrderPrice(orderNumber, connectionPool);
     }
 
-
     public static void PBdeleteOrderline(int orderlineId, ConnectionPool connectionPool) throws DatabaseException {
-
         String sql = "DELETE FROM orderline WHERE orderline_id = ? RETURNING order_number";
 
         try (Connection connection = connectionPool.getConnection();
@@ -57,6 +58,7 @@ public class OrderlineMapper {
 
     public static ArrayList<Orderline> getOrderlinesByOrderNumber(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<Orderline> orderlines = new ArrayList<>();
+
         String sql = "SELECT * FROM orderline WHERE order_number = ?";
 
         try (Connection connection = connectionPool.getConnection();

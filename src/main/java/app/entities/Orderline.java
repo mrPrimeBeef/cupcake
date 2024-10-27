@@ -1,6 +1,7 @@
 package app.entities;
 
 public class Orderline {
+
     private int orderlineId;
     private int orderNumber;
     private Bottom bottom;

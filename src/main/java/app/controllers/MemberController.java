@@ -58,7 +58,7 @@ public class MemberController {
         if (password1.equals(password2)) {
             try {
                 MemberMapper.createMember(name, email, mobile, password1, connectionPool);
-                ctx.attribute("message", "Du er hermed oprettet som bruger med emailen: " + email + ". Nu kan du logge ind.");
+                ctx.attribute("message", "Du er hermed oprettet som bruger med emailen: " + email);
                 ctx.render("login.html");
             } catch (DatabaseException e) {
                 ctx.attribute("message", "Email allerede i brug");
@@ -91,7 +91,7 @@ public class MemberController {
 
             ctx.render("adminkunde.html");
         } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der er sket en fejl: " + e.getMessage());
+            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data for kunde nummer: " + customerNumber);
             ctx.render("error.html");
         }
 
@@ -107,8 +107,8 @@ public class MemberController {
         }
 
         try {
-            ArrayList<Member> allCustomers = MemberMapper.getAllCostumers(connectionPool);
-            ctx.attribute("allCustomers", allCustomers);
+            ArrayList<Member> customers = MemberMapper.getAllCostumers(connectionPool);
+            ctx.attribute("customers", customers);
             ctx.render("adminallekunder.html");
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der er sket en fejl i at hente data");

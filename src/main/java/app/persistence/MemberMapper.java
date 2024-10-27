@@ -32,7 +32,7 @@ public class MemberMapper {
                 throw new DatabaseException("Forkert email eller adgangskode");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("DB fejl in login", e.getMessage());
+            throw new DatabaseException("DB error in login", e.getMessage());
         }
     }
 
@@ -64,10 +64,9 @@ public class MemberMapper {
     public static double getBalance(int memberId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "SELECT balance FROM member WHERE member_id=?";
 
-        try (
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement ps = connection.prepareStatement(sql)
-        ) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
             ps.setInt(1, memberId);
             ResultSet rs = ps.executeQuery();
 
@@ -78,7 +77,7 @@ public class MemberMapper {
                 throw new DatabaseException("Medlem ikke fundet.");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Databasefejl in getting balance: " + e.getMessage());
+            throw new DatabaseException("DB error in getting balance for memberId: " + memberId, e.getMessage());
         }
     }
 
@@ -90,20 +89,20 @@ public class MemberMapper {
 
             ps.setDouble(1, newBalance);
             ps.setInt(2, memberId);
-            int rowsAffected = ps.executeUpdate();
 
+            int rowsAffected = ps.executeUpdate();
             if (rowsAffected == 0) {
                 throw new DatabaseException("Member was not found.");
             }
+
         } catch (SQLException e) {
-            throw new DatabaseException("Error updating member balance.", e.getMessage());
+            throw new DatabaseException("Error updating member balance for memberId: " + memberId, e.getMessage());
         }
     }
 
 
     public static ArrayList<Member> getAllCostumers(ConnectionPool connectionPool) throws DatabaseException {
-
-        ArrayList<Member> allCostumers = new ArrayList<Member>();
+        ArrayList<Member> costumers = new ArrayList<>();
 
         String sql = "SELECT * FROM member WHERE role='customer' ORDER BY member_id";
 
@@ -120,13 +119,13 @@ public class MemberMapper {
                 String password = rs.getString("password");
                 String role = rs.getString("role");
                 double balance = rs.getInt("balance");
-                allCostumers.add(new Member(memberId, name, email, mobile, password, role, balance));
-
+                costumers.add(new Member(memberId, name, email, mobile, password, role, balance));
             }
         } catch (SQLException e) {
             throw new DatabaseException("DB error in getAllCostumers", e.getMessage());
         }
-        return allCostumers;
+
+        return costumers;
 
     }
 
@@ -136,12 +135,13 @@ public class MemberMapper {
 
         String sql = "SELECT * FROM member WHERE member_id=?";
 
-        try (
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement ps = connection.prepareStatement(sql)
-        ) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
             ps.setInt(1, memberId);
+
             ResultSet rs = ps.executeQuery();
+
             if (rs.next()) {
                 String name = rs.getString("name");
                 String email = rs.getString("email");

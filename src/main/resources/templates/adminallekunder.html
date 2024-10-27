@@ -22,7 +22,7 @@
             <th>Mobil</th>
             <th>Balance DKK</th>
         </tr>
-        <tr th:each="customer: ${allCustomers}">
+        <tr th:each="customer: ${customers}">
             <td th:text="${customer.memberId}"></td>
             <td th:text="${customer.name}"></td>
             <td><a href="adminkunde.html" th:href="@{/adminkunde(kundenr=${customer.memberId})}"
