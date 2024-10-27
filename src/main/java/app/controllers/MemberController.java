@@ -75,7 +75,7 @@ public class MemberController {
     private static void adminShowCustomer(Context ctx, ConnectionPool connectionPool) {
         Member currentMember = ctx.sessionAttribute("currentMember");
         if (currentMember == null || !currentMember.getRole().equals("admin")) {
-            ctx.attribute("errorMessage", "Kun for admin.");
+            ctx.attribute("errorMessage", "Kun adgang for admin.");
             ctx.render("error.html");
             return;
         }
@@ -102,7 +102,7 @@ public class MemberController {
     private static void adminShowAllCustomers(Context ctx, ConnectionPool connectionPool) {
         Member currentMember = ctx.sessionAttribute("currentMember");
         if (currentMember == null || !currentMember.getRole().equals("admin")) {
-            ctx.attribute("errorMessage", "Kun for admin.");
+            ctx.attribute("errorMessage", "Kun adgang for admin.");
             ctx.render("error.html");
             return;
         }
