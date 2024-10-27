@@ -72,7 +72,7 @@ public class OrderController {
             }
 
             OrderlineMapper.createOrderline(activeOrderNumber, bottomId, toppingId, quantity, orderlinePrice, connectionPool);
-            updateOrderPrice(activeOrderNumber, connectionPool);
+
             showOrderingPage(ctx, connectionPool);
 
         } catch (DatabaseException e) {
@@ -123,18 +123,8 @@ public class OrderController {
     private static void deleteOrderline(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
         // TODO: I rapporten kan vi skrive om hvad det farlige er ved delete ud fra GET request
         int orderlineId = Integer.parseInt(ctx.pathParam("id"));
-        OrderMapper.deleteOrderline(orderlineId, connectionPool);
+        OrderlineMapper.PBdeleteOrderline(orderlineId, connectionPool);
         ctx.redirect("/kurv");
-    }
-
-    private static void updateOrderPrice(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
-        ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(orderNumber, connectionPool);
-
-        double totalPrice = 0;
-        for (Orderline orderline : orderlines) {
-            totalPrice += orderline.getOrderlinePrice();
-        }
-        OrderMapper.updateOrderPrice(orderNumber, totalPrice, connectionPool);
     }
 
 

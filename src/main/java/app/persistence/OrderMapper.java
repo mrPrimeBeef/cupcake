@@ -54,21 +54,29 @@ public class OrderMapper {
     }
 
 
-    public static void updateOrderPrice(int orderNumber, double totalPrice, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "UPDATE member_order SET order_price = ? WHERE order_number = ?";
+    public static void PBupdateOrderPrice(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
+
+        String sql = "UPDATE member_order "+
+                "SET order_price = COALESCE((SELECT SUM(orderline_price) FROM orderline WHERE order_number = ?), 0) "+
+                "WHERE order_number = ?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            ps.setDouble(1, totalPrice);
+            ps.setInt(1, orderNumber);
             ps.setInt(2, orderNumber);
 
-            ps.executeUpdate();
+            int rowsAffected = ps.executeUpdate();
+            if(rowsAffected != 1) {
+                // TODO: Gør noget hvis det ikke er gået godt
+            }
 
         } catch (SQLException e) {
             throw new DatabaseException("Error updating order price for order number: " + orderNumber);
         }
+
     }
+
 
     public static double PBgetOrderPrice(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
 
@@ -108,21 +116,6 @@ public class OrderMapper {
 
         } catch (SQLException e) {
             throw new DatabaseException("Error updating order status for order number: " + orderNumber);
-        }
-    }
-
-    public static void deleteOrderline(int orderlineId, ConnectionPool connectionPool) throws DatabaseException {
-        try (Connection conn = connectionPool.getConnection()) {
-            String sql = "DELETE FROM orderline WHERE orderline_id = ?";
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setInt(1, orderlineId);
-                int rowsAffected = stmt.executeUpdate();
-                if (rowsAffected == 0) {
-                    throw new DatabaseException("Ingen ordrelinje blev slettet, kontrolér om ID'et findes.");
-                }
-            }
-        } catch (SQLException e) {
-            throw new DatabaseException("Fejl ved sletning af ordrelinje: " + e.getMessage());
         }
     }
 
