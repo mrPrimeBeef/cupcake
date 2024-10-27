@@ -122,7 +122,7 @@ public class OrderMapper {
 
     public static ArrayList<Order> getOrdersByMemberId(int memberId, boolean includeActiveOrder, ConnectionPool connectionPool) throws DatabaseException {
 
-        ArrayList<Order> orders = new ArrayList<Order>();
+        ArrayList<Order> orders = new ArrayList<>();
 
         String sql;
         if (includeActiveOrder) {
@@ -184,7 +184,7 @@ public class OrderMapper {
 
     public static ArrayList<OrderMemberDto> getAllOrderMemberDtos(ConnectionPool connectionPool) throws DatabaseException {
 
-        ArrayList<OrderMemberDto> allOrderMemberDtos = new ArrayList<OrderMemberDto>();
+        ArrayList<OrderMemberDto> allOrderMemberDtos = new ArrayList<>();
 
         String sql = "SELECT order_number, member_id, name, email, date, status, order_price FROM member_order JOIN member USING(member_id) ORDER BY order_number";
 
