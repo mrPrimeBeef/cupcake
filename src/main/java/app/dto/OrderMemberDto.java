@@ -26,7 +26,9 @@ public class OrderMemberDto {
         return orderNumber;
     }
 
-    public int getMemberId() {return memberId;}
+    public int getMemberId() {
+        return memberId;
+    }
 
     public String getMemberName() {
         return memberName;

@@ -1,15 +1,15 @@
 package app.controllers;
 
+import java.util.ArrayList;
+
+import io.javalin.Javalin;
+import io.javalin.http.Context;
 import app.entities.Member;
 import app.entities.Order;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.MemberMapper;
 import app.persistence.OrderMapper;
-import io.javalin.Javalin;
-import io.javalin.http.Context;
-
-import java.util.ArrayList;
 
 public class MemberController {
 
@@ -79,17 +79,16 @@ public class MemberController {
             return;
         }
 
-        // TODO: Håndter når query parameteren is null
         int customerNumber = Integer.parseInt(ctx.queryParam("kundenr"));
 
         try {
             Member customer = MemberMapper.getMemberById(customerNumber, connectionPool);
-            ctx.attribute("customer", customer);
-
             ArrayList<Order> orders = OrderMapper.getOrdersByMemberId(customerNumber, true, connectionPool);
-            ctx.attribute("orders", orders);
 
+            ctx.attribute("customer", customer);
+            ctx.attribute("orders", orders);
             ctx.render("adminkunde.html");
+
         } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der er sket en fejl i at hente data for kunde nummer: " + customerNumber);
             ctx.render("error.html");

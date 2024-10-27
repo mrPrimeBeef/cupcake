@@ -1,12 +1,12 @@
 package app.persistence;
 
+import java.util.ArrayList;
+import java.sql.*;
+
 import app.entities.Bottom;
 import app.entities.Topping;
 import app.entities.Orderline;
 import app.exceptions.DatabaseException;
-
-import java.sql.*;
-import java.util.ArrayList;
 
 public class OrderlineMapper {
 

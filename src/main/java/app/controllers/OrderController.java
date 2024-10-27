@@ -1,13 +1,13 @@
 package app.controllers;
 
+import java.util.ArrayList;
+
+import io.javalin.Javalin;
+import io.javalin.http.Context;
 import app.dto.OrderMemberDto;
 import app.entities.*;
 import app.exceptions.DatabaseException;
 import app.persistence.*;
-import io.javalin.Javalin;
-import io.javalin.http.Context;
-
-import java.util.ArrayList;
 
 public class OrderController {
 
@@ -22,7 +22,6 @@ public class OrderController {
         app.get("adminordre", ctx -> adminShowOrder(ctx, connectionPool));
         app.get("adminalleordrer", ctx -> adminShowAllOrders(ctx, connectionPool));
     }
-
 
     private static void showOrderingPage(Context ctx, ConnectionPool connectionPool) {
         Member currentMember = ctx.sessionAttribute("currentMember");
@@ -119,13 +118,11 @@ public class OrderController {
     }
 
     private static void deleteOrderline(Context ctx, ConnectionPool connectionPool) {
-        // TODO: I rapporten kan vi skrive om hvad det farlige er ved delete ud fra GET request
         int orderlineId = Integer.parseInt(ctx.pathParam("id"));
         try {
             OrderlineMapper.deleteOrderline(orderlineId, connectionPool);
             ctx.redirect("/kurv");
-        }
-        catch (DatabaseException e) {
+        } catch (DatabaseException e) {
             ctx.attribute("errorMessage", "Der opstod et problem med at slette ordrelinjen.");
             ctx.render("errorAlreadyLogin.html");
         }
@@ -135,7 +132,7 @@ public class OrderController {
     private static void attemptCheckout(Context ctx, ConnectionPool connectionPool) {
         Member currentMember = ctx.sessionAttribute("currentMember");
         if (currentMember == null) {
-            ctx.attribute("errorMessage", "Log ind for at bestille.");
+            ctx.attribute("errorMessage", "Log ind for at købe.");
             ctx.render("error.html");
             return;
         }
@@ -180,18 +177,22 @@ public class OrderController {
 
     private static void showOrder(Context ctx, ConnectionPool connectionPool) {
         Member currentMember = ctx.sessionAttribute("currentMember");
-        // TODO: Her skal være et check så currentMember kun har lov til at se sine egne ordre. Ikke andres.
         if (currentMember == null) {
             ctx.attribute("errorMessage", "Log ind for at se ordredetaljer.");
             ctx.render("error.html");
             return;
         }
 
-        // TODO: Håndter når query parameteren is null
         int orderNumber = Integer.parseInt(ctx.queryParam("ordrenr"));
 
         try {
             OrderMemberDto orderMemberDto = OrderMapper.getOrderMemberDtoByOrderNumber(orderNumber, connectionPool);
+            if (currentMember.getMemberId() != orderMemberDto.getMemberId()) {
+                ctx.attribute("errorMessage", "Du har ikke rettigheder til at se denne ordrer");
+                ctx.render("errorAlreadyLogin.html");
+                return;
+            }
+
             ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(orderNumber, connectionPool);
 
             ctx.attribute("orderMemberDto", orderMemberDto);
@@ -231,7 +232,6 @@ public class OrderController {
             return;
         }
 
-        // TODO: Håndter når query parameteren is null
         int orderNumber = Integer.parseInt(ctx.queryParam("ordrenr"));
 
         try {

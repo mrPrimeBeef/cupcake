@@ -181,12 +181,12 @@ class OrderlineMapperTest {
     void getOrderlinesByOrderNumber() throws DatabaseException {
         ArrayList<Orderline> orderlines = new ArrayList<>();
 
-        orderlines = OrderlineMapper.getOrderlinesByOrderNumber(1,connectionPool);
+        orderlines = OrderlineMapper.getOrderlinesByOrderNumber(1, connectionPool);
 
         assertEquals(1, orderlines.size());
         assertEquals(1, orderlines.get(0).getOrderNumber());
         assertEquals(2, orderlines.get(0).getQuantity());
-        assertEquals(20,orderlines.get(0).getOrderlinePrice());
+        assertEquals(20, orderlines.get(0).getOrderlinePrice());
     }
 
     @Test
@@ -198,9 +198,9 @@ class OrderlineMapperTest {
 //        Orderline orderlines = new Orderline(1, bottom,topping,4,40);
 //        OrderlineMapper.createOrderline(orderlines, connectionPool);
 
-        OrderlineMapper.createOrderline(1,bottom.getBottomId(), topping.getToppingId(), 4,40,connectionPool);
+        OrderlineMapper.createOrderline(1, bottom.getBottomId(), topping.getToppingId(), 4, 40, connectionPool);
 
-        Orderline actual = OrderlineMapper.getOrderlinesByOrderNumber(1,connectionPool).get(1);
+        Orderline actual = OrderlineMapper.getOrderlinesByOrderNumber(1, connectionPool).get(1);
 
 //        assertEquals(orderlines.getQuantity(),actual.getQuantity());
         assertEquals(true, false);
