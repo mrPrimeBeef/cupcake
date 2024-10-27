@@ -31,56 +31,6 @@ public class OrderMapper {
         return orderNumber;
     }
 
-
-    public static int createOrder(int memberId, Date orderDate, String status, double orderPrice, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "INSERT INTO member_order (member_id, date, status, order_price) VALUES (?, ?, ?, ?) RETURNING order_number";
-        int orderNumber = -1;
-
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-
-            ps.setInt(1, memberId);
-            ps.setDate(2, new java.sql.Date(orderDate.getTime()));
-            ps.setString(3, status);
-            ps.setDouble(4, orderPrice);
-
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                orderNumber = rs.getInt("order_number");
-            }
-
-        } catch (SQLException e) {
-            throw new DatabaseException("Error creating a new order");
-        }
-        return orderNumber;
-    }
-
-
-    public static Order getActiveOrder(int memberId, ConnectionPool connectionPool) throws DatabaseException {
-        Order order = null;
-
-        String sql = "SELECT * FROM member_order WHERE member_id = ? AND status = 'In progress'";
-
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-
-            ps.setInt(1, memberId);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                int orderNumber = rs.getInt("order_number");
-                Date date = rs.getDate("date");
-                String status = rs.getString("status");
-                double orderPrice = rs.getDouble("order_price");
-                order = new Order(orderNumber, memberId, date, status, orderPrice);
-            }
-
-        } catch (SQLException e) {
-            throw new DatabaseException("Error getting active order");
-        }
-        return order;
-    }
-
     public static int PBgetActiveOrderNumber(int memberId, ConnectionPool connectionPool) throws DatabaseException {
 
         int orderNumber = -1;
@@ -118,6 +68,32 @@ public class OrderMapper {
         } catch (SQLException e) {
             throw new DatabaseException("Error updating order price for order number: " + orderNumber);
         }
+    }
+
+    public static double PBgetOrderPrice(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
+
+        // TODO: Færdiggør denne metode
+        String sql = "SELECT order_price FROM member_order WHERE order_number = ?";
+
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, orderNumber);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                double orderPrice = rs.getDouble("order_price");
+                return orderPrice;
+            }
+            // TODO: Tilføj hvad der skal ske hvis orderNumber ikke findes
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Error getting order price for order number: "+orderNumber);
+        }
+
+        // TODO: Check om dette er smart at gøre
+        return -1;
+
     }
 
     public static void updateOrderStatus(int orderNumber, String status, ConnectionPool connectionPool) throws DatabaseException {

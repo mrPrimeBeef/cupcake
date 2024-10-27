@@ -100,10 +100,13 @@ public class OrderController {
             }
 
             ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(activeOrderNumber, connectionPool);
-            double totalPrice = 0;
-            for (Orderline orderline : orderlines) {
-                totalPrice += orderline.getOrderlinePrice();
+            if (orderlines.isEmpty()) {
+                ctx.attribute("tomKurv", "Kurven er tom.");
+                ctx.render("kurv.html");
+                return;
             }
+
+            double totalPrice = OrderMapper.PBgetOrderPrice(activeOrderNumber, connectionPool);
 
             ctx.attribute("orderlines", orderlines);
             ctx.attribute("totalPrice", totalPrice);
@@ -161,7 +164,7 @@ public class OrderController {
 
             // Now lets try to validate the balance
             double memberBalance = MemberMapper.getBalance(currentMember.getMemberId(), connectionPool);
-            double totalOrderPrice = OrderMapper.getActiveOrder(currentMember.getMemberId(), connectionPool).getPrice();
+            double totalOrderPrice = OrderMapper.PBgetOrderPrice(activeOrderNumber, connectionPool);
             if (totalOrderPrice > memberBalance) {
                 ctx.attribute("errorMessage", "Ikke nok penge på kontoen til at gennemføre ordren.");
                 ctx.render("errorAlreadyLogin.html");
