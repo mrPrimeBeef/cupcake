@@ -35,7 +35,6 @@ public class MemberController {
                 ctx.redirect("adminalleordrer");
                 return;
             }
-
             ctx.redirect("bestil");
 
         } catch (DatabaseException e) {

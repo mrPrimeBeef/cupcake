@@ -31,7 +31,7 @@ public class ToppingMapper {
             }
 
         } catch (SQLException e){
-            throw new DatabaseException("Error in getting topping names from database");
+            throw new DatabaseException("Error in getting topping names from database", e.getMessage());
         }
         return bottomNames;
     }
@@ -57,7 +57,7 @@ public class ToppingMapper {
             }
 
         } catch (SQLException e){
-            throw new DatabaseException("Error in getting topping name from database");
+            throw new DatabaseException("Error in getting topping name from database", e.getMessage());
         }
 
         if (topping == null) {

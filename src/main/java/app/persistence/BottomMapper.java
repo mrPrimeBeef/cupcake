@@ -31,7 +31,7 @@ public class BottomMapper {
             }
 
         } catch (SQLException e){
-            throw new DatabaseException("Error in getting bottom names from database");
+            throw new DatabaseException("Error in getting bottom names from database", e.getMessage());
         }
         return bottomNames;
     }
@@ -57,7 +57,7 @@ public class BottomMapper {
             }
 
         } catch (SQLException e){
-            throw new DatabaseException("Error in getting bottom name from database");
+            throw new DatabaseException("Error in getting bottom name from database", e.getMessage());
         }
 
         if (bottom == null) {

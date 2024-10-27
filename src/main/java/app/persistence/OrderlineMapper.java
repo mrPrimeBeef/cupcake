@@ -26,7 +26,7 @@ public class OrderlineMapper {
             // TODO: Check om det går godt
 
         } catch (SQLException e) {
-            throw new DatabaseException("Error creating orderline for order number: " + orderNumber);
+            throw new DatabaseException("Error creating orderline for order number: " + orderNumber, e.getMessage());
         }
 
         OrderMapper.PBupdateOrderPrice(orderNumber, connectionPool);
@@ -51,7 +51,7 @@ public class OrderlineMapper {
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl ved sletning af ordrelinje: " + orderlineId);
+            throw new DatabaseException("Fejl ved sletning af ordrelinje: " + orderlineId, e.getMessage());
         }
     }
 
@@ -79,7 +79,7 @@ public class OrderlineMapper {
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Error retrieving orderlines for order number: " + orderNumber);
+            throw new DatabaseException("Error retrieving orderlines for order number: " + orderNumber, e.getMessage());
         }
         return orderlines;
     }

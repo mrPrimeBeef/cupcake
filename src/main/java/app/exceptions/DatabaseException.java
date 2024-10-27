@@ -12,6 +12,6 @@ public class DatabaseException extends Exception
     {
         super(userMessage);
         System.out.println("userMessage: " + userMessage);
-        System.out.println("errorMessage: " + systemMessage);
+        System.out.println("systemMessage: " + systemMessage);
     }
 }

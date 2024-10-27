@@ -14,10 +14,9 @@ public class MemberMapper {
     public static Member login(String email, String password, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "SELECT * FROM member WHERE email=? AND password=?";
 
-        try (
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement ps = connection.prepareStatement(sql)
-        ) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
             ps.setString(1, email);
             ps.setString(2, password);
 
@@ -40,10 +39,9 @@ public class MemberMapper {
     public static void createMember(String name, String email, String mobile, String password, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "INSERT INTO member (name, email, mobile, password, balance) VALUES (?,?,?,?,0)";
 
-        try (
-                Connection connection = connectionPool.getConnection();
-                PreparedStatement ps = connection.prepareStatement(sql)
-        ) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
             ps.setString(1, name);
             ps.setString(2, email);
             ps.setString(3, mobile);

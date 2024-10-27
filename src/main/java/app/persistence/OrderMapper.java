@@ -26,7 +26,7 @@ public class OrderMapper {
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Error creating an active order");
+            throw new DatabaseException("Error creating an active order", e.getMessage());
         }
         return orderNumber;
     }
@@ -48,7 +48,7 @@ public class OrderMapper {
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Error getting active order number");
+            throw new DatabaseException("Error getting active order number", e.getMessage());
         }
         return orderNumber;
     }
@@ -72,7 +72,7 @@ public class OrderMapper {
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Error updating order price for order number: " + orderNumber);
+            throw new DatabaseException("Error updating order price for order number: " + orderNumber, e.getMessage());
         }
 
     }
@@ -96,7 +96,7 @@ public class OrderMapper {
             // TODO: Tilføj hvad der skal ske hvis orderNumber ikke findes
 
         } catch (SQLException e) {
-            throw new DatabaseException("Error getting order price for order number: "+orderNumber);
+            throw new DatabaseException("Error getting order price for order number: "+orderNumber, e.getMessage());
         }
 
         // TODO: Check om dette er smart at gøre
@@ -115,7 +115,7 @@ public class OrderMapper {
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            throw new DatabaseException("Error updating order status for order number: " + orderNumber);
+            throw new DatabaseException("Error updating order status for order number: " + orderNumber, e.getMessage());
         }
     }
 
