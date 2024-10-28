@@ -99,6 +99,10 @@ header .header-text {
 }
 
 /*login.html styling*/
+#login-form{
+    text-align: center;
+}
+
 .error {
     color: red;
 }
