@@ -239,7 +239,7 @@ label{
 }
 /* kurv.html styling*/
 
-.cart-table, th, td {
+.cart-table, .admin-tabel, th, td {
     margin: auto;
     margin-top: 35px;
     font-size: 15px;

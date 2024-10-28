@@ -39,8 +39,15 @@
         <a href="login.html" class="header-link" th:if="${#ctx.session.currentMember} != null" th:href="@{/logout}">Logud</a>
         <span class="admin-email" th:text="'Admin: ' + ${session.currentMember.email}"></span>
     </div>
-
 </header>
+
+<header th:fragment="headerNoNavbar">
+    <div class="headerimage">
+        <img src="/public/images/logo.png" th:src="@{/images/logo.png}" width="100" height="100"/>
+        <img src="/public/images/cupcakelogo.png" th:src="@{/images/cupcakelogo.png}" width="40%" height="75%"/>
+    </div>
+</header>
+
 <footer th:fragment="footer" class="footer-container">
     <div class="adresse">
         <p>Olsker Cupcakes <br>Olsker Hovedgade 10 <br>3770 Allinge <br>CVR-nr. 08 08 08 08</p>
