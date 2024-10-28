@@ -10,6 +10,7 @@
 
 <body>
 <header th:replace="fragments :: headerAdmin"></header>
+<div class="page">
 <h1 class="admin-centertext" th:text="'Ordrenr. ' + ${orderMemberDto.orderNumber}"></h1>
 
 <table class="admin-tabel">
@@ -59,5 +60,6 @@
 </div>
 
 <footer th:replace="fragments :: footer"></footer>
+</div>
 </body>
 </html>
