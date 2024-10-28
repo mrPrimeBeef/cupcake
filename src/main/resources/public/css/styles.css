@@ -5,7 +5,7 @@
 }
 
 html, body {
-    height: 100%;
+    min-height: 100%;
     width: 100%;
     margin: 0;
     background-color: #F9D9BB;
@@ -19,67 +19,70 @@ html, body {
     font-weight: bold;
     align-items: center;
     justify-content: center;
+    padding: 20px;
+    min-height: 100%;
+    margin: 0 auto 130px;
 }
 
-/*fragment styling*/
-header .header-text, .admin-text {
+header .header-text {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     height: 38px;
     background-color: #F5A582;
-    padding-top: 14px;
-    padding-bottom: 10px;
+    padding: 10px 20px;
 }
 
-.headerimage, .admin-image {
+.header-img-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.size{
+    height: 100px;
+    width: 100px;
+}
+
+
+.headerimage {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+}
+
+.center-logo {
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #F5BA83;
-    height: 18vh;
 }
 
-.header-link, .cart-icon, .email {
+.headerimage img, .center-logo img {
+    max-height: 100%;
+}
+
+.header-text .left,
+.header-text .right {
     display: flex;
-    color: black;
-    text-decoration: none;
-    font-weight: bold;
     align-items: center;
 }
 
-.left {
-    display: flex;
-    justify-content: flex-end;
-
+.header-text .left {
+    gap: 20px;
 }
 
-.right {
-    display: flex;
-    justify-content: flex-end;
-    margin-left: 10%;
+.header-text .right {
+    gap: 15px;
 }
 
-.email {
-    margin-left: 20px;
-}
-
-.cart-icon{
-    font-size: 20px;
-}
-
-.admin-link {
-    display: flex;
+.header-link, .email, .cart-icon {
     color: black;
     text-decoration: none;
     font-weight: bold;
-    margin-left: 25%;
 }
 
-.admin-email {
-    display: flex;
-    justify-content: flex-end;
-    margin-right: 25%;
+.cart-icon {
+    font-size: 20px;
 }
 
 /*footer styling*/
@@ -92,6 +95,7 @@ header .header-text, .admin-text {
     left: 0;
     bottom: 0;
     width: 100%;
+    height: 130px;
 }
 
 /*login.html styling*/
