@@ -366,3 +366,8 @@ tr:nth-of-type(even) {
     margin-bottom: 2px;
     text-align: center;
 }
+
+.middle{
+    display: flex;
+    justify-content: center;
+}
