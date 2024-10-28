@@ -45,8 +45,8 @@
     </div>
     <div class="header-text">
         <div class="left">
-            <a href="adminalleordrer.html" class="admin-link" th:href="@{/adminalleordrer}">Ordrer</a>
-            <a href="adminallekunder.html" class="admin-link" th:href="@{/adminallekunder}">Kunder</a>
+            <a href="adminalleordrer.html" class="header-link" th:href="@{/adminalleordrer}">Ordrer</a>
+            <a href="adminallekunder.html" class="header-link" th:href="@{/adminallekunder}">Kunder</a>
         </div>
         <div class="right">
             <a href="login.html" class="header-link" th:if="${#ctx.session.currentMember} != null" th:href="@{/logout}">Logud</a>
@@ -56,9 +56,14 @@
 </header>
 
 <header th:fragment="headerNoNavbar">
-    <div class="headerimage">
-        <img src="/public/images/logo.png" th:src="@{/images/logo.png}" width="100" height="100"/>
-        <img src="/public/images/cupcakelogo.png" th:src="@{/images/cupcakelogo.png}" width="40%" height="75%"/>
+    <div class="header-img-container">
+        <div class="headerimage">
+            <img src="/public/images/logo.png" th:src="@{/images/logo.png}" width="100" height="100"/>
+        </div>
+        <div class="center-logo">
+            <img src="/public/images/cupcakelogo.png" th:src="@{/images/cupcakelogo.png}" width="40%" height="75%"/>
+        </div>
+        <div class="size"></div>
     </div>
 </header>
 
