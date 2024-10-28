@@ -10,7 +10,6 @@
     <link rel="icon" type="image/x-icon" href="/images/cupcake.ico">
 </head>
 <body>
-
 <header th:fragment="headerFragment">
     <div class="header-img-container">
     <div class="headerimage">
@@ -56,6 +55,12 @@
     </div>
 </header>
 
+<header th:fragment="headerNoNavbar">
+    <div class="headerimage">
+        <img src="/public/images/logo.png" th:src="@{/images/logo.png}" width="100" height="100"/>
+        <img src="/public/images/cupcakelogo.png" th:src="@{/images/cupcakelogo.png}" width="40%" height="75%"/>
+    </div>
+</header>
 
 <footer th:fragment="footer" class="footer-container">
     <div class="adresse">
