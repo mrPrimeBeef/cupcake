@@ -4,36 +4,36 @@
     <title>Login</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
     <link rel="icon" type="image/x-icon" href="/images/cupcake.ico">
 </head>
 <body>
 <header>
     <div class="headerimage">
-    <img th:src="@{/images/logo.png}" src="/public/images/logo.png" width="100" height="100"/>
-    <img th:src="@{/images/cupcakelogo.png}" src="/public/images/cupcakelogo.png" width="40%" height="75%"/>
-</div>
+        <img th:src="@{/images/logo.png}" src="/public/images/logo.png" width="100" height="100"/>
+        <img th:src="@{/images/cupcakelogo.png}" src="/public/images/cupcakelogo.png" width="40%" height="75%"/>
+    </div>
 </header>
 <div class="page">
-<h1 id="velkommen">Velkommen til Olsker Cupcakes</h1>
-<h2 id="log-text">Log ind med din email og adgangskode</h2>
+    <h1 id="velkommen">Velkommen til Olsker Cupcakes</h1>
+    <h2 id="log-text">Log ind med din email og adgangskode</h2>
 
-<form method="post">
+    <form id="login-form" method="post">
 
-    <label for="email">Email</label><br>
-    <input type="email" id="email" name="email" placeholder="Email" required/><br>
+        <label for="email">Email</label><br>
+        <input type="email" id="email" name="email" placeholder="Email" required/><br>
 
-    <label for="password">Adgangskode</label><br>
-    <input type="password" id="password" name="password" placeholder="Adgangskode" required/><br>
+        <label for="password">Adgangskode</label><br>
+        <input type="password" id="password" name="password" placeholder="Adgangskode" required/><br>
 
-    <p class="error" th:text="${message}"></p>
+        <p class="error" th:text="${message}"></p>
 
-    <button id="sub_button" type="submit" formaction="/login">Log ind</button>
+        <button id="sub_button" type="submit" formaction="/login">Log ind</button>
 
-</form>
-
-<p class="opret-bruger">Ikke bruger endnu? <a href="opretbruger.html" th:href="@{/opretbruger}">Opret bruger</a></p>
-<footer th:replace="~{fragments :: footer}"></footer>
+    </form>
+    
+    <p class="opret-bruger">Ikke bruger endnu? <a href="opretbruger.html" th:href="@{/opretbruger}">Opret bruger</a></p>
+    <footer th:replace="~{fragments :: footer}"></footer>
 </div>
 </body>
 </html>
