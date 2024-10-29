@@ -1,19 +1,20 @@
 @startuml
-object login
-object member
-object memberOrder
-object orderline
-object cupcake
-object bottom
-object topping
-object cart
+object Kunde
+object Ordre
+object Ordrelinje {
+    +Bund
+    +Top
+    +Antal
+    +Pris for dette antal
+}
+object Cupcake
+object Bund
+object Top
 
-member *-- cart
-cart *-- memberOrder
-login *-- member
-memberOrder *-- orderline
-orderline *-- cupcake
-cupcake *-- bottom
-cupcake o-- topping
+Kunde "1" -- "0..*" Ordre
+Ordre "1" -- "1..*" Ordrelinje
+Ordrelinje "1" -- "1" Cupcake
+Cupcake "0..*" -- "1" Bund
+Cupcake "0..*" -- "1" Top
 
 @enduml
