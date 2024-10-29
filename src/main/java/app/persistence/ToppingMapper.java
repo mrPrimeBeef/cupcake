@@ -56,7 +56,6 @@ public class ToppingMapper {
         } catch (SQLException e) {
             throw new DatabaseException("DB error when getting topping with id: " + toppingId, e.getMessage());
         }
-
         return topping;
     }
 }

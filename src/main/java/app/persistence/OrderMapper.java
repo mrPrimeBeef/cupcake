@@ -2,15 +2,14 @@ package app.persistence;
 
 import java.util.ArrayList;
 import java.sql.*;
-
 import app.dto.OrderMemberDto;
 import app.entities.*;
 import app.exceptions.DatabaseException;
 
 public class OrderMapper {
 
-    // Returns activeOrderNumber or -1 if there is no active order
     public static int getActiveOrderNumber(int memberId, ConnectionPool connectionPool) throws DatabaseException {
+        // Returns activeOrderNumber or -1 if there is no active order
         int activeOrderNumber = -1;
 
         String sql = "SELECT order_number FROM member_order WHERE member_id = ? AND status = 'In progress'";
@@ -27,7 +26,6 @@ public class OrderMapper {
             if (rs.next()) {
                 throw new DatabaseException("More than one active order for member with id: " + memberId);
             }
-
         } catch (SQLException e) {
             throw new DatabaseException("Error getting active order for member with id: " + memberId, e.getMessage());
         }
@@ -55,11 +53,10 @@ public class OrderMapper {
         }
     }
 
-    // Updates orderPrice in database, by summing the price of all its orderlines
     public static void updateOrderPrice(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "UPDATE member_order " +
-                "SET order_price = COALESCE((SELECT SUM(orderline_price) FROM orderline WHERE order_number = ?), 0) " +
-                "WHERE order_number = ?";
+                     "SET order_price = COALESCE((SELECT SUM(orderline_price) FROM orderline WHERE order_number = ?), 0) " +
+                     "WHERE order_number = ?";
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -71,11 +68,9 @@ public class OrderMapper {
             if (rowsAffected == 0) {
                 throw new DatabaseException("Error updating order price for order number: " + orderNumber);
             }
-
         } catch (SQLException e) {
             throw new DatabaseException("Error updating order price for order number: " + orderNumber, e.getMessage());
         }
-
     }
 
     public static double getOrderPrice(int orderNumber, ConnectionPool connectionPool) throws DatabaseException {
@@ -97,7 +92,6 @@ public class OrderMapper {
         } catch (SQLException e) {
             throw new DatabaseException("Error getting order price for order number: " + orderNumber, e.getMessage());
         }
-
     }
 
     public static void updateOrderStatus(int orderNumber, String status, ConnectionPool connectionPool) throws DatabaseException {
@@ -113,12 +107,10 @@ public class OrderMapper {
             if (rowsAffected == 0) {
                 throw new DatabaseException("Error updating order status for order number: " + orderNumber);
             }
-
         } catch (SQLException e) {
             throw new DatabaseException("Error updating order status for order number: " + orderNumber, e.getMessage());
         }
     }
-
 
     public static ArrayList<Order> getOrdersByMemberId(int memberId, boolean includeActiveOrder, ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<Order> orders = new ArrayList<>();
@@ -146,7 +138,6 @@ public class OrderMapper {
         } catch (SQLException e) {
             throw new DatabaseException("DB error in getOrdersByMemberId", e.getMessage());
         }
-
         return orders;
     }
 
@@ -174,9 +165,7 @@ public class OrderMapper {
         } catch (SQLException e) {
             throw new DatabaseException("DB error when getting OrderMemberDto for order number: " + orderNumber, e.getMessage());
         }
-
     }
-
 
     public static ArrayList<OrderMemberDto> getAllOrderMemberDtos(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<OrderMemberDto> orderMemberDtos = new ArrayList<>();
@@ -200,9 +189,6 @@ public class OrderMapper {
         } catch (SQLException e) {
             throw new DatabaseException("DB error in getAllOrderMemberDtos", e.getMessage());
         }
-
         return orderMemberDtos;
     }
-
-
 }

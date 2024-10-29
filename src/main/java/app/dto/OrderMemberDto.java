@@ -62,5 +62,4 @@ public class OrderMemberDto {
                 ", orderPrice=" + orderPrice +
                 '}';
     }
-
 }

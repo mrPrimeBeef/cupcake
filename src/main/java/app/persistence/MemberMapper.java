@@ -29,10 +29,10 @@ public class MemberMapper {
                 int balance = rs.getInt("balance");
                 return new Member(memberId, name, email, mobile, password, role, balance);
             } else {
-                throw new DatabaseException("Forkert email eller adgangskode");
+                throw new DatabaseException("Forkert email eller adgangskode.");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("DB error in login", e.getMessage());
+            throw new DatabaseException("DB error in login.", e.getMessage());
         }
     }
 
@@ -49,17 +49,16 @@ public class MemberMapper {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected != 1) {
-                throw new DatabaseException("Fejl ved oprettelse af ny bruger");
+                throw new DatabaseException("Fejl ved oprettelse af ny bruger.");
             }
         } catch (SQLException e) {
-            String msg = "Der er sket en fejl. Prøv igen";
+            String msg = "Der er sket en fejl. Prøv igen.";
             if (e.getMessage().startsWith("ERROR: duplicate key value ")) {
-                msg = "Email allerede i brug";
+                msg = "Emailen er allerede i brug.";
             }
             throw new DatabaseException(msg, e.getMessage());
         }
     }
-
 
     public static double getBalance(int memberId, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "SELECT balance FROM member WHERE member_id=?";
@@ -74,7 +73,7 @@ public class MemberMapper {
                 int memberBalance = rs.getInt("balance");
                 return memberBalance;
             } else {
-                throw new DatabaseException("Medlem ikke fundet.");
+                throw new DatabaseException("Member not found for member: " + memberId);
             }
         } catch (SQLException e) {
             throw new DatabaseException("DB error in getting balance for memberId: " + memberId, e.getMessage());
@@ -100,7 +99,6 @@ public class MemberMapper {
         }
     }
 
-
     public static ArrayList<Member> getAllCostumers(ConnectionPool connectionPool) throws DatabaseException {
         ArrayList<Member> costumers = new ArrayList<>();
 
@@ -122,13 +120,10 @@ public class MemberMapper {
                 costumers.add(new Member(memberId, name, email, mobile, password, role, balance));
             }
         } catch (SQLException e) {
-            throw new DatabaseException("DB error in getAllCostumers", e.getMessage());
+            throw new DatabaseException("DB error in getAllCostumers method.", e.getMessage());
         }
-
         return costumers;
-
     }
-
 
     public static Member getMemberById(int memberId, ConnectionPool connectionPool) throws DatabaseException {
         Member member = null;
@@ -139,7 +134,6 @@ public class MemberMapper {
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setInt(1, memberId);
-
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {

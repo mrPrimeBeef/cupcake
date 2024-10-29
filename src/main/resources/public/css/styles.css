@@ -1,4 +1,3 @@
-
 /*general styling*/
 * {
     box-sizing: border-box;
@@ -21,7 +20,6 @@ html, body {
     align-items: center;
     justify-content: center;
     padding: 0px;
-
 }
 
 header .header-text {
@@ -42,7 +40,6 @@ header .header-text {
     height: 100px;
     width: 100px;
 }
-
 
 .headerimage {
     flex: 0 0 auto;
@@ -212,7 +209,7 @@ label{
 
 .order-button:hover{
         background-color: #F3986F;
-    }
+}
 
 .order-button:active {
     box-shadow: 0 5px #666;
@@ -248,8 +245,8 @@ label{
 .plads-top{
     margin-top: 5%;
 }
-/* kurv.html styling*/
 
+/* kurv.html styling*/
 .cart-table, .admin-tabel, th, td {
     margin: auto;
     margin-top: 35px;
@@ -339,7 +336,6 @@ tbody{
 }
 
 /* Admin styling */
-
 .admin-tabel, th, td {
     font-size: 1.5em;
     padding-left: 1vw;

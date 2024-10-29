@@ -1,7 +1,6 @@
 package app.controllers;
 
 import java.util.ArrayList;
-
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import app.entities.Member;
@@ -61,14 +60,13 @@ public class MemberController {
                 ctx.attribute("message", "Du er hermed oprettet som bruger med emailen: " + email);
                 ctx.render("login.html");
             } catch (DatabaseException e) {
-                ctx.attribute("message", "Email allerede i brug");
+                ctx.attribute("message", "Emailen er allerede i brug.");
                 ctx.render("opretbruger.html");
             }
         } else {
-            ctx.attribute("message", "Adgangskoder matcher ikke");
+            ctx.attribute("message", "Adgangskoderne matcher ikke.");
             ctx.render("opretbruger.html");
         }
-
     }
 
     private static void adminShowCustomer(Context ctx, ConnectionPool connectionPool) {
@@ -93,8 +91,6 @@ public class MemberController {
             ctx.attribute("errorMessage", "Der er sket en fejl i at hente data for kunde nummer: " + customerNumber);
             ctx.render("error.html");
         }
-
-
     }
 
     private static void adminShowAllCustomers(Context ctx, ConnectionPool connectionPool) {
@@ -110,7 +106,7 @@ public class MemberController {
             ctx.attribute("customers", customers);
             ctx.render("adminallekunder.html");
         } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data");
+            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data.");
             ctx.render("error.html");
         }
     }

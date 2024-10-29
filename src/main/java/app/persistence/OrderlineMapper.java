@@ -2,7 +2,6 @@ package app.persistence;
 
 import java.util.ArrayList;
 import java.sql.*;
-
 import app.entities.Bottom;
 import app.entities.Topping;
 import app.entities.Orderline;
@@ -32,7 +31,6 @@ public class OrderlineMapper {
         } catch (SQLException e) {
             throw new DatabaseException("Error creating orderline for order number: " + orderNumber, e.getMessage());
         }
-
     }
 
     public static void deleteOrderline(int orderlineId, ConnectionPool connectionPool) throws DatabaseException {
@@ -48,11 +46,11 @@ public class OrderlineMapper {
                 int orderNumber = rs.getInt("order_number");
                 OrderMapper.updateOrderPrice(orderNumber, connectionPool);
             } else {
-                throw new DatabaseException("Ingen ordrelinje blev slettet, kontrollér om ID'et findes.");
+                throw new DatabaseException("No orderlines have been deleted on: " + orderlineId);
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Fejl ved sletning af ordrelinje: " + orderlineId, e.getMessage());
+            throw new DatabaseException("Error in deleting orderline: " + orderlineId, e.getMessage());
         }
     }
 
@@ -85,5 +83,4 @@ public class OrderlineMapper {
         }
         return orderlines;
     }
-
 }

@@ -1,7 +1,6 @@
 package app.controllers;
 
 import java.util.ArrayList;
-
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import app.dto.OrderMemberDto;
@@ -39,12 +38,10 @@ public class OrderController {
             ctx.render("bestil.html");
 
         } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der var et problem ved at hente siden pga. fejl ved at hente data.");
+            ctx.attribute("errorMessage", "Der var et problem ved at hente data.");
             ctx.render("errorAlreadyLogin.html");
         }
-
     }
-
 
     private static void addToOrder(Context ctx, ConnectionPool connectionPool) {
         Member currentMember = ctx.sessionAttribute("currentMember");
@@ -59,7 +56,6 @@ public class OrderController {
         int quantity = Integer.parseInt(ctx.formParam("antal"));
 
         try {
-
             double bottomPrice = BottomMapper.getBottomById(bottomId, connectionPool).getBottomPrice();
             double toppingPrice = ToppingMapper.getToppingById(toppingId, connectionPool).getToppingPrice();
             double orderlinePrice = (toppingPrice + bottomPrice) * quantity;
@@ -74,10 +70,9 @@ public class OrderController {
             showOrderingPage(ctx, connectionPool);
 
         } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der var et problem med at lægge i kurven.");
+            ctx.attribute("errorMessage", "Der var et problem med at tilføje til kurven.");
             ctx.render("errorAlreadyLogin.html");
         }
-
     }
 
     private static void showCart(Context ctx, ConnectionPool connectionPool) {
@@ -89,16 +84,9 @@ public class OrderController {
         }
 
         try {
-
             int activeOrderNumber = OrderMapper.getActiveOrderNumber(currentMember.getMemberId(), connectionPool);
-            if (activeOrderNumber == -1) {
-                ctx.attribute("tomKurv", "Kurven er tom.");
-                ctx.render("kurv.html");
-                return;
-            }
-
             ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(activeOrderNumber, connectionPool);
-            if (orderlines.isEmpty()) {
+            if (orderlines.isEmpty() ) {
                 ctx.attribute("tomKurv", "Kurven er tom.");
                 ctx.render("kurv.html");
                 return;
@@ -114,7 +102,6 @@ public class OrderController {
             ctx.attribute("errorMessage", "Der opstod et problem ved hentningen af dataen, prøv igen.");
             ctx.render("errorAlreadyLogin.html");
         }
-
     }
 
     private static void deleteOrderline(Context ctx, ConnectionPool connectionPool) {
@@ -128,7 +115,6 @@ public class OrderController {
         }
     }
 
-
     private static void attemptCheckout(Context ctx, ConnectionPool connectionPool) {
         Member currentMember = ctx.sessionAttribute("currentMember");
         if (currentMember == null) {
@@ -140,20 +126,13 @@ public class OrderController {
         try {
 
             int activeOrderNumber = OrderMapper.getActiveOrderNumber(currentMember.getMemberId(), connectionPool);
-            if (activeOrderNumber == -1) {
-                ctx.attribute("errorMessage", "læg noget i kurven for at købe");
-                showOrderingPage(ctx, connectionPool);
-                return;
-            }
-
             ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(activeOrderNumber, connectionPool);
             if (orderlines.isEmpty()) {
-                ctx.attribute("errorMessage", "læg noget i kurven for at købe");
+                ctx.attribute("errorMessage", "Læg noget i kurven for at købe.");
                 showOrderingPage(ctx, connectionPool);
                 return;
             }
 
-            // Validate balance: Check that member has sufficient balance to buy the order
             double memberBalance = MemberMapper.getBalance(currentMember.getMemberId(), connectionPool);
             double totalOrderPrice = OrderMapper.getOrderPrice(activeOrderNumber, connectionPool);
             if (totalOrderPrice > memberBalance) {
@@ -188,7 +167,7 @@ public class OrderController {
         try {
             OrderMemberDto orderMemberDto = OrderMapper.getOrderMemberDtoByOrderNumber(orderNumber, connectionPool);
             if (currentMember.getMemberId() != orderMemberDto.getMemberId()) {
-                ctx.attribute("errorMessage", "Du har ikke rettigheder til at se denne ordrer");
+                ctx.attribute("errorMessage", "Du har ikke adgang til at se denne ordrer.");
                 ctx.render("errorAlreadyLogin.html");
                 return;
             }
@@ -200,11 +179,10 @@ public class OrderController {
             ctx.render("ordredetaljer.html");
 
         } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data");
+            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data.");
             ctx.render("errorAlreadyLogin.html");
         }
     }
-
 
     private static void showAllOrders(Context ctx, ConnectionPool connectionPool) {
         Member currentMember = ctx.sessionAttribute("currentMember");
@@ -219,7 +197,7 @@ public class OrderController {
             ctx.attribute("orders", orders);
             ctx.render("mineordrer.html");
         } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data");
+            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data.");
             ctx.render("errorAlreadyLogin.html");
         }
     }
@@ -243,10 +221,9 @@ public class OrderController {
             ctx.render("adminordre.html");
 
         } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data");
+            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data.");
             ctx.render("error.html");
         }
-
     }
 
     private static void adminShowAllOrders(Context ctx, ConnectionPool connectionPool) {
@@ -262,7 +239,7 @@ public class OrderController {
             ctx.attribute("orderMemberDtos", orderMemberDtos);
             ctx.render("adminalleordrer.html");
         } catch (DatabaseException e) {
-            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data");
+            ctx.attribute("errorMessage", "Der er sket en fejl i at hente data.");
             ctx.render("error.html");
         }
     }

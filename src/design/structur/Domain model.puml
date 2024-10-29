@@ -14,6 +14,6 @@ login *-- member
 memberOrder *-- orderline
 orderline *-- cupcake
 cupcake *-- bottom
-cupcake *-- topping
+cupcake o-- topping
 
 @enduml

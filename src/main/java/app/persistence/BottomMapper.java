@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import app.entities.Bottom;
 import app.exceptions.DatabaseException;
 
@@ -56,7 +55,6 @@ public class BottomMapper {
         } catch (SQLException e) {
             throw new DatabaseException("DB error when getting bottom with id: " + bottomId, e.getMessage());
         }
-
         return bottom;
     }
 }
