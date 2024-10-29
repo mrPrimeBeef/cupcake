@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Tak for dit køb</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link rel="icon" type="image/x-icon" href="/images/cupcake.ico">
+</head>
+<body>
+<header th:replace="fragments :: headerFragment"></header>
+<div class="page">
+    <h2 th:text="'Kære '+${session.currentMember.name}"></h2>
+    <h2>Mange tak for dit køb</h2>
+    <p th:text="'Dit ordrenummer er: '+${activeOrderNumber}"></p>
+    <p>Dine cupcakes er klar til afhentning næste hverdag kl. 12.00</p>
+    <div class="tak-adresse">
+        <p>Afhentningsadresse:</p>
+        <p>Olsker Hovedgade 10</p>
+        <p>3770 Allinge</p>
+    </div>
+    <footer th:replace="fragments :: footer"></footer>
+</div>
+</body>
+</html>

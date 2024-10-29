@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Mine ordrer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{css/styles.css}" rel="stylesheet"/>
+    <link rel="icon" type="image/x-icon" href="/images/cupcake.ico">
+</head>
+<body>
+
+<header th:replace="fragments :: headerFragment"></header>
+<div class="page">
+
+    <h2>Mine ordrer</h2>
+
+    <table>
+        <tr>
+            <th>Ordrenr.</th>
+            <th>Dato</th>
+            <th>Pris DKK</th>
+        </tr>
+        <tr th:each="order: ${orders}">
+            <td><a href="ordredetaljer.html" th:href="@{/ordredetaljer(ordrenr=${order.orderNumber})}"
+                   th:text="${order.orderNumber}"></a></td>
+            <td th:text="${order.date}"></td>
+            <td th:text="${order.price}"></td>
+        </tr>
+    </table>
+
+    <footer th:replace="fragments :: footer"></footer>
+</div>
+</body>
+</html>

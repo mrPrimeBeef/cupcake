@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link rel="icon" type="image/x-icon" href="/images/cupcake.ico">
+</head>
+<body>
+
+<header th:replace="fragments :: headerNoNavbar"></header>
+
+<div class="page">
+    <h1 id="velkommen">Velkommen til Olsker Cupcakes</h1>
+    <h2 id="log-text">Log ind med din email og adgangskode</h2>
+
+    <form id="login-form" method="post">
+
+        <label for="email">Email</label><br>
+        <input type="email" id="email" name="email" placeholder="Email" required/><br>
+
+        <label for="password">Adgangskode</label><br>
+        <input type="password" id="password" name="password" placeholder="Adgangskode" required/><br>
+
+        <p class="error" th:text="${message}"></p>
+
+        <button id="sub_button" type="submit" formaction="/login">Log ind</button>
+
+    </form>
+
+    <p class="opret-bruger">Ikke bruger endnu? <a href="opretbruger.html" th:href="@{/opretbruger}">Opret bruger</a></p>
+    <footer th:replace="~{fragments :: footer}"></footer>
+</div>
+</body>
+</html>

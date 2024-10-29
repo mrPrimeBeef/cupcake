@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Ordredetaljer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{css/styles.css}" rel="stylesheet"/>
+    <link rel="icon" type="image/x-icon" href="/images/cupcake.ico">
+</head>
+<body>
+
+<header th:replace="fragments :: headerFragment"></header>
+<div class="page">
+
+    <h2>Ordredetaljer</h2>
+
+    <table>
+        <tr>
+            <th>Ordrenr.</th>
+            <th>Dato</th>
+            <th>Pris DKK</th>
+        </tr>
+        <tr>
+            <td th:text="${orderMemberDto.orderNumber}"></td>
+            <td th:text="${orderMemberDto.orderDate}"></td>
+            <td th:text="${orderMemberDto.orderPrice}"></td>
+        </tr>
+    </table>
+
+    <br>
+    <br>
+    <h3>Cupcakes i denne ordre:</h3>
+
+    <div class="cart">
+        <table class="cart-table">
+            <thead>
+            <tr>
+                <th>Bund</th>
+                <th>Topping</th>
+                <th>Antal</th>
+                <th>Pris DKK</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="orderline : ${orderlines}">
+                <td th:text="${orderline.bottom.bottomName}"></td>
+                <td th:text="${orderline.topping.toppingName}"></td>
+                <td th:text="${orderline.quantity}"></td>
+                <td th:text="${orderline.orderlinePrice}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer th:replace="fragments :: footer"></footer>
+</div>
+</body>
+</html>

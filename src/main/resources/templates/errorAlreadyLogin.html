@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Error Already Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link rel="icon" type="image/x-icon" href="/images/cupcake.ico">
+</head>
+<body>
+
+<header th:replace="fragments :: headerNoNavbar"></header>
+
+<div class="page">
+
+    <h1 th:text="${errorMessage}"></h1>
+    <a href="bestil.html" th:href="@{/bestil}">Tilbage til bestillingssiden</a>
+
+    <footer th:replace="fragments :: footer"></footer>
+</div>
+</body>
+</html>
