@@ -6,6 +6,11 @@ object Kunde {
 object Kurv {
 (Kurven kan indeholde 0 eller 1 ordrer)
 }
+object Admin{
+En eller flere admins,
+som har adgang til at se detaljer
+om alle kunder og alle ordre
+}
 object Ordre {
 +Ordrenr.
 +Dato
