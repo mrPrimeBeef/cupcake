@@ -1,15 +1,31 @@
 @startuml
-object Kunde
-object Ordre
+object Kunde {
++Kontaktinformationer
++Balance i DKK
+}
+object Kurv {
+(Kurven kan indeholde 0 eller 1 ordrer)
+}
+object Ordre {
++Ordrenr.
++Dato
++Total pris
+}
 object Ordrelinje {
-    +Bund
-    +Top
-    +Antal
-    +Pris for dette antal
++Bund
++Top
++Antal
++Pris for dette antal
 }
 object Cupcake
-object Bund
-object Top
+object Bund {
++Navn
++Pris
+}
+object Top {
++Navn
++Pris
+}
 
 Kunde "1" -- "0..*" Ordre
 Ordre "1" -- "1..*" Ordrelinje
