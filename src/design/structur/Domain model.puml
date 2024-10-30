@@ -28,6 +28,7 @@ object Top {
 }
 
 Kunde "1" -- "0..*" Ordre
+Kunde "1" -- "1" Kurv
 Ordre "1" -- "1..*" Ordrelinje
 Ordrelinje "1" -- "1" Cupcake
 Cupcake "0..*" -- "1" Bund
