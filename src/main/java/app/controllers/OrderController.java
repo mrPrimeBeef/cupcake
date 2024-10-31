@@ -86,7 +86,7 @@ public class OrderController {
         try {
             int activeOrderNumber = OrderMapper.getActiveOrderNumber(currentMember.getMemberId(), connectionPool);
             ArrayList<Orderline> orderlines = OrderlineMapper.getOrderlinesByOrderNumber(activeOrderNumber, connectionPool);
-            if (orderlines.isEmpty() ) {
+            if (orderlines.isEmpty()) {
                 ctx.attribute("tomKurv", "Kurven er tom.");
                 ctx.render("kurv.html");
                 return;
