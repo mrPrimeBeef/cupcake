@@ -3,7 +3,7 @@
 Dette repository indholder vores cupcake web app projekt.
 
 ## Links
-- [Vores rapport som PDF](https://github.com/mrPrimeBeef/cupcake/blob/Main/report/report.pdf)
+- [Vores rapport som PDF](https://github.com/mrPrimeBeef/cupcake/blob/Main/rapport/Rapport.pdf)
 - [Video-demo af vores web app](https://youtu.be/DaZ4HdDT5a8)
 
 ## Installationsvejledning
