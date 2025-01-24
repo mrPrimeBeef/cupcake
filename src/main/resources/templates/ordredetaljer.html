@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<header th:replace="fragments :: headerFragment"></header>
+<header th:replace="~{fragments :: headerFragment}"></header>
 <div class="page">
 
     <h2>Ordredetaljer</h2>
@@ -53,7 +53,7 @@
         </table>
     </div>
 
-    <footer th:replace="fragments :: footer"></footer>
+    <footer th:replace="~{fragments :: footer}"></footer>
 </div>
 </body>
 </html>

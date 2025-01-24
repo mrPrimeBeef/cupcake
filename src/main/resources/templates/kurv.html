@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<header th:replace="fragments :: headerFragment"></header>
+<header th:replace="~{fragments :: headerFragment}"></header>
     <div class="page">
     <p><span th:text="${tomKurv}"></span></p>
 
@@ -47,7 +47,7 @@
             <button class="køb-knap" type="submit">Køb</button>
         </div>
     </form>
-    <footer th:replace="fragments :: footer"></footer>
+    <footer th:replace="~{fragments :: footer}"></footer>
 </div>
 </body>
 </html>

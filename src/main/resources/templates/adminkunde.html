@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<header th:replace="fragments :: headerAdmin"></header>
+<header th:replace="~{fragments :: headerAdmin}"></header>
 <div class="page">
     <h2 th:text="'Kundenr. ' + ${customer.memberId} +' ('+${customer.email}+')'"></h2>
 
@@ -48,7 +48,7 @@
     </table>
 
 
-    <footer th:replace="fragments :: footer"></footer>
+    <footer th:replace="~{fragments :: footer}"></footer>
 </div>
 </body>
 </html>

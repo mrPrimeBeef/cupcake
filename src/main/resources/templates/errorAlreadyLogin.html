@@ -9,14 +9,14 @@
 </head>
 <body>
 
-<header th:replace="fragments :: headerNoNavbar"></header>
+<header th:replace="~{fragments :: headerNoNavbar}"></header>
 
 <div class="page">
 
     <h1 th:text="${errorMessage}"></h1>
     <a href="bestil.html" th:href="@{/bestil}">Tilbage til bestillingssiden</a>
 
-    <footer th:replace="fragments :: footer"></footer>
+    <footer th:replace="~{fragments :: footer}"></footer>
 </div>
 </body>
 </html>

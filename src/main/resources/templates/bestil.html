@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<header th:replace="fragments :: headerFragment"></header>
+<header th:replace="~{fragments :: headerFragment}"></header>
 <div class="page">
 
     <h1 class="intro-headline">Velkommen ombord</h1>
@@ -47,7 +47,7 @@
         </div>
     </form>
     <p class="plads-top" th:text="${errorMessage}"></p>
-    <footer th:replace="fragments :: footer"></footer>
+    <footer th:replace="~{fragments :: footer}"></footer>
 </div>
 </body>
 </html>

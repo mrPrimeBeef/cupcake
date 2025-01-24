@@ -8,7 +8,7 @@
     <link rel="icon" type="image/x-icon" href="/images/cupcake.ico">
 </head>
 <body>
-<header th:replace="fragments :: headerAdmin"></header>
+<header th:replace="~{fragments :: headerAdmin}"></header>
 
 <div class="page">
     <h2>Alle ordrer for alle kunder</h2>
@@ -35,7 +35,7 @@
             <td th:text="${orderMemberDto.orderPrice}"></td>
         </tr>
     </table>
-    <footer th:replace="fragments :: footer"></footer>
+    <footer th:replace="~{fragments :: footer}"></footer>
 </div>
 </body>
 </html>
